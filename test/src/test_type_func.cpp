@@ -1,14 +1,11 @@
 
 #include <type_func.h>
 
-#include <stdexcept>
-
-#include <cassert>
-#include <iterator> 
-#include <algorithm>
 #include <vector>
 #include <iostream>
 
+#include <stdexcept>
+#include <cassert>
 
 void test_type_func_001()
 {
