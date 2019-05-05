@@ -14,5 +14,14 @@ int main (int argc, char *argv[])
 	test_type_func_003();
 	test_type_func_004();
 
+	test_type_func_005();
+	test_type_func_006();
+	test_type_func_007();
+
+	test_type_func_008();
+	test_type_func_008();
+
+	test_type_func_009();
+
 	return 0;
 }
