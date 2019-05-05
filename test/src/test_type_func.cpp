@@ -3,6 +3,7 @@
 
 #include <type_func.h>
 
+#include <cmath>
 #include <array>
 #include <list>
 #include <queue>
