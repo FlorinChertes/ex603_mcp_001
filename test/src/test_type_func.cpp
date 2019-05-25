@@ -3,6 +3,7 @@
 
 #include <type_func.h>
 
+#include <functional>
 #include <cmath>
 #include <array>
 #include <list>
@@ -86,8 +87,6 @@ void test_type_func_004()
 		std::cout << "out_of_range exception" << std::endl;
 	}
 }
-
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -232,6 +231,88 @@ void test_type_func_009()
 						   elem.second << ", "; });
 		std::cout << std::endl;
 
+	}
+	catch (std::out_of_range&)
+	{
+		std::cout << "out_of_range exception" << std::endl;
+	}
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_010()
+{
+	try
+	{
+		auto vnums = std::vector<int>{ 0, 2, -3, 5, -1, 6, 8, -4, 9 };
+
+		auto s1 = funclib::foldl(
+			[](int const s, int const n) { return s + n; },
+			vnums,
+			0);
+		std::cout << "foldl result s1 = " << s1 << std::endl;
+
+		auto s2 = funclib::foldl(
+			std::plus<>(),
+			vnums,
+			0);
+		std::cout << "foldl result s2 = " << s2 << std::endl;
+
+		auto s3 = funclib::foldr(
+			[](const int s, const int n) {return s + n; },
+			vnums,
+			0);
+		std::cout << "foldl result s3 = " << s3 << std::endl;
+
+		auto s4 = funclib::foldr(
+			std::plus<>(),
+			vnums,
+			0);
+		std::cout << "foldl result s4 = " << s4 << std::endl;
+
+
+		auto texts =
+			std::vector<std::string>{ std::string("hello"),
+				std::string(" "),
+				std::string("world"),
+				std::string("!") };
+
+		auto txt1 = funclib::foldl(
+			[](std::string const& s, std::string const& n) {
+				return s + n; },
+			texts,
+			std::string());
+		std::cout << "foldl result txt1 = " << txt1 << std::endl;
+
+		auto txt2 = funclib::foldr(
+			[](std::string const& s, std::string const& n) {
+				return s + n; },
+			texts,
+			std::string());
+		std::cout << "foldr result txt2 = " << txt2 << std::endl;
+
+		auto s5 = funclib::foldl(
+			std::plus<>(),
+			funclib::mapf(
+				[](int const i) {return i * i; },
+				funclib::mapf(
+					[](int const i) {return std::abs(i); },
+					vnums)),
+			0);
+		std::cout << "foldl result s5 = " << s5 << std::endl;
+
+
+		auto s6 = func_lib_ex::foldl(
+			[](int const s, int const n) { return s + n; },
+			0, 2, -3, 5, -1, 6, 8, -4, 9,
+			0);
+		std::cout << "foldl result s6 = " << s6 << std::endl;
+
+		auto s7 = func_lib_ex::foldl(
+			std::plus<>(),
+			0, 2, -3, 5, -1, 6, 8, -4, 9,
+			0);
+		std::cout << "foldl result s7 = " << s7 << std::endl;
 	}
 	catch (std::out_of_range&)
 	{

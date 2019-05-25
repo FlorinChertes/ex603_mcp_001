@@ -10,3 +10,5 @@ void test_type_func_007();
 
 void test_type_func_008();
 void test_type_func_009();
+
+void test_type_func_010();

@@ -45,7 +45,6 @@ constexpr auto min(Ts && ... args)
 //-----------------------------------------------------------------------------
 namespace funclib
 {
-
 	//-----------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------
 
@@ -105,5 +104,21 @@ namespace funclib
 			std::rbegin(r), std::rend(r),
 			std::move(i),
 			std::forward<F>(f));
+	}
+}
+
+
+namespace func_lib_ex
+{
+	template <typename F, typename T1, typename T2>
+	auto foldl(F&& f, T1 arg1, T2 arg2)
+	{
+		return f(arg1, arg2);
+	}
+
+	template <typename F, typename T, typename... Ts>
+	auto foldl(F&& f, T head, Ts... rest)
+	{
+		return f(head, foldl(std::forward<F>(f), rest...));
 	}
 }
