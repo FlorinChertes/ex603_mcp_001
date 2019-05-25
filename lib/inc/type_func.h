@@ -122,3 +122,41 @@ namespace func_lib_ex
 		return f(head, foldl(std::forward<F>(f), rest...));
 	}
 }
+
+namespace func_lib
+{
+	template<typename R, typename T>
+	bool in(R const& range, T const& value)
+	{
+		for (auto const& x : range)
+		{
+			if (x == value)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<typename R, typename T>
+	bool in_c(R const& range, T const& value)
+	{
+		for (auto const& x : range)
+		{
+			if (x == value)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+/*
+	template<typename T> 
+	concept C = requires(T x) { x + x; };
+	
+	template<typename T> requires C<T> T 
+	add(T a, T b) { return a + b; }
+*/
+
+}

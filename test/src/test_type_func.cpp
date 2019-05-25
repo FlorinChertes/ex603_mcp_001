@@ -319,3 +319,47 @@ void test_type_func_010()
 		std::cout << "out_of_range exception" << std::endl;
 	}
 }
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_011()
+{
+	std::cout << "*** test 11 ***" << std::endl;
+
+	auto vnums = std::vector<int>{0,1,2,3,4};
+	auto ret_val = func_lib::in(vnums, 0);
+
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+
+	auto v_words = std::vector<std::string>{
+		std::string("one"),
+		std::string("two"),
+		std::string("three"),
+		std::string("four"),
+		std::string("five")};
+
+	const std::string  value_one{ "one" };
+	ret_val = func_lib::in(v_words, value_one);
+
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+
+/*
+	ret_val = func_lib::in(v_words, 0);
+
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+
+*/
+
+	ret_val = func_lib::in_c(vnums, 0);
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+
+	ret_val = func_lib::in_c(v_words, value_one);
+
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+}

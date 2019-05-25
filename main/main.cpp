@@ -25,5 +25,7 @@ int main (int argc, char *argv[])
 
 	test_type_func_010();
 
+	test_type_func_011();
+
 	return 0;
 }
