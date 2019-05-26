@@ -1,12 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
 project (ex603_mcp_001_prj)
 
-# require C++17
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 IF (MSVC) 
+	# require C++17
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+
 	# Activate C++ exception handling 
 	IF (NOT CMAKE_CXX_FLAGS MATCHES "/EHsc") 
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
