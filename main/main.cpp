@@ -29,6 +29,7 @@ int main (int argc, char *argv[])
 	test_type_func_011();
 
 	test_type_func_chrono_012();
+	test_type_func_chrono_013();
 
 	return 0;
 }
