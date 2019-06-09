@@ -24,6 +24,9 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_type_func.h
 	test/src/test_type_func.cpp
 
+	test/inc/test_chrono_func.h
+	test/src/test_chrono_func.cpp
+
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
 
