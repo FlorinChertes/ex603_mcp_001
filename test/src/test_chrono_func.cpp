@@ -1,25 +1,8 @@
 
 #include <test_chrono_func.h>
 
-#include <type_func.h>
-
 #include <chrono>
-
-#include <functional>
-#include <cmath>
-#include <array>
-#include <list>
-#include <queue>
-#include <map>
-#include <vector>
 #include <iostream>
-
-#include <string>
-#include <algorithm>
-
-#include <stdexcept>
-#include <cassert>
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -56,13 +39,12 @@ void test_type_func_chrono_013()
 	std::cout << half_day_in_h.count() << "h" << std::endl;			//12h
 	std::cout << half_day_in_min.count() << "min" << std::endl;		//720min
 
-
 	auto total_seconds = 12345s;
-	auto hours = std::chrono::duration_cast<std::chrono::hours>(total_seconds);
-	auto minutes = std::chrono::duration_cast<std::chrono::minutes>(total_seconds % 1h);
-	auto seconds = std::chrono::duration_cast<std::chrono::seconds>(total_seconds % 1min);
+	auto hours		= std::chrono::duration_cast<std::chrono::hours>(total_seconds);
+	auto minutes	= std::chrono::duration_cast<std::chrono::minutes>(total_seconds % 1h);
+	auto seconds	= std::chrono::duration_cast<std::chrono::seconds>(total_seconds % 1min);
 
-	std::cout << hours.count() << ':'
-		<< minutes.count() << ':'
-		<< seconds.count() << std::endl; // 3:25:45
+	std::cout	<< hours.count()	<< ':'
+				<< minutes.count()	<< ':'
+				<< seconds.count()	<< std::endl; // 3:25:45
 }
