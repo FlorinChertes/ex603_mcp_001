@@ -48,3 +48,21 @@ void test_type_func_chrono_013()
 				<< minutes.count()	<< ':'
 				<< seconds.count()	<< std::endl; // 3:25:45
 }
+
+template <typename T>
+void print_clock()
+{
+	std::cout << "precision: " << (1000000.0 * double(T::period::num)) / (T::period::den) << std::endl;
+	std::cout << "steady:    " << T::is_steady << std::endl;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_chrono_015()
+{
+	{
+		print_clock<std::chrono::system_clock>();
+		print_clock<std::chrono::high_resolution_clock>();
+		print_clock<std::chrono::steady_clock>();
+	}
+}
