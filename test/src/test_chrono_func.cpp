@@ -36,6 +36,7 @@ void test_type_func_chrono_013()
 
 	std::chrono::hours half_day_in_h(12);
 	std::chrono::minutes half_day_in_min(half_day_in_h);
+
 	std::cout << half_day_in_h.count() << "h" << std::endl;			//12h
 	std::cout << half_day_in_min.count() << "min" << std::endl;		//720min
 
