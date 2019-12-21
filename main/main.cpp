@@ -1,8 +1,10 @@
+#include <test_func_arg.h>
+#include <test_chrono_func.h>
+#include <test_type_func.h>
+
 #include <iostream>
 #include <string>
 
-#include <test_chrono_func.h>
-#include <test_type_func.h>
 
 int main (int argc, char *argv[])
 {
@@ -34,5 +36,8 @@ int main (int argc, char *argv[])
 	test_type_func_chrono_012();
 	test_type_func_chrono_013();
 	test_type_func_chrono_015();
+
+	test_func_arg_001();
+
 	return 0;
 }
