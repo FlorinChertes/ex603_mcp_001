@@ -14,3 +14,10 @@ https://coderwall.com/p/xyuoza/git-cloning-specific-commits
 
 use CMake for C++17
 https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html
+
+//-----------------
+2019-12-21 10:30
+//-----------------
+CMake 3.14.2
+E:/users/chfl/ms160_app/dev/ex603_mcp_001
+E:/users/chfl/ms160_app/build/ex603_mcp_001

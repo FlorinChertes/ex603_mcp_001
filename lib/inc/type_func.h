@@ -151,12 +151,13 @@ namespace func_lib
 		return false;
 	}
 
-/*
+
 	template<typename T> 
 	concept C = requires(T x) { x + x; };
 	
-	template<typename T> requires C<T> T 
-	add(T a, T b) { return a + b; }
-*/
+	template<typename T>
+	requires C<T>
+	T add(T a, T b) { return a + b; }
+
 
 }
