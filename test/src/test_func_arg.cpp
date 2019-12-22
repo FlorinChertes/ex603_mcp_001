@@ -3,6 +3,7 @@
 #include <arg_func.h>
 
 #include <array>
+#include <iterator>
 #include <iostream>
 #include <cassert>
 
