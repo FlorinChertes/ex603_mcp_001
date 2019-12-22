@@ -40,6 +40,8 @@ add_executable(ex603_mcp_type_func
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
 
+	lib/inc/arg_func.h
+
 	main/main.cpp
 )
 
