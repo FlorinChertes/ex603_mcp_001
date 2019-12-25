@@ -31,3 +31,19 @@ void test_func_arg_001()
 
 	std::cout << "size of array is: " << arraySize(keyVals) << std::endl;
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_func_arg_002()
+{
+	std::cout << "*** test func arg 002 ***" << std::endl;
+
+	const int the_answer = 43;
+	auto x = the_answer;
+	auto y = &the_answer;
+
+	std::cout << "the asswer is: " << *y << std::endl;
+
+	std::cout << "the x type is: " << typeid(x).name() << std::endl;
+	std::cout << "the y type is: " << typeid(y).name() << std::endl;
+}
