@@ -42,6 +42,9 @@ add_executable(ex603_mcp_type_func
 
 	lib/inc/arg_func.h
 
+	lib/inc/emc_sm_item_26_01.h
+	lib/src/emc_sm_item_26_01.cpp
+
 	main/main.cpp
 )
 
