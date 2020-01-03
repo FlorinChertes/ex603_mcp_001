@@ -21,3 +21,17 @@ https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html
 CMake 3.14.2
 E:/users/chfl/ms160_app/dev/ex603_mcp_001
 E:/users/chfl/ms160_app/build/ex603_mcp_001
+
+//-----------------
+2020-01-03 17:00
+//-----------------
+
+florin@Lenovo-19-PC:~$ cd prj_appl/dev/ex603_mcp_001/
+florin@Lenovo-19-PC:~/prj_appl/dev/ex603_mcp_001$ git pull
+
+florin@Lenovo-19-PC:~$ cd build/dev/ex603_mcp_001/
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ rm -fr *
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake ~/prj_appl/dev/ex603_mcp_001/
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ make
+
+
