@@ -33,14 +33,7 @@ void log_and_add(int idx)
 //-----------------------------------------------------------------------------
 void log_and_add_impl(int idx, std::true_type)
 {
-	auto now = std::chrono::system_clock::now();
-	std::cout <<
-		now.time_since_epoch().count() <<
-		" " <<
-		"insert in container using index" <<
-		std::endl;
-
-	names.emplace(name_from_idx(idx));
+	log_and_add_ex(name_from_idx(idx));
 }
 
 //-----------------------------------------------------------------------------
