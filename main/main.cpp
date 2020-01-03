@@ -40,5 +40,8 @@ int main (int argc, char *argv[])
 	test_func_arg_001();
 	test_func_arg_002();
 
+	test_func_arg_003();
+	test_func_arg_004();
+
 	return 0;
 }
