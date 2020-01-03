@@ -1,6 +1,8 @@
 
 #include <emc_sm_item_26_01.h>
 
+#include <iterator>
+
 std::multiset<std::string> names;
 
 //-----------------------------------------------------------------------------

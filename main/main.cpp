@@ -1,3 +1,4 @@
+#include <test_emc_sm_item26.h>
 #include <test_func_arg.h>
 #include <test_chrono_func.h>
 #include <test_type_func.h>
@@ -40,8 +41,8 @@ int main (int argc, char *argv[])
 	test_func_arg_001();
 	test_func_arg_002();
 
-	test_func_arg_003();
-	test_func_arg_004();
+	test_emc_item_26_01();
+	test_emc_item_26_02();
 
 	return 0;
 }

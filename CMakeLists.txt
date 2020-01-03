@@ -37,6 +37,9 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_func_arg.h
 	test/src/test_func_arg.cpp
 
+	test/inc/test_emc_sm_item26.h
+	test/src/test_emc_sm_item26.cpp
+
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
 
