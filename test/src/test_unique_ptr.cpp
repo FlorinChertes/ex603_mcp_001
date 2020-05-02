@@ -55,6 +55,15 @@ void myFunc_02(std::unique_ptr<A> arg)
 	std::cout << ptr->GetVal() << std::endl;
 }
 
+std::unique_ptr<A> myFunc_03()
+{
+	std::unique_ptr<A> ptr = std::make_unique<A>(7890);
+	assert(ptr != nullptr);
+
+	return ptr;
+}
+
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_unique_ptr_002()
@@ -69,6 +78,9 @@ void test_unique_ptr_002()
 	myFunc_02(std::move(ptr_1));
 	assert(ptr_1 == nullptr);
 
+	std::unique_ptr<A> ptr_2 = myFunc_03();
+	assert(ptr_2 != nullptr);
+	std::cout << ptr_2->GetVal() << std::endl;
 
 }
 
