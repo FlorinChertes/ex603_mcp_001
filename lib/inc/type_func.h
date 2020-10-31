@@ -1,4 +1,8 @@
 
+#if _MSC_VER
+	#include <concepts>
+#endif
+
 #include <numeric>
 #include <iterator>
 #include <algorithm>
@@ -144,8 +148,16 @@ namespace func_lib
 	template <typename T>
 	concept Equality_comparable = requires (T a, T b)
 	{
+#if _MSC_VER
 		{a == b} -> std::same_as<bool>;
 		{a != b} -> std::same_as<bool>;
+#else
+		{a == b} -> bool;
+		{a != b} -> bool;
+
+#endif
+
+
 	};
 
 	//-----------------------------------------------------------------------------
