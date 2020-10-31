@@ -43,6 +43,9 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_unique_ptr.h
 	test/src/test_unique_ptr.cpp
 
+	test/inc/test_lambda.h
+	test/src/test_lambda.cpp
+
 
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
