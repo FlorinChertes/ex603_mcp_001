@@ -14,6 +14,8 @@ void test_lambda_001()
 		}
 	} someInstance;
 
+	std::cout << "*** test lambda 001 ***" << std::endl;
+
 	const std::vector<int> v{ 1, 2, 3, };
 	
 	std::for_each(v.cbegin(), v.cend(), someInstance);

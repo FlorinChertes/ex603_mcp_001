@@ -8,6 +8,8 @@
 //-----------------------------------------------------------------------------
 void test_type_func_chrono_012()
 {
+	std::cout << "*** test chrono 012 ***" << std::endl;
+
 	auto start = std::chrono::high_resolution_clock::now();
 
 	[](int const count = 300000000) { for (int i = 0; i < count; ++i); }();
@@ -26,6 +28,8 @@ void test_type_func_chrono_012()
 //-----------------------------------------------------------------------------
 void test_type_func_chrono_013()
 {
+	std::cout << "*** test chrono 013 ***" << std::endl;
+
 	std::chrono::hours half_day(12);
 	std::chrono::minutes half_hour(30);
 
@@ -61,6 +65,8 @@ void print_clock()
 //-----------------------------------------------------------------------------
 void test_type_func_chrono_015()
 {
+	std::cout << "*** test chrono 015 ***" << std::endl;
+
 	{
 		print_clock<std::chrono::system_clock>();
 		print_clock<std::chrono::high_resolution_clock>();

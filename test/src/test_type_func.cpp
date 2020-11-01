@@ -346,13 +346,30 @@ void test_type_func_011()
 	std::cout << "Value was found: " <<
 		(ret_val ? "True" : "False") << std::endl;
 
+
 /*
+	// This call is invalid '0' is not a string,
+	// the description is long and
+	//needs some experiance to understand
+
 	ret_val = func_lib::in(v_words, 0);
 
 	std::cout << "Value was found: " <<
 		(ret_val ? "True" : "False") << std::endl;
 
-*/
+//*/
+
+/*
+	// This call is invalid '0' is not a string,
+	// because of using concepts
+	// the description is short and clear
+
+	ret_val = func_lib::in_c(v_words, 0);
+
+	std::cout << "Value was found: " <<
+		(ret_val ? "True" : "False") << std::endl;
+
+//*/
 
 	ret_val = func_lib::in_c(vnums, 0);
 	std::cout << "Value was found: " <<

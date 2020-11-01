@@ -149,15 +149,12 @@ namespace func_lib
 	concept Equality_comparable = requires (T a, T b)
 	{
 #if _MSC_VER
-		{a == b} -> std::same_as<bool>;
-		{a != b} -> std::same_as<bool>;
+		{a == b} -> std::convertible_to<bool>;
+		{a != b} -> std::convertible_to<bool>;
 #else
 		{a == b} -> bool;
 		{a != b} -> bool;
-
 #endif
-
-
 	};
 
 	//-----------------------------------------------------------------------------

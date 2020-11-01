@@ -10,7 +10,6 @@ void sink(std::unique_ptr<Widget> uniqPtr) {
 	// do something with uniqPtr
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_unique_ptr_001()
@@ -22,7 +21,6 @@ void test_unique_ptr_001()
 
 	std::cout << "p1 = " << p1.get() << std::endl;
 	std::cout << "p2 = " << p2.get() << std::endl;
-	
 
 	auto uniqPtr = std::make_unique<Widget>(1998);
 	sink(std::move(uniqPtr));      // ´there is no copy ctor only copy move ctor
@@ -33,13 +31,13 @@ class A
 {
 public:
 	A(int val)
-	{
-		_val = val;
-	}
+		: val_(val)
+	{}
 
-	int GetVal() { return _val; }
+	int GetVal() { return val_; }
+
 private:
-	int _val;
+	int val_;
 };
 
 void myFunc_01(std::unique_ptr<A> arg)
@@ -63,14 +61,13 @@ std::unique_ptr<A> myFunc_03()
 	return ptr;
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_unique_ptr_002()
 {
 	std::cout << "*** test unique_ptr 002 ***" << std::endl;
 
-	std::unique_ptr<A> ptr = std::unique_ptr<A>(new A(1234));
+	std::unique_ptr<A> ptr = std::make_unique<A>(1234);
 	myFunc_01(std::move(ptr));
 	assert(ptr == nullptr);
 
@@ -81,6 +78,4 @@ void test_unique_ptr_002()
 	std::unique_ptr<A> ptr_2 = myFunc_03();
 	assert(ptr_2 != nullptr);
 	std::cout << ptr_2->GetVal() << std::endl;
-
 }
-
