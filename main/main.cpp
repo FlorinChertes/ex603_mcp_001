@@ -1,3 +1,5 @@
+#include <test_overloading_tf.h>
+
 #include <test_lambda.h>
 #include <test_unique_ptr.h>
 #include <test_emc_sm_item26.h>
@@ -50,6 +52,8 @@ int main (int argc, char *argv[])
 	test_unique_ptr_002();
 
 	test_lambda_001();
+
+	test_overloading_ft_001();
 
 	return 0;
 }
