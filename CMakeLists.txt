@@ -49,6 +49,9 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_overloading_tf.h
 	test/src/test_overloading_tf.cpp
 
+	test/inc/test_shape.h
+	test/src/test_shape.cpp
+
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
 

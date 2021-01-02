@@ -1,3 +1,4 @@
+#include "test_shape.h"
 #include <test_overloading_tf.h>
 
 #include <test_lambda.h>
@@ -54,6 +55,10 @@ int main (int argc, char *argv[])
 	test_lambda_001();
 
 	test_overloading_ft_001();
+
+	test_shape_001();
+	test_shape_002();
+	test_shape_003();
 
 	return 0;
 }
