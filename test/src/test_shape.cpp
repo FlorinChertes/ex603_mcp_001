@@ -116,7 +116,7 @@ void test_shape_003()
 {
     std::cout << "*** test shape 003 ***" << std::endl;
 
-    std::vector<Shape> shapes =  build_shapes();
+    std::vector<Shape> shapes (build_shapes());
     for (auto& shape : shapes)
     {
         shape->draw();
