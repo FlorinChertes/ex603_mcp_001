@@ -114,7 +114,7 @@ std::vector<Shape> build_shapes()
 
 void test_shape_003()
 {
-    std::cout << "*** test shape 003s ***" << std::endl;
+    std::cout << "*** test shape 003 ***" << std::endl;
 
     std::vector<Shape> shapes = build_shapes();
     for (auto& shape : shapes)
