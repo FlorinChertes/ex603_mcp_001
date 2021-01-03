@@ -49,8 +49,13 @@ public:
         return &getter(storage); 
     }
 
+    const IShape* operator->() const
+    {
+        return &getter(storage);
+    }
+
 private:
-    std::any storage;
+    mutable std::any storage;
     IShape& (*getter)(std::any&);
 };
 
@@ -111,13 +116,23 @@ std::vector<Shape> build_shapes()
     return shapes;
 }
 
-
 void test_shape_003()
 {
     std::cout << "*** test shape 003 ***" << std::endl;
 
     std::vector<Shape> shapes (build_shapes());
     for (auto& shape : shapes)
+    {
+        shape->draw();
+    }
+}
+
+void test_shape_004()
+{
+    std::cout << "*** test shape 004 ***" << std::endl;
+
+    const std::vector<Shape> shapes(build_shapes());
+    for (const auto& shape : shapes)
     {
         shape->draw();
     }

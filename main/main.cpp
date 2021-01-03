@@ -59,6 +59,7 @@ int main (int argc, char *argv[])
 	test_shape_001();
 	test_shape_002();
 	test_shape_003();
+	test_shape_004();
 
 	return 0;
 }
