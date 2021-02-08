@@ -18,17 +18,24 @@ void log_and_add_impl(int idx, std::true_type);
 //-----------------------------------------------------------------------------
 template<typename T>
 void print_time(std::chrono::time_point<T> time) {
-	struct tm time_info;
 	time_t time_raw = T::to_time_t(time);
+	char buffer[32];
 
+#if _MSC_VER
+	struct tm time_info;
 	const errno_t err = localtime_s(&time_info, &time_raw);
 	if (err) {
 		std::string msg{"Invalid argument to localtime_s."};
 		throw std::runtime_error{ msg };
 	}
-
-	char buffer[32];
 	strftime(buffer, 32, "%FT%TZ", &time_info);
+#else
+	struct tm* time_info;
+	time_t time_raw = T::to_time_t(time);
+
+	time_info = localtime(&time_raw);
+	strftime(buffer, 32, "%FT%TZ", time_info);
+#endif
 
 	// Calculate the micro-seconds-part of time-duration sice-epoch.
 	typename T::duration since_epoch = time.time_since_epoch();
