@@ -37,9 +37,9 @@ public:
     template<typename ConcreteShape>
     Shape(ConcreteShape&& shape)
         : storage{ std::forward<ConcreteShape>(shape) }
-        , getter{ [](std::any& storage) -> IShape&
+        , getter{ [](std::any& sto) -> IShape&
         {
-            return std::any_cast<ConcreteShape&>(storage);
+            return std::any_cast<ConcreteShape&>(sto);
         }
     }
     {}

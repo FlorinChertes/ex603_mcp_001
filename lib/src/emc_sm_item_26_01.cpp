@@ -17,15 +17,13 @@ std::string name_from_idx(int idx)
 	return name;
 }
 
+
 //-----------------------------------------------------------------------------
 void log_and_add(int idx)
 {
-	auto now = std::chrono::system_clock::now();
-	std::cout <<
-		now.time_since_epoch().count() <<
-		" " <<
-		"insert in container using index" <<
-		std::endl;
+	const auto tp_now = std::chrono::system_clock::now();
+	print_time(tp_now);
+	std::cout << " insert in container using index\n";
 
 	names.emplace(name_from_idx(idx));
 }
