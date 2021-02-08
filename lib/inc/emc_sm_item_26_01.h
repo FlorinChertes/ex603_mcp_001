@@ -31,7 +31,6 @@ void print_time(std::chrono::time_point<T> time) {
 	strftime(buffer, 32, "%FT%TZ", &time_info);
 #else
 	struct tm* time_info;
-	time_t time_raw = T::to_time_t(time);
 
 	time_info = localtime(&time_raw);
 	strftime(buffer, 32, "%FT%TZ", time_info);
@@ -43,7 +42,7 @@ void print_time(std::chrono::time_point<T> time) {
 		std::chrono::duration_cast<std::chrono::seconds>(since_epoch);
 	since_epoch -= seconds_since_epoch;
 	std::chrono::microseconds micro_seconds =
-		duration_cast<std::chrono::microseconds>(since_epoch);
+		std::chrono::duration_cast<std::chrono::microseconds>(since_epoch);
 
 	std::string buffer_str(buffer);
 	std::stringstream ss;
