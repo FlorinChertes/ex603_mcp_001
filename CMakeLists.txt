@@ -52,6 +52,9 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_shape.h
 	test/src/test_shape.cpp
 
+	test/inc/test_utils.h
+	test/src/test_utils.cpp
+
 	lib/inc/type_func.h
 	lib/src/type_func.cpp
 
