@@ -2,6 +2,7 @@
 #include <test_chrono_func.h>
 
 #include <chrono>
+#include <functional>
 #include <iostream>
 
 //-----------------------------------------------------------------------------
