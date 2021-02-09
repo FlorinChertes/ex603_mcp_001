@@ -156,7 +156,9 @@ void test_utils_020()
 			[](auto&& arg) -> dvd {
 				auto cpy{ arg };
 				std::transform(std::begin(cpy.title), std::end(cpy.title),
-					std::begin(cpy.title), std::toupper);
+					std::begin(cpy.title),
+					[] (unsigned char c){return std::toupper(c);});
+
 				return cpy; },
 			d );
 
