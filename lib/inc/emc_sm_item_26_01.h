@@ -74,7 +74,7 @@ void log_and_add_impl(T&& name, std::false_type)
 {
 	const auto tp_now = std::chrono::system_clock::now();
 	print_time(tp_now);
-	std::cout << " insert in container using name\n";
+	std::cout << " insert in container using name, impl\n";
 
 	names.emplace(std::forward<T>(name));
 }

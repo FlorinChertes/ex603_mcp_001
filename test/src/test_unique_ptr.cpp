@@ -23,7 +23,7 @@ void test_unique_ptr_001()
 	std::cout << "p2 = " << p2.get() << std::endl;
 
 	auto uniqPtr = std::make_unique<Widget>(1998);
-	sink(std::move(uniqPtr));      // ´there is no copy ctor only copy move ctor
+	sink(std::move(uniqPtr));      // there is no copy ctor only copy move ctor
 	
 }
 

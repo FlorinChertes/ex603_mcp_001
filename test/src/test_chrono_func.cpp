@@ -23,7 +23,6 @@ void test_type_func_chrono_012()
 		"ns" << std::endl;
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_type_func_chrono_013()
@@ -54,6 +53,8 @@ void test_type_func_chrono_013()
 				<< seconds.count()	<< std::endl; // 3:25:45
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename T>
 void print_clock()
 {
@@ -72,4 +73,39 @@ void test_type_func_chrono_015()
 		print_clock<std::chrono::high_resolution_clock>();
 		print_clock<std::chrono::steady_clock>();
 	}
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+auto func = [](int const count = 300000000) { for (int i = 0; i < count; ++i); };
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+template <typename Time = std::chrono::microseconds,
+		  typename Clock = std::chrono::high_resolution_clock>
+	struct perf_timer
+{
+	template <typename F, typename... Args>
+	static Time duration(F&& f, Args... args)
+	{
+		auto start = Clock::now();
+		std::invoke( std::forward<F>(f), std::forward<Args>(args)... );
+		auto end = Clock::now();
+
+		return std::chrono::duration_cast<Time>(end - start);
+	}
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_chrono_016()
+{
+	std::cout << "*** test chrono 016 ***" << std::endl;
+
+	auto t = perf_timer<>::duration(func, 100000000);
+
+	std::cout << std::chrono::duration<double, std::milli>(t).count()
+		<< "ms" << std::endl;
+
+	std::cout << std::chrono::duration<double, std::nano>(t).count()
+		<< "ns" << std::endl;
 }
