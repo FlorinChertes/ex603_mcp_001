@@ -1,24 +1,25 @@
-cmake_minimum_required (VERSION 2.6)
-project (ex603_mcp_001_prj)
+# set minimum cmake version
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
-IF (MSVC) 
-	# require C++17
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
+# project name and language
+project (ex603_mcp_001_prj  LANGUAGES CXX)
 
+# require C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+IF (MSVC)
 	# Activate C++ exception handling 
 	IF (NOT CMAKE_CXX_FLAGS MATCHES "/EHsc") 
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 	ENDIF ()
 ELSE ()
-	SET(GCC_STD_CPP_2A_COMPILE_FLAGS "-std=c++2a")
-	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_2A_COMPILE_FLAGS}")
-
 	SET(GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS "-fconcepts")
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS}")
 
 	SET(GCC_STD_CPP_PERMISIV_COMPILE_FLAGS "-fpermissive")
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_PERMISIV_COMPILE_FLAGS}")
-
 ENDIF () 
 
 set(INCLUDE_DIRS "test/inc" "lib/inc")
@@ -65,4 +66,3 @@ add_executable(ex603_mcp_type_func
 
 	main/main.cpp
 )
-
