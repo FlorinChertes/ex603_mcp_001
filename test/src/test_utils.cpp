@@ -273,8 +273,10 @@ void test_utils_021()
 	std::cout << "*** test utils 021 ***" << std::endl;
 
 	auto v1 = multiply(42.0, 1.5);
+	std::cout << "  v1: " << v1 << '\n';
 	//auto v2 = multiply("42.0"s, "1.5"s);
 
 	auto v1_a = multiply_a(42.0, 1.5);
+	std::cout << "  v1_a: " << v1_a << '\n';
 	//auto v2_a = multiply_a("42.0"s, "1.5"s);
 }
