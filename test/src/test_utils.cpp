@@ -5,6 +5,9 @@
 #include <optional>
 #include <chrono>
 
+#include <type_traits>
+
+
 #include <algorithm>
 #include <map>
 #include <vector>
@@ -231,4 +234,47 @@ void test_utils_020()
 	}
 }
 
+//-----------------------------------------------------------------------------
+// if T is arithmetic the first argument of enable_if is true and
+// the internal type of enable_if is void,
+// ::type returns exactly this void as type.
+//
+// if T is not arithmetic, the first argument of enable_if is false and
+// there is no internal type defined of enable_if, void is simply ignored,
+// ::type can not be returned, it does not exist, the compiler stops with
+//the error: type does not exist.
+//-----------------------------------------------------------------------------
 
+template< typename T,
+		  typename =  typename std::enable_if<
+									std::is_arithmetic<T>::value,
+									void
+								>::type
+		>
+T multiply(T const t1, T const t2) {
+	return t1 * t2;
+}
+
+template< typename T,
+			typename = typename std::enable_if_t<
+									std::is_arithmetic<T>::value
+								>
+		>
+T multiply_a(T const t1, T const t2) {
+	return t1 * t2;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_utils_021()
+{
+	using namespace std::string_literals;
+
+	std::cout << "*** test utils 021 ***" << std::endl;
+
+	auto v1 = multiply(42.0, 1.5);
+	//auto v2 = multiply("42.0"s, "1.5"s);
+
+	auto v1_a = multiply_a(42.0, 1.5);
+	//auto v2_a = multiply_a("42.0"s, "1.5"s);
+}
