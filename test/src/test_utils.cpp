@@ -280,3 +280,47 @@ void test_utils_021()
 	std::cout << "  v1_a: " << v1_a << '\n';
 	//auto v2_a = multiply_a("42.0"s, "1.5"s);
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+#define EXIT_CONSTEXPR_IF
+
+#if defined(EXIT_CONSTEXPR_IF)
+template<typename T>
+auto compute(T const a, T const b) {
+	if constexpr (std::is_integral<T>::value) {
+		return a * b;
+	}
+	else {
+		return a + b;
+	}
+}
+#else
+template< typename T
+	, typename = typename std::enable_if_t<std::is_integral<T>::value>
+>
+T compute(T const t1, T const t2) {
+	return t1 * t2;
+}
+
+template< typename T
+	, typename = typename std::enable_if_t<not std::is_integral<T>::value
+	>
+>
+T compute(T const t1, T const t2, int i = 0) {
+	return t1 + t2;
+}
+#endif
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_utils_022()
+{
+	std::cout << "*** test utils 022 ***" << std::endl;
+	auto v1 = compute(1, 3);
+	std::cout << "  v1: " << v1 << '\n';
+
+	auto v2 = compute(1.0, 3.0);
+	std::cout << "  v2: " << v2 << '\n';
+}
