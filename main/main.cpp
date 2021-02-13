@@ -26,12 +26,11 @@ int main (int argc, char *argv[])
 	test_type_func_004();
 
 	test_type_func_005();
+	test_type_func_005_1();
+
 	test_type_func_006();
 	test_type_func_007();
-
 	test_type_func_008();
-	test_type_func_008();
-
 	test_type_func_009();
 
 	test_type_func_010();

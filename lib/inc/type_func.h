@@ -1,7 +1,5 @@
 
-#if _MSC_VER
-	#include <concepts>
-#endif
+#include <iostream>
 
 #include <numeric>
 #include <iterator>
@@ -17,9 +15,11 @@ auto add(Ts... args)
 	return (... + args);
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 template <typename... Ts>
-auto add_to_one(Ts... args)
-{
+auto add_to_one(Ts... args) {
 	return (1 + ... + args);
 }
 
@@ -49,6 +49,22 @@ constexpr auto min(Ts && ... args)
 //-----------------------------------------------------------------------------
 namespace funclib
 {
+
+	template<typename ...Args>
+	void fold_print(Args&&... args) {
+		(std::cout << ... << std::forward<Args>(args)) << '\n';
+	}
+
+	template<typename ...Args>
+	void fold_separate_line(Args&&... args) {
+
+		auto separate_line = [](const auto& v) {
+			std::cout << v << '\n';
+		};
+
+		( ... , separate_line(std::forward<Args>(args)) ); // over comma operator
+	}
+
 	//-----------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------
 

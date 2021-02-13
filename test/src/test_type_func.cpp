@@ -10,7 +10,7 @@
 #include <queue>
 #include <map>
 #include <vector>
-#include <iostream>
+
 
 #include <string>
 #include <algorithm>
@@ -70,6 +70,8 @@ void test_type_func_003()
 //-----------------------------------------------------------------------------
 void test_type_func_004()
 {
+
+	std::cout << "*** test type func 004 ***" << std::endl;
 	try
 	{
 		auto vnums = std::vector<int>{ 0, 2, -3, 5, -1, 6, 8, -4, 9 };
@@ -92,6 +94,7 @@ void test_type_func_004()
 //-----------------------------------------------------------------------------
 void test_type_func_005()
 {
+	std::cout << "*** test type func 005 ***" << std::endl;
 	try
 	{
 		std::map<char, int> m_char_num{ { 'a', 0 },
@@ -125,6 +128,22 @@ void test_type_func_005()
 	}
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_005_1()
+{
+	std::cout << "*** test type func 005_1 ***" << std::endl;
+	try 	{
+		std::cout << "fold print" << std::endl;
+		funclib::fold_print("hello", 10, 20, 30);
+
+		std::cout << "fold separate line" << std::endl;
+		funclib::fold_separate_line("hello", 10, 20, 30);
+	}
+	catch (std::exception& e) 	{
+		std::cout << "exception: " << e.what() << std::endl;
+	}
+}
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -191,6 +210,7 @@ struct fround
 //-----------------------------------------------------------------------------
 void test_type_func_008()
 {
+	std::cout << "*** test type func 008 ***" << std::endl;
 	try
 	{
 		auto amounts =
@@ -212,6 +232,7 @@ void test_type_func_008()
 //-----------------------------------------------------------------------------
 void test_type_func_009()
 {
+	std::cout << "*** test type func 009 ***" << std::endl;
 	try
 	{
 		auto words = std::map<std::string, int> {
@@ -242,6 +263,7 @@ void test_type_func_009()
 //-----------------------------------------------------------------------------
 void test_type_func_010()
 {
+	std::cout << "*** test type func 010 ***" << std::endl;
 	try
 	{
 		auto vnums = std::vector<int>{ 0, 2, -3, 5, -1, 6, 8, -4, 9 };

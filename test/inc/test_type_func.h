@@ -4,6 +4,8 @@ void test_type_func_003();
 void test_type_func_004();
 
 void test_type_func_005();
+void test_type_func_005_1();
+
 void test_type_func_006();
 void test_type_func_007();
 
