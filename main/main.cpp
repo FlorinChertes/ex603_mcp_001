@@ -45,6 +45,8 @@ int main (int argc, char *argv[])
 	test_type_func_chrono_015();
 	test_type_func_chrono_016();
 
+	test_type_func_chrono_017();
+
 	test_func_arg_001();
 	test_func_arg_002();
 

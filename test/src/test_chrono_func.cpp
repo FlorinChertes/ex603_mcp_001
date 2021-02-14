@@ -1,8 +1,11 @@
 
 #include <test_chrono_func.h>
 
+#include <ctime>
 #include <chrono>
 #include <functional>
+
+#include <iomanip>
 #include <iostream>
 
 //-----------------------------------------------------------------------------
@@ -110,4 +113,21 @@ void test_type_func_chrono_016()
 
 	std::cout << std::chrono::duration<double, std::nano>(t).count()
 		<< "ns" << std::endl;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_type_func_chrono_017()
+{
+	std::cout << "*** test chrono 017 ***" << std::endl;
+
+	auto now = std::chrono::system_clock::now();
+	auto stime = std::chrono::system_clock::to_time_t(now);
+	auto ltime = std::localtime(&stime);
+	std::cout << std::put_time(ltime, "%c") << '\n';
+
+	std::cout.imbue(std::locale("de_AT.utf8"));
+	std::cout << "de_AT: " << std::put_time(ltime, "%c %Z") << '\n';
+
+	std::cout << "de_AT: " << std::put_time(ltime, "%c") << '\n';
 }
