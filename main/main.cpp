@@ -48,6 +48,8 @@ int main (int argc, char *argv[])
 
 	test_func_arg_001();
 	test_func_arg_002();
+	test_func_arg_003();
+	test_func_arg_004();
 
 	test_emc_item_26_01();
 	test_emc_item_26_02();
