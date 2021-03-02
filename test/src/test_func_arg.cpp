@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <string_view>
 
+#include <memory>
 #include <array>
 #include <iterator>
 #include <iostream>
