@@ -74,5 +74,8 @@ int main (int argc, char *argv[])
 	test_utils_021();
 	test_utils_022();
 
+	test_utils_023();
+
+
 	return 0;
 }
