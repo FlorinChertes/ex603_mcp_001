@@ -392,6 +392,19 @@ int null_deref(int x)
 		return 47;
 	}
 }
+
+int div_by_zero(int x)
+{
+	if(x)
+	{
+		return 13 / 0;
+	}
+	else
+	{
+		return 47;
+	}
+}
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_utils_024()
@@ -400,5 +413,8 @@ void test_utils_024()
 
 	//const int ret_val = null_deref(1);
 	//std::cout << "ret val null deref = " << ret_val << std::endl;
+	const int ret_val = div_by_zero(1);
+	std::cout << "ret val div by null = " << ret_val << std::endl;
+
 
 }
