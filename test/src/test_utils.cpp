@@ -378,3 +378,27 @@ void test_utils_023()
 	std::visit(PrintVisitor, intFloatString2);
 
 }
+
+int null_deref(int x)
+{
+	int* p = nullptr;
+
+	if (x)
+	{
+		return *p + 13;
+	}
+	else
+	{
+		return 47;
+	}
+}
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_utils_024()
+{
+	std::cout << "*** test utils 024 ***" << std::endl;
+	const int ret_val = null_deref(1);
+
+	std::cout << "ret val null deref = " << ret_val << std::endl;
+
+}
