@@ -415,6 +415,4 @@ void test_utils_024()
 	//std::cout << "ret val null deref = " << ret_val << std::endl;
 	const int ret_val = div_by_zero(1);
 	std::cout << "ret val div by null = " << ret_val << std::endl;
-
-
 }
