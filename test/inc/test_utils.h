@@ -7,4 +7,3 @@ void test_utils_022();
 
 void test_utils_023();
 
-void test_utils_024();
