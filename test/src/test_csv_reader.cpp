@@ -82,6 +82,7 @@ template<typename T>
 
 // as of Dec 2018 only MSVC supports floating point conversion
 // this code might be removed when GCC/Clang handles it as well
+
 #ifndef _MSC_VER
 template<>
 [[nodiscard]] std::optional<double> TryConvert(std::string_view sv) noexcept {
@@ -271,7 +272,15 @@ void ShowResults(const std::vector<Result>& results, Date startDate, Date endDat
 //-----------------------------------------------------------------------------
 int test_csv_reader_24() {
 
+
+
+#ifndef _MSC_VER
+    std::string path_("./data/");
+#else
     std::string path_(".\\data\\");
+#endif
+
+
     std::cout << "input path: " << path_ << std::endl;
     try {
 

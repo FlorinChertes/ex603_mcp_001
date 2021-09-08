@@ -272,7 +272,7 @@ namespace unterricht
         return is_valid;
     }
 
-} // namespace unterricht
+
 
 unterricht::CLe lehrer_1("L1_a");
 unterricht::CLe lehrer_2("L2_a");
@@ -346,11 +346,13 @@ unterricht::CUnt build_unterricht()
     return unt;
 }
 
+} // namespace unterricht
+
 void test_polymorphism_25_ante()
 {
     std::cout << "*** start test_polymorphism_25 ante ***" << std::endl;
 
-    unterricht::CUnt unt_1{build_unterricht()};
+    unterricht::CUnt unt_1{unterricht::build_unterricht()};
 
     assert(unt_1.check_one_lehrer_pro_KZ() == true);
     assert(unt_1.check_one_lehrer_for_all_KZ() == true);
