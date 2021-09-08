@@ -10,6 +10,10 @@
 #include <test_chrono_func.h>
 #include <test_type_func.h>
 
+#include <test_csv_reader.h>
+#include <test_polymorphism.h>
+#include <test_polymorphism_variant.h>
+
 #include <iostream>
 #include <string>
 
@@ -18,7 +22,7 @@ int main (int argc, char *argv[])
 {
 	
 	std::cout << "test_main" << std::endl;
-	
+
 	test_type_func_001();
 	test_type_func_002();
 
@@ -76,6 +80,10 @@ int main (int argc, char *argv[])
 
 	test_utils_023();
 
+	test_csv_reader_24();
+
+	test_polymorphism_25_ante();
+	test_polymorphism_25();
 
 	return 0;
 }

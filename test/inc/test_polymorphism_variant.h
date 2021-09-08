@@ -1,0 +1,1 @@
+void test_polymorphism_25();

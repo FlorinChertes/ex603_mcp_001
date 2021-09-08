@@ -15,7 +15,7 @@ IF (MSVC)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 	ENDIF ()
 ELSE ()
-	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wnull-dereference")
+	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wnull-dereference")
 
 	SET(GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS "-fconcepts")
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS}")
@@ -65,6 +65,18 @@ add_executable(ex603_mcp_type_func
 
 	lib/inc/emc_sm_item_26_01.h
 	lib/src/emc_sm_item_26_01.cpp
+
+
+	test/src/test_csv_reader.cpp
+	test/inc/test_csv_reader.h
+	test/inc/scope_timer.h
+
+	test/src/test_polymorphism.cpp
+	test/inc/test_polymorphism.h
+
+	test/src/test_polymorphism_variant.cpp
+	test/inc/test_polymorphism_variant.h
+
 
 	main/main.cpp
 )
