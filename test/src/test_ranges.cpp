@@ -68,7 +68,7 @@ void test_ranges_028()
 
     const std::vector<int> ve = vi | std::vector<int>{};
 
-    std::ranges::copy(ve.begin(), ve.end(),		//source
+    std::copy(ve.begin(), ve.end(),		                //source
         std::ostream_iterator<int>(std::cout, ", "));	        //destination
     std::cout << std::endl;
 
