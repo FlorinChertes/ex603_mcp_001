@@ -77,6 +77,9 @@ add_executable(ex603_mcp_type_func
 	test/src/test_polymorphism_variant.cpp
 	test/inc/test_polymorphism_variant.h
 
+	lib/inc/ranges_func.h
+	test/inc/test_ranges.h
+	test/src/test_ranges.cpp
 
 	main/main.cpp
 )

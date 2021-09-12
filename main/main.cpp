@@ -14,6 +14,8 @@
 #include <test_polymorphism.h>
 #include <test_polymorphism_variant.h>
 
+#include <test_ranges.h>
+
 #include <iostream>
 #include <string>
 
@@ -84,6 +86,10 @@ int main (int argc, char *argv[])
 
 	test_polymorphism_25_ante();
 	test_polymorphism_25();
+
+	test_ranges_026();
+	test_ranges_027();
+	test_ranges_028();
 
 	return 0;
 }

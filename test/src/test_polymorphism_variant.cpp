@@ -9,7 +9,9 @@
 #include <memory>
 #include <cassert>
 
-// Some non-refined, abstract helper functions:
+//-----------------------------------------------------------------------------
+// Abstract helper functions.
+//-----------------------------------------------------------------------------
 template <class Rng1, class Rng2>
 bool SubsetOf(Rng1&& r1, Rng2&& r2)
 {
@@ -27,26 +29,34 @@ bool Equal(Rng1&& r1, Rng2&& r2) // We could serialize r1, r2 into vectors and s
         && SubsetOf (std::forward<Rng2>(r2), std::forward<Rng1>(r1));
 }
 
-struct ToVectorFn
+//-----------------------------------------------------------------------------
+// The type of a range-element
+//-----------------------------------------------------------------------------
+template <std::ranges::range R>
+using elem_t = std::decay_t<std::ranges::range_value_t<R>>;
+
+//-----------------------------------------------------------------------------
+// Build a std::vector from a range,
+// the elements of both data structures have the same type.
+//-----------------------------------------------------------------------------
+template <std::ranges::range R>
+constexpr auto operator|(R&& r, std::vector<elem_t<R>>) {
+     return std::vector<elem_t<R>>{ r.begin(), r.end() };
+ }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+template <class Target>
+struct CastableToFn
 {
-    template <class Rng>
-    auto operator()(Rng&& r) const
+    template <class Source>
+    bool operator()(const Source* s) const noexcept
     {
-        return std::vector<std::ranges::range_value_t<Rng>>{
-            std::ranges::begin(r),
-            std::ranges::end(r)
-        };
+        return dynamic_cast<const Target*>(s) != nullptr;
     }
 };
-
-constexpr ToVectorFn ToVector;
-
-template <class R>
-auto operator|(R&& r, const ToVectorFn& f)
-{
-    return std::invoke(f, std::forward<R>(r));
-}
-
+template <class Target>
+constexpr auto CastableTo = CastableToFn<Target>{};
 
 
 //-----------------------------------------------------------------------------
@@ -93,117 +103,107 @@ struct CKoppZeile
 public:
     void set_element(CStpEl* elem) { m_arStpEl.push_back(elem); }
 
-    bool check_one_lehrer_pro_KZ() const;
-    CLe* get_lehrer() const;
-    bool check_all_klassen_gleich(const CKoppZeile& other) const;
-    std::vector<std::string> get_all_klassen_name() const;
+    bool check_one_lehrer_pro_KZ() const noexcept;
+    CLe* get_lehrer() const noexcept;
+    bool check_all_klassen_gleich(const CKoppZeile& other) const noexcept;
+    std::vector<std::string> get_all_klassen_name() const noexcept;
 
 //private:
     // Alle Elemente, die gemeinsam während eines Unterrichts belegt sind:
     std::vector<CStpEl*> m_arStpEl;
 };
 
-template <class Target>
-struct CastableToFn
-{
-	template <class Source>
-	bool operator()(const Source* s) const noexcept
-	{
-		return dynamic_cast<const Target*>(s) != nullptr;
-	}
-};
-template <class Target>
-constexpr auto CastableTo = CastableToFn<Target>{};
 
-bool CKoppZeile::check_one_lehrer_pro_KZ() const {
+bool CKoppZeile::check_one_lehrer_pro_KZ() const noexcept {
 	return std::count_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>) == 1;
 }
 
-CLe* CKoppZeile::get_lehrer() const {
+CLe* CKoppZeile::get_lehrer() const noexcept {
 	auto it = std::find_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>);
 	return it != m_arStpEl.end() ? static_cast<CLe*>(*it) : nullptr;
 }
 
-bool CKoppZeile::check_all_klassen_gleich(const CKoppZeile& other) const
+bool CKoppZeile::check_all_klassen_gleich(const CKoppZeile& other) const noexcept
 {
 	return Equal(
 		m_arStpEl | std::views::filter(CastableTo<CKla>),
 		other.m_arStpEl | std::views::filter(CastableTo<CKla>));
 }
 
-std::vector<std::string> CKoppZeile::get_all_klassen_name() const
+std::vector<std::string> CKoppZeile::get_all_klassen_name() const noexcept
 {
-	return m_arStpEl | std::views::filter(CastableTo<CKla>)
+    return m_arStpEl | std::views::filter(CastableTo<CKla>)
 		| std::views::transform([](CStpEl* pEl) { return static_cast<CKla*>(pEl)->get_name(); })
-		| ToVector;	// Custom function that converts ranges to vector;
-						// As an alternative, use vector-from-iterator-pair constructor.
+        | std::vector<std::string>{};
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
 class CUnt
 {
+
+    friend void swap(CUnt& lhs, CUnt& rhs) {
+        std::swap(lhs.m_arKoppZeile, rhs.m_arKoppZeile);
+    }
+
 public:
-        CUnt() = default;
+    CUnt() = default;
 
-        CUnt(const CUnt& unt)
+    CUnt(const CUnt & unt)
+    {
+        for (CKoppZeile* pKoppZeile : unt.m_arKoppZeile)
         {
-			*this = unt;
+            m_arKoppZeile.push_back(new CKoppZeile(*pKoppZeile));
         }
+    }
 
-		CUnt& operator=(const CUnt& unt)
-		{
-			Clear();
-            for (CKoppZeile* pKoppZeile : unt.m_arKoppZeile)
-            {
-                    m_arKoppZeile.push_back(new CKoppZeile(*pKoppZeile));
-            }
-            return *this;
-		}
-
-        ~CUnt()
+    CUnt& operator= (const CUnt & rhs)
+    {
+        if (this != &rhs)
         {
-			Clear();
+            CUnt temp{ rhs };
+            swap(*this, temp);
         }
+        return *this;
+    }
 
-        void AddKoppZeile(CKoppZeile* pKoppZeile)
+    ~CUnt()
+    {
+        for (CKoppZeile* pKoppZeile : m_arKoppZeile)
         {
-            m_arKoppZeile.push_back(pKoppZeile);
+            delete pKoppZeile;
         }
+    }
 
-		void Clear()
-		{
-            for (CKoppZeile* pKoppZeile : m_arKoppZeile)
-            {
-                    delete pKoppZeile;
-            }
-			m_arKoppZeile = {};
-		}
+    void AddKoppZeile(CKoppZeile* pKoppZeile)
+    {
+        m_arKoppZeile.push_back(pKoppZeile);
+    }
 
-        bool check_one_lehrer_pro_KZ() const;
-        bool check_one_lehrer_for_all_KZ() const;
-        bool if_one_klass_gleich_all_kalssen_gleich() const;
+    bool check_one_lehrer_pro_KZ() const noexcept;
+    bool check_one_lehrer_for_all_KZ() const noexcept;
+    bool if_one_klass_gleich_all_kalssen_gleich() const noexcept;
 
 private:
         std::vector<CKoppZeile*> m_arKoppZeile;
 };
 
-bool CUnt::check_one_lehrer_pro_KZ() const {
+bool CUnt::check_one_lehrer_pro_KZ() const noexcept
+{
 	return std::ranges::all_of(m_arKoppZeile, &CKoppZeile::check_one_lehrer_pro_KZ);
 }
 
-bool CUnt::check_one_lehrer_for_all_KZ() const
+bool CUnt::check_one_lehrer_for_all_KZ() const noexcept
 {
 	auto allTeachers = m_arKoppZeile
         | std::views::transform([](CKoppZeile* pZ) { return pZ->get_lehrer(); })
-		| ToVector;
+		| std::vector<CLe*>{};
+
 	std::sort(allTeachers.begin(), allTeachers.end());
 	return std::adjacent_find(allTeachers.begin(), allTeachers.end()) == allTeachers.end();
 }
 
-bool CUnt::if_one_klass_gleich_all_kalssen_gleich() const
+bool CUnt::if_one_klass_gleich_all_kalssen_gleich() const noexcept
 {
     std::map<const CStpEl*, const CKoppZeile*> klaToKoppZeile;
 	for (const CKoppZeile* pZ : m_arKoppZeile)
@@ -226,7 +226,8 @@ bool CUnt::if_one_klass_gleich_all_kalssen_gleich() const
 	return true;
 }
 
-
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 CLe lehrer_1("L1");
 CLe lehrer_2("L2");
 CLe lehrer_3("L3");
@@ -240,6 +241,8 @@ CKla klasse_4("K4");
 CKla klasse_5("K5");
 CKla klasse_6("K6");
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 CUnt build_unterricht()
 {
     CKoppZeile k_zeile_1;
@@ -284,6 +287,8 @@ CUnt build_unterricht()
     return unt;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void test_polymorphism_25()
 {
     std::cout << "*** start test_polymorphism_25 ***" << std::endl;
@@ -297,11 +302,13 @@ void test_polymorphism_25()
     CUnt unt_2{ unt_1 };
 
     CUnt unt_3{};
-    //unt_3 = unt_1;
+    unt_3 = unt_1;
 
     std::cout << "*** end test_polymorphism_25 ***" << std::endl;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 /*
 int main(int, char**)
 {
