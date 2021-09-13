@@ -10,39 +10,24 @@
 #include <cassert>
 
 //-----------------------------------------------------------------------------
-// Abstract helper functions.
 //-----------------------------------------------------------------------------
-template <class Rng1, class Rng2>
-bool SubsetOf(Rng1&& r1, Rng2&& r2)
+struct ToVectorFn
 {
-	return std::ranges::all_of (std::forward<Rng1>(r1),
-		[&r2](const auto & el) {
-            return std::ranges::find(r2, el) != std::ranges::end(r2);
-        }
-    );
-}
+    template <class Rng>
+    auto operator()(Rng&& r) const
+    {
+        using elem_t = std::decay_t<std::ranges::range_value_t<Rng>>;
+        return std::vector<elem_t> {             std::ranges::begin(r), std::ranges::end(r)
+        };
+    }
+};
+constexpr ToVectorFn ToVector;
+template <class R>
 
-template <class Rng1, class Rng2>
-bool Equal(Rng1&& r1, Rng2&& r2) // We could serialize r1, r2 into vectors and sort them.
+auto operator| (R&& r, const ToVectorFn& f)
 {
-	return SubsetOf (std::forward<Rng1>(r1), std::forward<Rng2>(r2))
-        && SubsetOf (std::forward<Rng2>(r2), std::forward<Rng1>(r1));
+    return std::invoke(f, std::forward<R>(r));
 }
-
-//-----------------------------------------------------------------------------
-// The type of a range-element
-//-----------------------------------------------------------------------------
-template <std::ranges::range R>
-using elem_t = std::decay_t<std::ranges::range_value_t<R>>;
-
-//-----------------------------------------------------------------------------
-// Build a std::vector from a range,
-// the elements of both data structures have the same type.
-//-----------------------------------------------------------------------------
-template <std::ranges::range R>
-constexpr auto operator|(R&& r, std::vector<elem_t<R>>) {
-     return std::vector<elem_t<R>>{ r.begin(), r.end() };
- }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -56,7 +41,7 @@ struct CastableToFn
     }
 };
 template <class Target>
-constexpr auto CastableTo = CastableToFn<Target>{};
+constexpr CastableToFn<Target> CastableTo;
 
 
 //-----------------------------------------------------------------------------
@@ -115,17 +100,17 @@ public:
 
 
 bool CKoppZeile::check_one_lehrer_pro_KZ() const noexcept {
-	return std::count_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>) == 1;
+	return std::ranges::count_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>) == 1;
 }
 
 CLe* CKoppZeile::get_lehrer() const noexcept {
-	auto it = std::find_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>);
+	auto it = std::ranges::find_if(m_arStpEl.begin(), m_arStpEl.end(), CastableTo<CLe>);
 	return it != m_arStpEl.end() ? static_cast<CLe*>(*it) : nullptr;
 }
 
 bool CKoppZeile::check_all_klassen_gleich(const CKoppZeile& other) const noexcept
 {
-	return Equal(
+	return std::ranges::equal(
 		m_arStpEl | std::views::filter(CastableTo<CKla>),
 		other.m_arStpEl | std::views::filter(CastableTo<CKla>));
 }
@@ -134,7 +119,7 @@ std::vector<std::string> CKoppZeile::get_all_klassen_name() const noexcept
 {
     return m_arStpEl | std::views::filter(CastableTo<CKla>)
 		| std::views::transform([](CStpEl* pEl) { return static_cast<CKla*>(pEl)->get_name(); })
-        | std::vector<std::string>{};
+        | ToVector;
 }
 
 //-----------------------------------------------------------------------------
@@ -142,7 +127,7 @@ std::vector<std::string> CKoppZeile::get_all_klassen_name() const noexcept
 class CUnt
 {
 
-    friend void swap(CUnt& lhs, CUnt& rhs) {
+    friend void swap(CUnt& lhs, CUnt& rhs) noexcept {
         std::swap(lhs.m_arKoppZeile, rhs.m_arKoppZeile);
     }
 
@@ -151,7 +136,7 @@ public:
 
     CUnt(const CUnt & unt)
     {
-        for (CKoppZeile* pKoppZeile : unt.m_arKoppZeile)
+        for (const CKoppZeile* pKoppZeile : unt.m_arKoppZeile)
         {
             m_arKoppZeile.push_back(new CKoppZeile(*pKoppZeile));
         }
@@ -197,7 +182,7 @@ bool CUnt::check_one_lehrer_for_all_KZ() const noexcept
 {
 	auto allTeachers = m_arKoppZeile
         | std::views::transform([](CKoppZeile* pZ) { return pZ->get_lehrer(); })
-		| std::vector<CLe*>{};
+		| ToVector;
 
 	std::sort(allTeachers.begin(), allTeachers.end());
 	return std::adjacent_find(allTeachers.begin(), allTeachers.end()) == allTeachers.end();
@@ -214,10 +199,13 @@ bool CUnt::if_one_klass_gleich_all_kalssen_gleich() const noexcept
 			auto r = klaToKoppZeile.try_emplace(pEl, pZ);
 			if (!std::get<1>(r)) // There is already an element
 			{
-				relatedCouplingLines.insert(std::get<0>(r)->second); // The already inserted element.
+                // The already inserted element.
+				relatedCouplingLines.insert(std::get<0>(r)->second);
 			}
 		}
-		if (std::ranges::any_of(relatedCouplingLines, [pZ](const CKoppZeile* pOther) { return !pZ->check_all_klassen_gleich(*pOther); }))
+		if ( std::ranges::any_of(relatedCouplingLines,              [pZ](const CKoppZeile* pOther)
+                { return !pZ->check_all_klassen_gleich(*pOther); })
+            )
 		{
 			return false;
 		}
