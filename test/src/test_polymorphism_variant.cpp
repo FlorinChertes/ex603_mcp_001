@@ -17,8 +17,7 @@ struct ToVectorFn
     auto operator()(Rng&& r) const
     {
         using elem_t = std::decay_t<std::ranges::range_value_t<Rng>>;
-        return std::vector<elem_t> {             std::ranges::begin(r), std::ranges::end(r)
-        };
+        return std::vector<elem_t> { std::ranges::begin(r), std::ranges::end(r) };
     }
 };
 constexpr ToVectorFn ToVector;
@@ -106,7 +105,6 @@ public:
     bool check_all_klassen_gleich(const CKoppZeile& other) const noexcept;
     std::vector<std::string> get_all_klassen_name() const noexcept;
 
-//private:
     // Alle Elemente, die gemeinsam während eines Unterrichts belegt sind:
     std::vector<CStpEl*> m_arStpEl;
 };
@@ -285,7 +283,9 @@ CUnt build_unterricht()
     assert(is_unique_inserted == true);
     is_unique_inserted = k_zeile_4.set_element(&klasse_4);
     assert(is_unique_inserted == true);
-    //k_zeile_4.set_element(&klasse_1);
+    //is_unique_inserted = k_zeile_4.set_element(&klasse_1);
+    assert(is_unique_inserted == true);
+
     unt.AddKoppZeile(new CKoppZeile(k_zeile_4));
 
     CKoppZeile k_zeile_5;
