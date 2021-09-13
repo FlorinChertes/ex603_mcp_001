@@ -22,8 +22,8 @@ struct ToVectorFn
     }
 };
 constexpr ToVectorFn ToVector;
-template <class R>
 
+template <class R>
 auto operator| (R&& r, const ToVectorFn& f)
 {
     return std::invoke(f, std::forward<R>(r));
@@ -86,7 +86,20 @@ public:
 struct CKoppZeile
 {
 public:
-    void set_element(CStpEl* elem) { m_arStpEl.push_back(elem); }
+    [[nodiscard]] bool set_element(CStpEl* elem) {
+        bool is_unique_inserted = false;
+        auto it = std::ranges::find_if(m_arStpEl.begin(), m_arStpEl.end(),
+            [elem](const auto item) {
+                return item->get_name() == elem->get_name();
+            }
+        );
+
+        if (it == m_arStpEl.end()) {
+            m_arStpEl.push_back(elem);
+            is_unique_inserted = true;
+        }
+        return is_unique_inserted;
+    }
 
     bool check_one_lehrer_pro_KZ() const noexcept;
     CLe* get_lehrer() const noexcept;
@@ -203,7 +216,8 @@ bool CUnt::if_one_klass_gleich_all_kalssen_gleich() const noexcept
 				relatedCouplingLines.insert(std::get<0>(r)->second);
 			}
 		}
-		if ( std::ranges::any_of(relatedCouplingLines,              [pZ](const CKoppZeile* pOther)
+		if ( std::ranges::any_of(relatedCouplingLines,
+			[pZ](const CKoppZeile* pOther)
                 { return !pZ->check_all_klassen_gleich(*pOther); })
             )
 		{
@@ -233,16 +247,21 @@ CKla klasse_6("K6");
 //-----------------------------------------------------------------------------
 CUnt build_unterricht()
 {
-    CKoppZeile k_zeile_1;
-    k_zeile_1.set_element(&lehrer_1);
-    k_zeile_1.set_element(&klasse_1);
+    bool is_unique_inserted{ false };
 
+    CKoppZeile k_zeile_1;
+    is_unique_inserted = k_zeile_1.set_element(&lehrer_1);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_1.set_element(&klasse_1);
+    assert(is_unique_inserted == true);
     //      1. in jeder Kopplungszeile höchstens 1 Lehrer vorkommt
     //k_zeile_1.set_element(&lehrer_3);
 
     CKoppZeile k_zeile_2;
-    k_zeile_2.set_element(&lehrer_2);
-    k_zeile_2.set_element(&klasse_2);
+    is_unique_inserted = k_zeile_2.set_element(&lehrer_2);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_2.set_element(&klasse_2);
+    assert(is_unique_inserted == true);
 
     CUnt unt;
 
@@ -260,16 +279,22 @@ CUnt build_unterricht()
     //      3. wenn zwei Kopplungszeilen eine Klasse gemeinsam haben, dann
     //              sind alle Klassen gleich.
     CKoppZeile k_zeile_4;
-    k_zeile_4.set_element(&lehrer_3);
-    k_zeile_4.set_element(&klasse_3);
-    k_zeile_4.set_element(&klasse_4);
+    is_unique_inserted = k_zeile_4.set_element(&lehrer_3);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_4.set_element(&klasse_3);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_4.set_element(&klasse_4);
+    assert(is_unique_inserted == true);
     //k_zeile_4.set_element(&klasse_1);
     unt.AddKoppZeile(new CKoppZeile(k_zeile_4));
 
     CKoppZeile k_zeile_5;
-    k_zeile_5.set_element(&lehrer_4);
-    k_zeile_5.set_element(&klasse_3);
-    k_zeile_5.set_element(&klasse_4);
+    is_unique_inserted = k_zeile_5.set_element(&lehrer_4);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_5.set_element(&klasse_3);
+    assert(is_unique_inserted == true);
+    is_unique_inserted = k_zeile_5.set_element(&klasse_4);
+    assert(is_unique_inserted == true);
     unt.AddKoppZeile(new CKoppZeile(k_zeile_5));
 
     return unt;
