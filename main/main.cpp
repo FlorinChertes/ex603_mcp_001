@@ -16,6 +16,8 @@
 
 #include <test_ranges.h>
 
+#include <test_read_file.h>
+
 #include <iostream>
 #include <string>
 
@@ -90,6 +92,9 @@ int main (int argc, char *argv[])
 	test_ranges_026();
 	test_ranges_027();
 	test_ranges_028();
+
+	test_count_words_29();
+	test_count_words_30();
 
 	return 0;
 }

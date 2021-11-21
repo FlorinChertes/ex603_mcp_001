@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 template <typename... Ts>
-auto add(Ts... args)
+constexpr auto add(Ts... args)
 {
 	return (... + args);
 }
@@ -19,7 +19,7 @@ auto add(Ts... args)
 //-----------------------------------------------------------------------------
 
 template <typename... Ts>
-auto add_to_one(Ts... args) {
+constexpr auto add_to_one(Ts... args) {
 	return (1 + ... + args);
 }
 

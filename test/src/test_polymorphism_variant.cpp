@@ -49,7 +49,7 @@ class CStpEl
 {
 public:
     void set_name(const std::string& name) { m_name = name; }
-    const std::string& get_name() const { return m_name; }
+    const std::string& get_name() const noexcept { return m_name; }
 
     virtual void show() = 0;
 

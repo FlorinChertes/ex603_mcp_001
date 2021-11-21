@@ -66,7 +66,6 @@ add_executable(ex603_mcp_type_func
 	lib/inc/emc_sm_item_26_01.h
 	lib/src/emc_sm_item_26_01.cpp
 
-
 	test/src/test_csv_reader.cpp
 	test/inc/test_csv_reader.h
 	test/inc/scope_timer.h
@@ -80,6 +79,9 @@ add_executable(ex603_mcp_type_func
 	lib/inc/ranges_func.h
 	test/inc/test_ranges.h
 	test/src/test_ranges.cpp
+
+	test/inc/test_read_file.h
+	test/src/test_read_file.cpp
 
 	main/main.cpp
 )
