@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <iterator>
+
 #include "scope_timer.h"
 
 struct StringHash {
