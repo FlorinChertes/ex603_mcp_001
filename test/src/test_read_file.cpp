@@ -54,9 +54,8 @@ std::size_t count_words_from_string(const std::string& file_as_string)
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int test_count_words_29()
+int test_count_words_from_file_as_string()
 {
-	std::cout << "*** start test_count_words_29 ***" << std::endl;
 
 #ifndef _MSC_VER
     std::string file_name("./data/file_of_strings.txt");
@@ -89,7 +88,7 @@ int test_count_words_29()
     return 0;
 }
 
-std::size_t count_words(const std::filesystem::path& filePath)
+std::size_t count_words_from_file(const std::filesystem::path& filePath)
 {
     ScopeTimer _t(__func__, /*store*/true);
 
@@ -104,9 +103,8 @@ std::size_t count_words(const std::filesystem::path& filePath)
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int test_count_words_30()
+int test_count_words_from_file()
 {
-    std::cout << "*** start test_count_words_30 ***" << std::endl;
 
 #ifndef _MSC_VER
     std::string file_name("./data/file_of_strings.txt");
@@ -120,7 +118,7 @@ int test_count_words_30()
 
         const std::filesystem::path file_name_path(file_name.c_str());
 
-        const std::size_t word_count = count_words(file_name_path);
+        const std::size_t word_count = count_words_from_file(file_name_path);
         std::cout << "word count: " << word_count << std::endl;
 
         ScopeTimer::ShowStoredResults();

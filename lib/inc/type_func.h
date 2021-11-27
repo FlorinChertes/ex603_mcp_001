@@ -86,7 +86,7 @@ namespace funclib
 	{
 		std::map<T, U> r;
 
-		for (auto const kvp : m)
+		for (auto& kvp : m)
 		{
 			r.insert(f(kvp));
 		}

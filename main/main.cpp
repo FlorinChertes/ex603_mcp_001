@@ -93,8 +93,10 @@ int main (int argc, char *argv[])
 	test_ranges_027();
 	test_ranges_028();
 
-	test_count_words_29();
-	test_count_words_30();
+	std::cout << "*** start test_count_words_29 ***" << std::endl;
+	test_count_words_from_file_as_string();
+    std::cout << "*** start test_count_words_30 ***" << std::endl;
+	test_count_words_from_file();
 
 	return 0;
 }

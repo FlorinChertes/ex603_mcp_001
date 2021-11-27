@@ -7,6 +7,7 @@ struct Widget {
 };
 
 void sink(std::unique_ptr<Widget> uniqPtr) {
+	uniqPtr;
 	// do something with uniqPtr
 }
 
