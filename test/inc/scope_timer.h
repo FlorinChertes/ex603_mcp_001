@@ -19,7 +19,6 @@ public:
     ~ScopeTimer() {
         const auto end = std::chrono::steady_clock::now();
         const auto res = std::chrono::duration_cast<std::chrono::milliseconds>(end - mStart).count();
-        std::cout << "duration in ms: " << res << " ms\n";
         if (mStore)
             sResults[mName] += res;
         else
