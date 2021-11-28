@@ -104,7 +104,6 @@ std::size_t count_words_from_file(const std::filesystem::path& filePath)
 //-----------------------------------------------------------------------------
 int test_count_words_from_file()
 {
-
 #ifndef _MSC_VER
     std::string file_name("./data/big_file_of_strings.txt");
 #else
@@ -122,7 +121,6 @@ int test_count_words_from_file()
         std::cout << "word count: " << word_count << std::endl;
 
         ScopeTimer::ShowStoredResults();
-
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
@@ -210,10 +208,9 @@ std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& fi
     std::cout << "buffersize: " << buffer_size << std::endl;
 
     std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
-
-    ScopeTimer _t(__func__, /*store*/true);
  
     try {
+        ScopeTimer _t(__func__, /*store*/true);
 
         std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
         if (!in_file)
@@ -257,13 +254,10 @@ std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& fi
     return  uniques.size();
 }
 
-
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 int test_count_words_from_file_read_in_blocks()
 {
-
 #ifndef _MSC_VER
     std::string file_name("./data/big_file_of_strings.txt");
 #else
@@ -281,7 +275,6 @@ int test_count_words_from_file_read_in_blocks()
         std::cout << "word count: " << word_count << std::endl;
 
         ScopeTimer::ShowStoredResults();
-
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
