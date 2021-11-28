@@ -58,19 +58,18 @@ int test_count_words_from_file_as_string()
 {
 
 #ifndef _MSC_VER
-    std::string file_name("./data/file_of_strings.txt");
+    std::string file_name("./data/big_file_of_strings.txt");
 #else
-    std::string file_name(".\\data\\file_of_strings.txt");
+    std::string file_name(".\\data\\big_file_of_strings.txt");
 #endif
 
     std::cout << "input path: " << file_name << std::endl;
 
     try {
+        ScopeTimer::ClearStoredResults();
 
         const std::filesystem::path file_name_path(file_name.c_str());
-
         const std::string& file_as_string = get_file_as_string(file_name_path);
-        std::cout << file_as_string << std::endl;
 
         const std::size_t word_count = count_words_from_string(file_as_string);
         std::cout << "word count: " << word_count << std::endl;
@@ -107,14 +106,15 @@ int test_count_words_from_file()
 {
 
 #ifndef _MSC_VER
-    std::string file_name("./data/file_of_strings.txt");
+    std::string file_name("./data/big_file_of_strings.txt");
 #else
-    std::string file_name(".\\data\\file_of_strings.txt");
+    std::string file_name(".\\data\\big_file_of_strings.txt");
 #endif
 
     std::cout << "input path: " << file_name << std::endl;
 
     try {
+        ScopeTimer::ClearStoredResults();
 
         const std::filesystem::path file_name_path(file_name.c_str());
 
@@ -134,3 +134,71 @@ int test_count_words_from_file()
     return 0;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void create_big_file(const std::filesystem::path& filePath)
+{
+
+#ifndef _MSC_VER
+    std::string big_file_name("./data/big_file_of_strings.txt");
+#else
+    std::string big_file_name(".\\data\\big_file_of_strings.txt");
+#endif
+
+    std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
+    if (!in_file)
+        throw std::runtime_error("Cannot open " + filePath.filename().string());
+
+    std::string file_as_string(static_cast<size_t>(std::filesystem::file_size(filePath)), 0);
+
+    in_file.read(file_as_string.data(), file_as_string.size());
+    if (!in_file)
+        throw std::runtime_error("Could not read the full contents from " + filePath.filename().string());
+
+    ScopeTimer _t(__func__, /*store*/true);
+
+    const std::filesystem::path big_file_path(big_file_name.c_str());
+    std::ofstream out_file{ big_file_path, std::ios::out | std::ios::binary };
+    if (!out_file)
+        throw std::runtime_error("Cannot open " + big_file_path.filename().string());
+
+    for (int i = 0; i < 1000000; ++i)
+    {
+        out_file.write(file_as_string.data(), file_as_string.size());
+        if (!out_file)
+            throw std::runtime_error("Could not write the full contents from " + big_file_path.filename().string());
+    }
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+int test_create_big_file()
+{
+
+#ifndef _MSC_VER
+    std::string file_name("./data/file_of_strings.txt");
+#else
+    std::string file_name(".\\data\\file_of_strings.txt");
+#endif
+
+    std::cout << "input path: " << file_name << std::endl;
+
+    try {
+        ScopeTimer::ClearStoredResults();
+
+        const std::filesystem::path file_name_path(file_name.c_str());
+        create_big_file(file_name_path);
+        std::cout << "big file written" << std::endl;
+
+        ScopeTimer::ShowStoredResults();
+
+    }
+    catch (const std::filesystem::filesystem_error& err) {
+        std::cerr << "filesystem error! " << err.what() << '\n';
+    }
+    catch (const std::runtime_error& err) {
+        std::cerr << "runtime error! " << err.what() << '\n';
+    }
+
+    return 0;
+}

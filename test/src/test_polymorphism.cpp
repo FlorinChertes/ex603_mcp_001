@@ -19,7 +19,9 @@ namespace unterricht
 
         virtual void show() = 0;
 
-        virtual ~CStpEl() { std::cout << "dtor CStpEl " << m_name << std::endl; }
+        virtual ~CStpEl() { 
+            //std::cout << "dtor CStpEl " << m_name << std::endl; 
+        }
     private:
         std::string m_name;
     };
@@ -30,7 +32,9 @@ namespace unterricht
     {
     public:
         explicit CLe(const std::string& name) { set_name(name); }
-        ~CLe() { std::cout << "dtor Le " << get_name() << std::endl; }
+        ~CLe() { 
+            //std::cout << "dtor Le " << get_name() << std::endl; 
+        }
 
         void show() override { std::cout << get_name() << std::endl; }
     };
@@ -41,7 +45,9 @@ namespace unterricht
     {
     public:
         explicit CKla(const std::string& name) { set_name(name); }
-        ~CKla() { std::cout << "dtor Kla " << get_name() << std::endl; }
+        ~CKla() { 
+            //std::cout << "dtor Kla " << get_name() << std::endl; 
+        }
 
         void show() override { std::cout << get_name() << std::endl; }
     };

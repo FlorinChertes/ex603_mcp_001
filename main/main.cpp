@@ -86,17 +86,22 @@ int main (int argc, char *argv[])
 
 	test_csv_reader_24();
 
-	test_polymorphism_25_ante();
-	test_polymorphism_25();
+	//test_polymorphism_25_ante();
+	//test_polymorphism_25();
 
-	test_ranges_026();
-	test_ranges_027();
-	test_ranges_028();
+	//test_ranges_026();
+	//test_ranges_027();
+	//test_ranges_028();
 
 	std::cout << "*** start test_count_words_29 ***" << std::endl;
+	test_create_big_file();
+
+	std::cout << "*** start test_count_words_30 ***" << std::endl;
 	test_count_words_from_file_as_string();
-    std::cout << "*** start test_count_words_30 ***" << std::endl;
+    std::cout << "*** start test_count_words_31 ***" << std::endl;
 	test_count_words_from_file();
+	
+
 
 	return 0;
 }
