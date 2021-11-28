@@ -27,6 +27,7 @@ int main (int argc, char *argv[])
 	
 	std::cout << "test_main" << std::endl;
 
+	/*
 	test_type_func_001();
 	test_type_func_002();
 
@@ -85,6 +86,7 @@ int main (int argc, char *argv[])
 	test_utils_023();
 
 	test_csv_reader_24();
+	*/
 
 	//test_polymorphism_25_ante();
 	//test_polymorphism_25();
@@ -93,6 +95,7 @@ int main (int argc, char *argv[])
 	//test_ranges_027();
 	//test_ranges_028();
 
+	
 	std::cout << "*** start test_count_words_29 ***" << std::endl;
 	test_create_big_file();
 
@@ -101,6 +104,10 @@ int main (int argc, char *argv[])
     std::cout << "*** start test_count_words_31 ***" << std::endl;
 	test_count_words_from_file();
 	
+
+	std::cout << "*** start test_count_words_32 ***" << std::endl;
+	test_count_words_from_file_read_in_blocks();
+
 
 
 	return 0;

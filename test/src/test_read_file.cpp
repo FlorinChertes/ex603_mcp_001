@@ -162,7 +162,7 @@ void create_big_file(const std::filesystem::path& filePath)
     if (!out_file)
         throw std::runtime_error("Cannot open " + big_file_path.filename().string());
 
-    for (int i = 0; i < 1000000; ++i)
+    for (int i = 0; i < 1024 * 50000; ++i)
     {
         out_file.write(file_as_string.data(), file_as_string.size());
         if (!out_file)
@@ -174,7 +174,6 @@ void create_big_file(const std::filesystem::path& filePath)
 //-----------------------------------------------------------------------------
 int test_create_big_file()
 {
-
 #ifndef _MSC_VER
     std::string file_name("./data/file_of_strings.txt");
 #else
@@ -189,6 +188,97 @@ int test_create_big_file()
         const std::filesystem::path file_name_path(file_name.c_str());
         create_big_file(file_name_path);
         std::cout << "big file written" << std::endl;
+
+        ScopeTimer::ShowStoredResults();
+
+    }
+    catch (const std::filesystem::filesystem_error& err) {
+        std::cerr << "filesystem error! " << err.what() << '\n';
+    }
+    catch (const std::runtime_error& err) {
+        std::cerr << "runtime error! " << err.what() << '\n';
+    }
+
+    return 0;
+}
+
+
+std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& filePath)
+{
+    // Buffer size 1/32 Megabyte
+    constexpr std::size_t buffer_size = 1 << 15; // 20 is 1 Megabyte
+    std::cout << "buffersize: " << buffer_size << std::endl;
+
+    std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
+
+    ScopeTimer _t(__func__, /*store*/true);
+ 
+    try {
+
+        std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
+        if (!in_file)
+            throw std::runtime_error("Cannot open " + filePath.filename().string());
+        
+        std::streampos fsize = in_file.tellg();
+        in_file.seekg(0, std::ios::end);
+        fsize = in_file.tellg() - fsize;
+        const std::size_t loops = fsize / buffer_size;
+        const std::size_t lastChunk = fsize % buffer_size;
+        in_file.seekg(0, std::ios::beg);
+
+        std::string file_as_string(buffer_size, 0);
+
+        auto insert_file_block_in_set = [&in_file, &file_as_string, &uniques]()
+        {
+            in_file.read(file_as_string.data(), file_as_string.size());
+
+            std::stringstream istring_stream(file_as_string);
+            std::istream_iterator<std::string> it{ istring_stream };
+            std::transform(it, {}, std::inserter(uniques, uniques.begin()), std::identity{});
+        };
+
+        for (std::size_t i = 0; i < loops; ++i) 
+        {
+            insert_file_block_in_set();
+        }
+        
+        if (lastChunk > 0)
+        {
+            insert_file_block_in_set();
+        }
+    }
+    catch (const std::filesystem::filesystem_error& err) {
+        std::cerr << "filesystem error! " << err.what() << '\n';
+    }
+    catch (const std::runtime_error& err) {
+        std::cerr << "runtime error! " << err.what() << '\n';
+    }
+
+    return  uniques.size();
+}
+
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+int test_count_words_from_file_read_in_blocks()
+{
+
+#ifndef _MSC_VER
+    std::string file_name("./data/big_file_of_strings.txt");
+#else
+    std::string file_name(".\\data\\big_file_of_strings.txt");
+#endif
+
+    std::cout << "input path: " << file_name << std::endl;
+
+    try {
+        ScopeTimer::ClearStoredResults();
+
+        const std::filesystem::path file_name_path(file_name.c_str());
+
+        const std::size_t word_count = count_words_from_file_read_in_blocks(file_name_path);
+        std::cout << "word count: " << word_count << std::endl;
 
         ScopeTimer::ShowStoredResults();
 
