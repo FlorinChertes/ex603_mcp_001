@@ -24,7 +24,7 @@ struct StringHash {
 
 [[nodiscard]] std::string get_file_as_string(const std::filesystem::path& filePath)
 {
-    ScopeTimer _t(__func__, /*store*/true);
+    ScopeTimer _t(__func__);
 
     std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
     if (!in_file)
@@ -41,7 +41,7 @@ struct StringHash {
 
 std::size_t count_words_from_string(const std::string& file_as_string)
 {
-    ScopeTimer _t(__func__, /*store*/true);
+    ScopeTimer _t(__func__);
 
     std::stringstream istring_stream(file_as_string);
     std::istream_iterator<std::string> it{ istring_stream };
@@ -66,16 +66,13 @@ int test_count_words_from_file_as_string()
     std::cout << "input path: " << file_name << std::endl;
 
     try {
-        ScopeTimer::ClearStoredResults();
-
         const std::filesystem::path file_name_path(file_name.c_str());
         const std::string& file_as_string = get_file_as_string(file_name_path);
 
         const std::size_t word_count = count_words_from_string(file_as_string);
-        std::cout << "word count: " << word_count << std::endl;
-
         ScopeTimer::ShowStoredResults();
 
+        std::cout << "word count: " << word_count << std::endl;
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
@@ -89,7 +86,7 @@ int test_count_words_from_file_as_string()
 
 std::size_t count_words_from_file(const std::filesystem::path& filePath)
 {
-    ScopeTimer _t(__func__, /*store*/true);
+    ScopeTimer _t(__func__);
 
     std::ifstream ifile(filePath);
     std::istream_iterator<std::string> it{ ifile };
@@ -113,14 +110,12 @@ int test_count_words_from_file()
     std::cout << "input path: " << file_name << std::endl;
 
     try {
-        ScopeTimer::ClearStoredResults();
-
         const std::filesystem::path file_name_path(file_name.c_str());
 
         const std::size_t word_count = count_words_from_file(file_name_path);
-        std::cout << "word count: " << word_count << std::endl;
-
         ScopeTimer::ShowStoredResults();
+
+        std::cout << "word count: " << word_count << std::endl;
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
@@ -153,14 +148,14 @@ void create_big_file(const std::filesystem::path& filePath)
     if (!in_file)
         throw std::runtime_error("Could not read the full contents from " + filePath.filename().string());
 
-    ScopeTimer _t(__func__, /*store*/true);
+    ScopeTimer _t(__func__);
 
     const std::filesystem::path big_file_path(big_file_name.c_str());
     std::ofstream out_file{ big_file_path, std::ios::out | std::ios::binary };
     if (!out_file)
         throw std::runtime_error("Cannot open " + big_file_path.filename().string());
 
-    for (int i = 0; i < 1024 * 50000; ++i)
+    for (int i = 0; i < 1024 * 500; ++i)
     {
         out_file.write(file_as_string.data(), file_as_string.size());
         if (!out_file)
@@ -185,10 +180,9 @@ int test_create_big_file()
 
         const std::filesystem::path file_name_path(file_name.c_str());
         create_big_file(file_name_path);
-        std::cout << "big file written" << std::endl;
 
         ScopeTimer::ShowStoredResults();
-
+        std::cout << "big file written" << std::endl;
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
@@ -210,7 +204,7 @@ std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& fi
     std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
  
     try {
-        ScopeTimer _t(__func__, /*store*/true);
+        ScopeTimer _t(__func__);
 
         std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
         if (!in_file)
@@ -267,14 +261,12 @@ int test_count_words_from_file_read_in_blocks()
     std::cout << "input path: " << file_name << std::endl;
 
     try {
-        ScopeTimer::ClearStoredResults();
-
         const std::filesystem::path file_name_path(file_name.c_str());
 
         const std::size_t word_count = count_words_from_file_read_in_blocks(file_name_path);
-        std::cout << "word count: " << word_count << std::endl;
-
         ScopeTimer::ShowStoredResults();
+
+        std::cout << "word count: " << word_count << std::endl;
     }
     catch (const std::filesystem::filesystem_error& err) {
         std::cerr << "filesystem error! " << err.what() << '\n';
