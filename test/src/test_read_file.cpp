@@ -204,30 +204,26 @@ std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& fi
     std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
  
     try {
-        ScopeTimer _t(__func__);
 
         std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
         if (!in_file)
             throw std::runtime_error("Cannot open " + filePath.filename().string());
-        
-        std::streampos fsize = in_file.tellg();
-        in_file.seekg(0, std::ios::end);
-        fsize = in_file.tellg() - fsize;
-        const std::size_t loops = fsize / buffer_size;
-        const std::size_t lastChunk = fsize % buffer_size;
-        in_file.seekg(0, std::ios::beg);
 
+        const auto fsize{ static_cast<size_t>(std::filesystem::file_size(filePath)) };
+        const auto loops{ fsize / buffer_size };
+        const auto lastChunk{ fsize % buffer_size };
         std::string file_as_string(buffer_size, 0);
-
         auto insert_file_block_in_set = [&in_file, &file_as_string, &uniques]()
         {
             in_file.read(file_as_string.data(), file_as_string.size());
 
             std::stringstream istring_stream(file_as_string);
             std::istream_iterator<std::string> it{ istring_stream };
+
             std::transform(it, {}, std::inserter(uniques, uniques.begin()), std::identity{});
         };
 
+        ScopeTimer _t(__func__);
         for (std::size_t i = 0; i < loops; ++i) 
         {
             insert_file_block_in_set();
