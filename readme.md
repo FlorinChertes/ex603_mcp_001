@@ -34,4 +34,13 @@ florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ rm -fr *
 florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake ~/prj_appl/dev/ex603_mcp_001/
 florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ make
 
+//-----------------
+2021-12-08 17:00
+//-----------------
+
+
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ rm -fr *
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake -DCMAKE_BUILD_TYPE=Release ../../../prj_appl/dev/ex603_mcp_001/
+florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake --build .
+
 
