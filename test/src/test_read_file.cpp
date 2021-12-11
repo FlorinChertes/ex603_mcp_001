@@ -155,7 +155,7 @@ void create_big_file(const std::filesystem::path& filePath)
     if (!out_file)
         throw std::runtime_error("Cannot open " + big_file_path.filename().string());
 
-    for (int i = 0; i < 1024 * 500; ++i)
+    for (int i = 0; i < 1024 * 5000; ++i)
     {
         out_file.write(file_as_string.data(), file_as_string.size());
         if (!out_file)

@@ -37,8 +37,8 @@ set(INCLUDE_DIRS "test/inc" "lib/inc")
 
 include_directories(${INCLUDE_DIRS})
 
-# add the executable
-add_executable(ex603_mcp_type_func
+# add the executable 001
+add_executable(ex603_mcp_001_ex
 
 	test/inc/test_type_func.h
 	test/src/test_type_func.cpp
@@ -89,8 +89,17 @@ add_executable(ex603_mcp_type_func
 	test/inc/test_ranges.h
 	test/src/test_ranges.cpp
 
+	main/main_01.cpp
+)
+
+
+# add the executable 002
+add_executable(ex603_mcp_002_ex
+
+	test/inc/scope_timer.h
+
 	test/inc/test_read_file.h
 	test/src/test_read_file.cpp
 
-	main/main.cpp
+	main/main_02.cpp
 )
