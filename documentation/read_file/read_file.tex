@@ -3,7 +3,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 
-\title{Count the distinct word from a file}
+\title{Count all distinct words from a big file}
 \date{2021-11-27}
 \author{Dipl-Ing. Dr. techn. Florin Ioan Chertes}
 
@@ -28,13 +28,13 @@ The program basically
 \subsection{First implementations ideas}
 If the file has a moderate length two alternative solutions could be applied. 
 \begin{itemize}
-	\item If the file is line oriented, it could be read line by line and each line read in the set. The line length is assumed to be moderately long. 
-	\item If the file is not very big and not line oriented, then the whole file could be read all in a big string and then inserted in a set.
+	\item If the file is line oriented, it could be read line by line and all the words of each line inserted the the set. The line length is assumed to be moderately long. 
+	\item If the file is not very big and not line oriented, then the whole file could be read as a whole in a big string and then inserted in the set.
 \end{itemize}
 
 \subsection{Current concrete situation}
 
-The file to be read is not line oriented, so it could be not read line by line. The file is to big to be read in a string in the memory and used as such efficiently. There are two solutions that could work:
+The file to be read is not line oriented, so it could be not read line by line. The file is to big to be read in one string in the memory and used as such efficiently. There are two solutions that could work:
 
 \begin{itemize}
 	\item read the big file in blocks of the a certain number of bytes or,
@@ -45,13 +45,13 @@ The file to be read is not line oriented, so it could be not read line by line. 
 
 \section{Current implementation}
 
-Experts believe, that memory mapped file solution performs better than any other solution, but it is known, that a memory mapped solution is operation system (OS) dependent. This dependency to OS could be changed to a dependency to the well known and appreciated boost library.  I prefer to delay to implement using this dependencies to OS or to boost library as long as possible and give a good C++ solution, but not an optimal OS solution.  
+Experts believe, that memory mapped file solution performs better than any other solution, but it is known, that a memory mapped solution is operation system (OS) dependent. This dependency to OS could be changed to a dependency to the well known and appreciated boost library.  I prefer to delay this implementation using this dependencies to OS or to boost library as long as possible and give a good C++ solution, but not an optimal OS solution.  
 
-The current implementation considers the solution of reading successively blocks from the file in a string then inserting them in the set. Many ideas were taken from \cite{WEBSITE:CppStories}. The problem of reading strings blocks is considered solved. For the proof of concept, a very simplified case is tested. In this case the first block is also the only one.
+The current implementation considers the solution of reading blocks successively from a file in a string and then inserting them in a set. Many ideas were taken from \cite{WEBSITE:CppStories, WEBSITE:CppStoriesCSVReader}. The problem of reading blocks is considered solved. Without loss of generality, the big file was so constructed, that by reading in blocks of fix length words are not fragmented between two successive blocks. This problem could be solved by an algorithm, later implemented. For the proof of concept, a very simplified case was tested. In this case the first block is also the only one.
 
 \subsection{Change the length of the read file}
 
-To test files with a different length please use the the function: 
+To create files with a defined length, please use the the function: 
 \begin{lstlisting}
 	void create_big_file(const std::filesystem::path& filePath) 
 \end{lstlisting}
@@ -67,9 +67,9 @@ please use the value \textit{5000} as a parameter. To test with files in the ran
 In this very simplified case, in Listing~\ref{lst:count_words_from_string} we have only one block, that is read only in one string and then is inserted in a set. The size of the set is the desired result.
 
 \begin{lstlisting} [language=C++, label={lst:count_words_from_string}, caption=count words from file]
-std::size_t count_words_from_string(const std::string& file_as_string)
+std::size_t count_words_from_string(std::string&& file_as_string)
 {
-    std::stringstream istring_stream(file_as_string);
+    std::stringstream istring_stream(std::move(file_as_string));
     std::istream_iterator<std::string> it{ istring_stream };
     std::unordered_set<std::string, StringHash, 
     			std::equal_to<>> uniques;
@@ -81,11 +81,8 @@ std::size_t count_words_from_string(const std::string& file_as_string)
 
     return  uniques.size();
 }
-
-The implementation of the \textit{struct StringHash} in this case is the mot trivial to keep the things as simple as possible.
-
 \end{lstlisting}
-
+The implementation of the \textit{struct StringHash} in this case is the most trivial to keep the things, as simple, as possible.
 
 \subsection{Read from file, the implementation}
 
@@ -115,7 +112,7 @@ This implementation looks very compact and easy to read. The performance of this
 
 \subsection{Read using string blocks, the implementation}
 
-In this case, reading from a string, Listing~\ref{lst:count_words_from_string} is reused. Reading from file is performed using limited blocks, as strings. The string's contain is inserted in a set as in previous case. The size of the set is the desired result.
+In this case, reading from a string, Listing~\ref{lst:count_words_from_string} is reused. Reading from file is performed using blocks of limited length into strings. The string's contain is inserted in a set as in previous cases. The size of the set is the desired result.
 
 \begin{lstlisting} [language=C++, label={lst:count_words_from_string_blocks}, caption=count words from file]
 std::size_t count_words_from_file_read_in_blocks(
@@ -125,11 +122,14 @@ std::size_t count_words_from_file_read_in_blocks(
     constexpr std::size_t buffer_size = 1 << 15; // 20 is 1 Megabyte
     std::cout << "buffersize: " << buffer_size << std::endl;
 
-    std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
+    std::unordered_set<std::string, 
+    		StringHash, 
+    		std::equal_to<>> uniques;
  
     try {
         
-        std::ifstream in_file{ filePath, std::ios::in | std::ios::binary };
+        std::ifstream in_file{ filePath, 
+        		std::ios::in | std::ios::binary };
         if (!in_file)
             throw std::runtime_error("Cannot open " 
             	+ filePath.filename().string());
@@ -138,10 +138,10 @@ std::size_t count_words_from_file_read_in_blocks(
         	static_cast<size_t>(std::filesystem::file_size(filePath)) };
         const auto loops{ fsize / buffer_size };
         const auto lastChunk{ fsize % buffer_size };
-        std::string file_as_string(buffer_size, 0);
         auto insert_file_block_in_set = 
-        	[&in_file, &file_as_string, &uniques]()
+        	[&in_file, buffer_size, &uniques]()
         {
+	    std::string file_as_string(buffer_size, 0);	
             in_file.read(file_as_string.data(), file_as_string.size());
 
             std::stringstream istring_stream(file_as_string);
@@ -176,33 +176,37 @@ std::size_t count_words_from_file_read_in_blocks(
 \end{lstlisting}
 
 \section{Source code}
-To read and test the source code please use the file \textit{ex\_read\_file.tar.bz2}.
-Copy this file to the work directory and input the following commands.
+The source code relevant for these is placed in the file:
 
+ \textit{ex603\_mcp\_001/test/src/test\_read\_file.cpp} 
+
+\noindent To read and test the source code please clone the repository in the work directory from:
+
+\textit{https://github.com/FlorinChertes/ex603\_mcp\_001.git}.
+
+\noindent To create the executable \textit{ex603\_mcp\_002\_ex} and to run it, please use the \textit{CMakeLists.txt} file. In the work directory input the following commands:
 \begin{lstlisting}
-tar -xjvf ex_read_file.tar.bz2
-
 mkdir build
-
 cd build
-
-cp -R ../ex_read_file/data/ ./data
-
-cmake ../ex_read_file
-
-make
-
-./ex_read_file
-
+cp -R ../ex603_mcp_001/data/ ./data
+cmake -DCMAKE_BUILD_TYPE=Release ../ex603_mcp_001
+cmake - -build .
+ ./ex603_mcp_002_ex
 \end{lstlisting}
 
 
 
 \section{Conclusions}
 
-The presented functions were tested with files in the range of 1.5 GB this is far more than my experience, 0.5 GB is already big enough .  I know that the task spoke about 32 GB, this is in the moment above what I can simulate with my machines. I solved the problem using files in the range of 1.5 GB and they are read in some 15-20 seconds, in the best case. I do not know if this satisfies the requirements. I am using by intention an old processor (i5 2,5GHz 4GB RAM), a new processor (i7-6600U CPU 2.6 GHz x 4 8GB RAM) but very new OS, i.e., Ubuntu 21 and gcc 11 and Debian 11 gcc 10.2, with MSVC 16.7 on WIN 10 (i5 4 x 1,7GHz 24GB RAM) the time is much longer, at a factor 2 to 3 in release.
+The presented functions were tested with files in the range of 1.5 GB this is far more than my experience, 0.5 GB is already big enough .  I know that the task spoke about 32 GB, this is in the moment above what I can simulate with my machines. I solved the problem using files in the range of 1.5 GB and they are read in some 15-20 seconds, in the best case. I do not know if this satisfies the requirements. I am using by intention an old processor (i5 2,5GHz 4GB RAM), a new processor (i7-6600U CPU 4 x 2.6 GHz 8GB RAM) but very new OS, i.e., Ubuntu 21 with gcc 11 and Debian 11 with gcc 10.2; with MSVC 16.7 on WIN 10 (i5-8350U CPU 4 x 1,7GHz 24GB RAM) the time is much longer, at a factor 2 to 3 in \textit{Release}.
 
 As far as I could measure the bottleneck is not the way I read from the disk, but the operation of inserting the strings in the set, or the \textit{std::unordered\_set} itself, or its configuration. I believe that the used methodologies: $std::istream\_iterator<std::string>$ and \textit{std::transform} are at the root of the performance limitations, I encounter.
+
+The work on this project in the direction of \textit{memory mapped files} could be done in collaboration with one or two other colleges to be able to change ideas and experience. The used machines must be dedicated for the production, not as in my case, general usage hardware, above mentioned.
+
+The measured time of read the file and insert in the set was almous similar in \textit{Release} and \textit{Debug} versions with \textit{gcc} on \textit{Linux}  but different (factor 10) on \textit{WIN10} with \textit{MSCV 16.7} for this behavior on \textit{Linux} with \textit{gcc} I do not have an exhaustive explanation.
+
+This case has potentially very many words, the files are very big, e.g., 32 GB, the necessary time to compute the result is not hundreds of milliseconds but about 300 seconds. This case is what Teodorescu \cite{DBLP:journals/accu/161/Teodorescu/paralleAlgo} calls a case were parallel algorithms, introduced with C++17 could play an important role. Further Teodorescu remarks that \textit{concurrency} is a design decision but \textit{parallelism} is a local implementation decision. The used \textit{STL} algorithm: \textit{std::transform} has a version employing the parallel behavior. This is very good presented in Williams \cite{DBLP:books/Williams2019} in Chapter 10. In the current implementation the usage of the parallel version of the algorithm was not possible to be used because the \textit{std::istream\_iterator} is a \textit{input} iterator. For parallel behavior a \textit{forward} iterator is necessary. This implies the usage of something different, not the \textit{std::istream\_iterator} but something very similar, this could be an interesting future task.
  
 
 \newpage
