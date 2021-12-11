@@ -84,7 +84,7 @@ int test_count_words_from_file_as_string()
     return 0;
 }
 
-std::size_t count_words_from_file(const std::filesystem::path& filePath)
+[[nodiscard]] std::size_t count_words_from_file(const std::filesystem::path& filePath)
 {
     ScopeTimer _t(__func__);
 
@@ -127,8 +127,6 @@ int test_count_words_from_file()
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void create_big_file(const std::filesystem::path& filePath)
 {
 
@@ -178,9 +176,10 @@ int test_create_big_file()
 
     try {
         const std::filesystem::path file_name_path(file_name.c_str());
-        create_big_file(file_name_path);
 
+        create_big_file(file_name_path);
         ScopeTimer::ShowStoredResults();
+
         std::cout << "big file written" << std::endl;
     }
     catch (const std::filesystem::filesystem_error& err) {
@@ -194,7 +193,7 @@ int test_create_big_file()
 }
 
 
-std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& filePath)
+[[nodiscard]] std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& filePath)
 {
     // Buffer size 1/32 Megabyte
     constexpr std::size_t buffer_size = 1 << 15; // 20 is 1 Megabyte
