@@ -39,11 +39,11 @@ struct StringHash {
     return file_as_string;
 }
 
-std::size_t count_words_from_string(const std::string& file_as_string)
+[[nodiscard]] std::size_t count_words_from_string(std::string&& file_as_string)
 {
     ScopeTimer _t(__func__);
 
-    std::stringstream istring_stream(file_as_string);
+    std::stringstream istring_stream(std::move(file_as_string));
     std::istream_iterator<std::string> it{ istring_stream };
     std::unordered_set<std::string, StringHash, std::equal_to<>> uniques;
 
@@ -67,9 +67,9 @@ int test_count_words_from_file_as_string()
 
     try {
         const std::filesystem::path file_name_path(file_name.c_str());
-        const std::string& file_as_string = get_file_as_string(file_name_path);
 
-        const std::size_t word_count = count_words_from_string(file_as_string);
+        const std::size_t word_count {
+            count_words_from_string(get_file_as_string(file_name_path)) };
         ScopeTimer::ShowStoredResults();
 
         std::cout << "word count: " << word_count << std::endl;
@@ -149,17 +149,18 @@ void create_big_file(const std::filesystem::path& filePath)
         throw std::runtime_error("Could not read the full contents from " + filePath.filename().string());
 
     ScopeTimer _t(__func__);
-
-    const std::filesystem::path big_file_path(big_file_name.c_str());
-    std::ofstream out_file{ big_file_path, std::ios::out | std::ios::binary };
-    if (!out_file)
-        throw std::runtime_error("Cannot open " + big_file_path.filename().string());
-
-    for (int i = 0; i < 1024 * 5000; ++i)
     {
-        out_file.write(file_as_string.data(), file_as_string.size());
+        const std::filesystem::path big_file_path(big_file_name.c_str());
+        std::ofstream out_file{ big_file_path, std::ios::out | std::ios::binary };
         if (!out_file)
-            throw std::runtime_error("Could not write the full contents from " + big_file_path.filename().string());
+            throw std::runtime_error("Cannot open " + big_file_path.filename().string());
+
+        for (int i = 0; i < 1024 * 5000; ++i)
+        {
+            out_file.write(file_as_string.data(), file_as_string.size());
+            if (!out_file)
+                throw std::runtime_error("Could not write the full contents from " + big_file_path.filename().string());
+        }
     }
 }
 
@@ -176,8 +177,6 @@ int test_create_big_file()
     std::cout << "input path: " << file_name << std::endl;
 
     try {
-        ScopeTimer::ClearStoredResults();
-
         const std::filesystem::path file_name_path(file_name.c_str());
         create_big_file(file_name_path);
 
@@ -212,12 +211,13 @@ std::size_t count_words_from_file_read_in_blocks(const std::filesystem::path& fi
         const auto fsize{ static_cast<size_t>(std::filesystem::file_size(filePath)) };
         const auto loops{ fsize / buffer_size };
         const auto lastChunk{ fsize % buffer_size };
-        std::string file_as_string(buffer_size, 0);
-        auto insert_file_block_in_set = [&in_file, &file_as_string, &uniques]()
+
+        auto insert_file_block_in_set = [&in_file, buffer_size, &uniques]()
         {
+            std::string file_as_string(buffer_size, 0);
             in_file.read(file_as_string.data(), file_as_string.size());
 
-            std::stringstream istring_stream(file_as_string);
+            std::stringstream istring_stream(std::move(file_as_string));
             std::istream_iterator<std::string> it{ istring_stream };
 
             std::transform(it, {}, std::inserter(uniques, uniques.begin()), std::identity{});
@@ -259,7 +259,8 @@ int test_count_words_from_file_read_in_blocks()
     try {
         const std::filesystem::path file_name_path(file_name.c_str());
 
-        const std::size_t word_count = count_words_from_file_read_in_blocks(file_name_path);
+        const std::size_t word_count =
+            count_words_from_file_read_in_blocks(file_name_path);
         ScopeTimer::ShowStoredResults();
 
         std::cout << "word count: " << word_count << std::endl;
