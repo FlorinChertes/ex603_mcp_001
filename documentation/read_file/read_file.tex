@@ -144,7 +144,7 @@ std::size_t count_words_from_file_read_in_blocks(
 	    std::string file_as_string(buffer_size, 0);	
             in_file.read(file_as_string.data(), file_as_string.size());
 
-            std::stringstream istring_stream(file_as_string);
+            std::stringstream istring_stream(std::move(file_as_string));
             std::istream_iterator<std::string> it{ istring_stream };
 
             std::transform(it, 
