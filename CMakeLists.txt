@@ -1,5 +1,5 @@
 # set minimum cmake version
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 
 # project name and language
 project (ex603_mcp_001_prj  LANGUAGES CXX)
@@ -9,8 +9,22 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        release-1.11.0
+        GIT_SHALLOW    1
+)
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
+
 
 IF (MSVC)
+	# Avoid error LNK2038
+	set(gtest_force_shared_crt on)
+
 	# Activate C++ exception handling 
 	IF (NOT CMAKE_CXX_FLAGS MATCHES "/EHsc") 
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
@@ -103,3 +117,24 @@ add_executable(ex603_mcp_002_ex
 
 	main/main_02.cpp
 )
+
+
+# add the executable 003
+set(TEST_NAME ex603_mcp_003_gtest
+	)
+set(TEST_SOURCES
+	main/test_main.cpp
+	test/src/gtest_ranges.cpp
+	)
+set(SOURCES
+	lib/inc/ranges_func.h
+	)
+
+enable_testing()
+
+# add the executable
+add_executable(	${TEST_NAME})
+target_sources(${TEST_NAME} PRIVATE ${TEST_SOURCES} ${SOURCES})
+
+target_link_libraries(${TEST_NAME} gtest gmock)
+gtest_discover_tests(${TEST_NAME})
