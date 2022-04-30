@@ -44,6 +44,9 @@ florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake -DCMAKE_BUILD_TYPE=Release 
 florin@Lenovo-19-PC:~/build/dev/ex603_mcp_001$ cmake --build .
 
 //-----------------
-2022-01-18 19:00
+2022-04-30 23:00
 //-----------------
+ git branch work_b_001
+ git checkout work_b_001
+  
 
