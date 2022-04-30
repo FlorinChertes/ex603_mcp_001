@@ -4,10 +4,16 @@ cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 # project name and language
 project (ex603_mcp_001_prj  LANGUAGES CXX)
 
-# require C++20
+
+IF (MSVC)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ELSE()
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ENDIF()
 
 include(FetchContent)
 
