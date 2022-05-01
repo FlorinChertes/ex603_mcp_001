@@ -287,10 +287,11 @@ TEST(RangesTest, test_find_first_of_ranges)
 		std::cout << "std::ranges::find_first_of: " << it->name_
 			<< " at: " << pos << '\n';
 
-		auto it2 = std::ranges::find_first_of(prods | std::views::drop(pos + 1), arrInvalids,
+		const auto rest_of_prods = prods | std::views::drop(pos + 1);
+		auto it2 = std::ranges::find_first_of(rest_of_prods, arrInvalids,
 			std::ranges::equal_to{}, &Product::name_);
-		EXPECT_NE(it2, end(prods));
-		if (it2 != end(prods))
+		EXPECT_NE(it2, rest_of_prods.end());
+		if (it2 != end(rest_of_prods))
 			std::cout << "std::ranges::find_first_of: " << it2->name_
 			<< " at: " << std::distance(begin(prods), it2) << '\n';
 	}
