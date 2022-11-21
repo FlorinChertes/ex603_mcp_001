@@ -109,6 +109,15 @@ add_executable(ex603_mcp_001_ex
 	test/inc/test_ranges.h
 	test/src/test_ranges.cpp
 
+	test/inc/test_strong_type.h
+	test/src/test_strong_type.cpp
+
+	lib/inc/person.h
+	lib/src/person.cpp
+
+	test/inc/test_person.h
+	test/src/test_person.cpp
+
 	main/main_01.cpp
 )
 

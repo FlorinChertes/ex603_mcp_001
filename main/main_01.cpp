@@ -1,3 +1,7 @@
+#include "test_person.h"
+
+#include "test_strong_type.h"
+
 #include "test_utils.h"
 #include "test_shape.h"
 
@@ -89,6 +93,12 @@ int main (int argc, char *argv[])
 	test_ranges_026();
 	test_ranges_027();
 	test_ranges_028();
+
+	test_strong_type_029();
+	test_strong_type_030();
+	test_strong_type_031();
+
+	test_person_032();
 
 	return 0;
 }
