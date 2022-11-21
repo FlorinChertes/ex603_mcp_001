@@ -16,16 +16,20 @@ void test_ranges_026()
         std::ranges::filter_view v1{ coll,
             [](auto elem) { return elem % 3 == 0; }
         };
-        std::copy(v1.begin(), v1.end(),						//source
-            std::ostream_iterator<int>(std::cout, ", "));	//destination
+        for (const auto& i : v1)
+        {
+            std::cout << i << ", ";
+        }
         std::cout << std::endl;
 
 
         std::ranges::transform_view v2{ v1,
             [](auto elem) {return elem * elem;}
         };
-        std::copy(v2.begin(), v2.end(),						//source
-            std::ostream_iterator<int>(std::cout, ", "));	//destination
+        for (const auto& i : v2)
+        {
+            std::cout << i << ", ";
+        }
         std::cout << std::endl;
 
         auto v3 = std::views::iota(5, 20)
