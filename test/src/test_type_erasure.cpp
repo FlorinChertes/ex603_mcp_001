@@ -34,9 +34,9 @@ void test_type_erasure_035()
 	draw(shape1);
 
 	// Create a copy of the shape by means of the copy constructor
-	Shape shape2(shape1);
+	//Shape shape2(shape1);
 
-	//// Drawing the copy will result in the same output
+	// Drawing the copy will result in the same output
 	//draw(shape2);
 }
 
@@ -62,10 +62,10 @@ void test_type_erasure_036()
 	// Draw the shape
 	draw(shape1);
 
-	//// Create a copy of the shape by means of the copy constructor
+	// Create a copy of the shape by means of the copy constructor
 	//Shape shape2(shape1);
 
-	//// Drawing the copy will result in the same output
+	// Drawing the copy will result in the same output
 	//draw(shape2);
 }
 
