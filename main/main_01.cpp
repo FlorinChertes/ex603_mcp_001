@@ -1,3 +1,5 @@
+#include "test_type_erasure.h"
+#include "test_ext_polymorph.h"
 #include "test_person.h"
 
 #include "test_strong_type.h"
@@ -27,7 +29,7 @@
 int main (int argc, char *argv[])
 {
 	std::cout << "test main 01" << std::endl;
-	
+
 	test_type_func_001();
 	test_type_func_002();
 
@@ -99,6 +101,14 @@ int main (int argc, char *argv[])
 	test_strong_type_031();
 
 	test_person_032();
+
+
+	test_ext_polimorph_033();
+	test_ext_polimorph_034();
+
+	test_type_erasure_035();
+	test_type_erasure_036();
+
 
 	return 0;
 }
