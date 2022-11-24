@@ -45,10 +45,10 @@ public:
     template< typename ShapeT
             , typename DrawStrategy >
     Shape(ShapeT shape, DrawStrategy drawer)
+        : pimpl_ { std::make_unique<detail::OwningShapeModel<
+                    ShapeT, DrawStrategy>>(std::move(shape)
+                                         , std::move(drawer)) }
     {
-        using Model = detail::OwningShapeModel<ShapeT, DrawStrategy>;
-        pimpl_ = std::make_unique<Model>(std::move(shape)
-                                       , std::move(drawer));
     }
 
     Shape(Shape const& other)
@@ -57,9 +57,7 @@ public:
 
     Shape& operator=(Shape const& other)
     {
-        // Copy-and-Swap Idiom
-        Shape copy(other);
-        pimpl_.swap(copy.pimpl_);
+        other.pimpl_->clone().swap(pimpl_);
         return *this;
     }
 

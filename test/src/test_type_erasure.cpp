@@ -69,3 +69,45 @@ void test_type_erasure_036()
 	//draw(shape2);
 }
 
+void draw_all_shapes(std::vector<Shape> const& shapes)
+{
+	for (auto const& shape : shapes)
+	{
+		draw(shape);
+	}
+}
+
+// Create a drawing strategy in the form of a lambda
+auto square_drawer = [](Square const& s) {
+	std::cout << "draw square, side: " << s.side() << std::endl;
+};
+
+// Create a drawing strategy in the form of a lambda
+auto circle_drawer = [](Circle const& c) {
+	std::cout << "draw circle, radius: " << c.radius() << std::endl;
+};
+
+
+void test_type_erasure_037()
+{
+	std::cout << "*** test type erasure 37 start ***" << std::endl;
+
+	using Shapes = std::vector<Shape>;
+
+	Shapes shapes;
+	shapes.emplace_back(Square(3.14), [](Square const& s) {
+		std::cout << "draw square, side: " << s.side() << std::endl; }
+	);
+
+	std::cout << "*** test type erasure 37 start ***" << std::endl;
+
+	shapes.emplace_back(Circle(3.14), [](Circle const& c) {
+		std::cout << "draw circle, radius: " << c.radius() << std::endl;}
+	);
+
+	std::cout << "*** test type erasure 37 start ***" << std::endl;
+	draw_all_shapes(shapes);
+
+	std::cout << "*** test type erasure 37 end ***" << std::endl;
+}
+

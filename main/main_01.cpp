@@ -108,6 +108,7 @@ int main (int argc, char *argv[])
 
 	test_type_erasure_035();
 	test_type_erasure_036();
+	test_type_erasure_037();
 
 
 	return 0;
