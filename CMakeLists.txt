@@ -113,27 +113,6 @@ add_executable(ex603_mcp_001_ex
 	test/src/test_strong_type.cpp
 
 
-	lib/inc/person.h
-	lib/src/person.cpp
-
-	test/inc/test_person.h
-	test/src/test_person.cpp
-
-	lib/inc/geometry.h
-	lib/inc/ext_polymorph.h
-	lib/inc/ext_polymorph_strategy.h
-	lib/src/ext_polymorph_strategy.cpp
-
-	test/inc/test_ext_polymorph.h
-	test/src/test_ext_polymorph.cpp
-
-
-	lib/inc/type_erasure.h
-
-	test/inc/test_type_erasure.h
-	test/src/test_type_erasure.cpp
-
-
 	main/main_01.cpp
 )
 
@@ -169,3 +148,29 @@ target_sources(${TEST_NAME} PRIVATE ${TEST_SOURCES} ${SOURCES})
 
 target_link_libraries(${TEST_NAME} gtest gmock)
 gtest_discover_tests(${TEST_NAME})
+
+
+# add the executable 004
+add_executable(ex603_mcp_004_ex
+
+	lib/inc/person.h
+	lib/src/person.cpp
+
+	test/inc/test_person.h
+	test/src/test_person.cpp
+
+	lib/inc/geometry.h
+	lib/inc/ext_polymorph.h
+	lib/inc/ext_polymorph_strategy.h
+	lib/src/ext_polymorph_strategy.cpp
+
+	test/inc/test_ext_polymorph.h
+	test/src/test_ext_polymorph.cpp
+
+	lib/inc/type_erasure.h
+
+	test/inc/test_type_erasure.h
+	test/src/test_type_erasure.cpp
+
+	main/main_04.cpp
+)

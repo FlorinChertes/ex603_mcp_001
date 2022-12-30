@@ -100,16 +100,6 @@ int main (int argc, char *argv[])
 	test_strong_type_030();
 	test_strong_type_031();
 
-	test_person_032();
-
-
-	test_ext_polimorph_033();
-	test_ext_polimorph_034();
-
-	test_type_erasure_035();
-	test_type_erasure_036();
-	test_type_erasure_037();
-
 
 	return 0;
 }
