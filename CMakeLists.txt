@@ -46,8 +46,10 @@ ELSE ()
 
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wnull-dereference")
 
-	SET(GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS "-fconcepts")
-	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS}")
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		SET(GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS "-fconcepts")
+		SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_CONCEPTS_COMPILE_FLAGS}")
+	endif()
 
 	SET(GCC_STD_CPP_PERMISIV_COMPILE_FLAGS "-fpermissive")
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_STD_CPP_PERMISIV_COMPILE_FLAGS}")
@@ -58,7 +60,8 @@ set(INCLUDE_DIRS "test/inc" "lib/inc")
 include_directories(${INCLUDE_DIRS})
 
 # add the executable 001
-add_executable(ex603_mcp_001_ex
+
+set(SRC_001
 
 	test/inc/test_type_func.h
 	test/src/test_type_func.cpp
@@ -102,18 +105,29 @@ add_executable(ex603_mcp_001_ex
 	test/src/test_polymorphism.cpp
 	test/inc/test_polymorphism.h
 
-	test/src/test_polymorphism_variant.cpp
-	test/inc/test_polymorphism_variant.h
-
-	lib/inc/ranges_func.h
-	test/inc/test_ranges.h
-	test/src/test_ranges.cpp
-
 	test/inc/test_strong_type.h
 	test/src/test_strong_type.cpp
 
 
 	main/main_01.cpp
+)
+
+#if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+set(ex603_mcp_001_ex_src ${ex603_mcp_001_ex_src}
+	lib/inc/ranges_func.h
+	test/inc/test_ranges.h
+	test/src/test_ranges.cpp
+
+	test/src/test_polymorphism_variant.cpp
+	test/inc/test_polymorphism_variant.h
+
+
+)
+#endif()
+
+
+add_executable(ex603_mcp_001_ex
+${SRC_001}
 )
 
 
