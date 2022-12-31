@@ -144,8 +144,8 @@ TEST(RangesTest, test_for_each_ranges)
 	// std::ranges::for_each(prods | std::views::reverse,
 	// 	out, &Product::name_);
 
-	std::cout << '\n';
-	EXPECT_EQ(prods.size(), 3);
+	// std::cout << '\n';
+	// EXPECT_EQ(prods.size(), 3);
 }
 
 //-----------------------------------------------------------------------------
@@ -282,16 +282,16 @@ TEST(RangesTest, test_find_first_of_ranges)
 	auto it = std::ranges::find_first_of(prods, arrInvalids,
 		std::ranges::equal_to{}, &Product::name_);
 	EXPECT_NE(it, end(prods));
-	if (it != end(prods)) {
-		const auto pos = std::distance(begin(prods), it);
-		std::cout << "std::ranges::find_first_of: " << it->name_
-			<< " at: " << pos << '\n';
+	// if (it != end(prods)) {
+	// 	const auto pos = std::distance(begin(prods), it);
+	// 	std::cout << "std::ranges::find_first_of: " << it->name_
+	// 		<< " at: " << pos << '\n';
 
-		// auto it2 = std::ranges::find_first_of(prods | std::views::drop(pos + 1), arrInvalids,
-		// 	std::ranges::equal_to{}, &Product::name_);
-		// EXPECT_NE(it2, prods.end());
-		// if (it2 != end(prods))
-		// 	std::cout << "std::ranges::find_first_of: " << it2->name_
-		// 	<< " at: " << std::distance(begin(prods), it2) << '\n';
-	}
+	// 	auto it2 = std::ranges::find_first_of(prods | std::views::drop(pos + 1), arrInvalids,
+	// 		std::ranges::equal_to{}, &Product::name_);
+	// 	EXPECT_NE(it2, prods.end());
+	// 	if (it2 != end(prods))
+	// 		std::cout << "std::ranges::find_first_of: " << it2->name_
+	// 		<< " at: " << std::distance(begin(prods), it2) << '\n';
+	// }
 }

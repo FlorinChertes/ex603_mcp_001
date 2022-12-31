@@ -13,24 +13,24 @@ void test_ranges_026()
     try {
         std::vector<int> coll{ 0, 2, -3, 5, -1, 6, 8, -4, 9 };
 
-        // std::filter_view v1{ coll,
-        //     [](auto elem) { return elem % 3 == 0; }
-        // };
-        // for (const auto& i : v1)
-        // {
-        //     std::cout << i << ", ";
-        // }
-        // std::cout << std::endl;
+        std::ranges::filter_view v1{ coll,
+            [](auto elem) { return elem % 3 == 0; }
+        };
+        for (const auto& i : v1)
+        {
+            std::cout << i << ", ";
+        }
+        std::cout << std::endl;
 
 
-        // std::ranges::transform_view v2{ v1,
-        //     [](auto elem) {return elem * elem;}
-        // };
-        // for (const auto& i : v2)
-        // {
-        //     std::cout << i << ", ";
-        // }
-        // std::cout << std::endl;
+        std::ranges::transform_view v2{ v1,
+            [](auto elem) {return elem * elem;}
+        };
+        for (const auto& i : v2)
+        {
+            std::cout << i << ", ";
+        }
+        std::cout << std::endl;
 
         auto v3 = std::views::iota(5, 20)
             | std::views::filter([](auto elem) { return elem % 3 == 0; })

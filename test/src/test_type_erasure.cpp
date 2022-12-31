@@ -34,10 +34,10 @@ void test_type_erasure_035()
 	draw(shape1);
 
 	// Create a copy of the shape by means of the copy constructor
-	//Shape shape2(shape1);
+	Shape shape2(shape1);
 
 	// Drawing the copy will result in the same output
-	//draw(shape2);
+	draw(shape2);
 }
 
 
@@ -63,10 +63,10 @@ void test_type_erasure_036()
 	draw(shape1);
 
 	// Create a copy of the shape by means of the copy constructor
-	//Shape shape2(shape1);
+	Shape shape2(shape1);
 
 	// Drawing the copy will result in the same output
-	//draw(shape2);
+	draw(shape2);
 }
 
 void draw_all_shapes(std::vector<Shape> const& shapes)
@@ -97,9 +97,9 @@ void test_type_erasure_037()
 	using Shapes = std::vector<Shape>;
 	Shapes shapes;
 
-	//shapes.emplace_back(Square(3.14), square_drawer);
-	//shapes.emplace_back(Circle(3.14), circle_drawer);
-	//shapes.emplace_back(Square(2.63), square_drawer);
+	shapes.emplace_back(Square(3.14), square_drawer);
+	shapes.emplace_back(Circle(3.14), circle_drawer);
+	shapes.emplace_back(Square(2.63), square_drawer);
 
 	draw_all_shapes(shapes);
 

@@ -107,28 +107,24 @@ set(SRC_001
 
 	test/inc/test_strong_type.h
 	test/src/test_strong_type.cpp
-
-
-	main/main_01.cpp
 )
 
-#if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-set(ex603_mcp_001_ex_src ${ex603_mcp_001_ex_src}
-	lib/inc/ranges_func.h
-	test/inc/test_ranges.h
-	test/src/test_ranges.cpp
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	add_executable(ex603_mcp_001_ex
+		main/main_01_02.cpp	${SRC_001}
+	)
+else()
+	add_executable(ex603_mcp_001_ex
+		main/main_01_01.cpp	${SRC_001}
 
-	test/src/test_polymorphism_variant.cpp
-	test/inc/test_polymorphism_variant.h
+		lib/inc/ranges_func.h
+		test/inc/test_ranges.h
+		test/src/test_ranges.cpp
 
-
-)
-#endif()
-
-
-add_executable(ex603_mcp_001_ex
-${SRC_001}
-)
+		test/src/test_polymorphism_variant.cpp
+		test/inc/test_polymorphism_variant.h
+	)
+endif()
 
 
 # add the executable 002
@@ -165,6 +161,7 @@ gtest_discover_tests(${TEST_NAME})
 
 
 # add the executable 004
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 add_executable(ex603_mcp_004_ex
 
 	lib/inc/person.h
@@ -188,3 +185,4 @@ add_executable(ex603_mcp_004_ex
 
 	main/main_04.cpp
 )
+endif()
