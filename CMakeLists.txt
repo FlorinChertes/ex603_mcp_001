@@ -161,7 +161,7 @@ gtest_discover_tests(${TEST_NAME})
 
 
 # add the executable 004
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 add_executable(ex603_mcp_004_ex
 
 	lib/inc/person.h
@@ -185,4 +185,4 @@ add_executable(ex603_mcp_004_ex
 
 	main/main_04.cpp
 )
-endif()
+#endif()
