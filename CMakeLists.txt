@@ -59,8 +59,9 @@ set(INCLUDE_DIRS "test/inc" "lib/inc")
 
 include_directories(${INCLUDE_DIRS})
 
+#------------------------------------------------------------------------------
 # add the executable 001
-
+#------------------------------------------------------------------------------
 set(SRC_001
 
 	test/inc/test_type_func.h
@@ -126,8 +127,9 @@ else()
 	)
 endif()
 
-
+#------------------------------------------------------------------------------
 # add the executable 002
+#------------------------------------------------------------------------------
 add_executable(ex603_mcp_002_ex
 
 	test/inc/scope_timer.h
@@ -138,14 +140,25 @@ add_executable(ex603_mcp_002_ex
 	main/main_02.cpp
 )
 
-
+#------------------------------------------------------------------------------
 # add the executable 003
+#------------------------------------------------------------------------------
 set(TEST_NAME ex603_mcp_003_gtest
 	)
-set(TEST_SOURCES
-	main/test_main.cpp
-	test/src/gtest_ranges.cpp
+
+IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	set(TEST_SOURCES
+		main/test_main.cpp
+		test/src/gtest_ranges_01.cpp
+		test/src/gtest_ranges_02.cpp
 	)
+ELSE()
+	set(TEST_SOURCES
+		main/test_main.cpp
+		test/src/gtest_ranges_01.cpp
+	)
+ENDIF()
+
 set(SOURCES
 	lib/inc/ranges_func.h
 	)
@@ -159,9 +172,9 @@ target_sources(${TEST_NAME} PRIVATE ${TEST_SOURCES} ${SOURCES})
 target_link_libraries(${TEST_NAME} gtest gmock)
 gtest_discover_tests(${TEST_NAME})
 
-
+#------------------------------------------------------------------------------
 # add the executable 004
-#if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#------------------------------------------------------------------------------
 add_executable(ex603_mcp_004_ex
 
 	lib/inc/person.h
@@ -185,4 +198,3 @@ add_executable(ex603_mcp_004_ex
 
 	main/main_04.cpp
 )
-#endif()
