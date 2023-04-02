@@ -1,9 +1,5 @@
 #include <functional>
-
-#include <cstddef>
 #include <algorithm>
-#include <iostream>
-#include <numbers>
 #include <string>
 
 #include <iostream>
@@ -64,16 +60,27 @@ std::vector<int> get_next_row(const std::vector<int>& last_row)
 
 auto generate_triangle(int rows)
 {
-    std::vector<int> data;
-
-    std::vector<std::vector<int>> triangle;
+    std::vector<std::vector<int>> triangle{ {1} };
     for (int row = 0; row < rows; ++row)
     {
-        data = get_next_row(data);
-        triangle.push_back(data);
+        triangle.push_back(get_next_row(triangle.back()));
     }
-    
     return triangle;
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+template<typename T>
+std::ostream& operator << (std::ostream& s, const std::vector<std::vector<T>>& triangle)
+{
+    for (const auto& row : triangle)
+    {
+        std::ranges::copy(row, std::ostream_iterator<T>(s, " "));
+        s << '\n';
+    }
+
+    return s;
 }
 
 //-----------------------------------------------------------------------------
@@ -83,13 +90,6 @@ void test_034()
     std::cout << "*** test 034 ***" << std::endl;
 
     const auto rows_count {6};
-    const auto pascal_triangle{ generate_triangle(rows_count) };
-    for (const auto& row : pascal_triangle)
-    {
-        for (const auto& row_elem : row)
-        { 
-            std::cout << row_elem << " ";
-        }
-        std::cout << '\n';
-    }
+    const auto pascal_triangle { generate_triangle(rows_count) };
+    std::cout << pascal_triangle;
 }

@@ -1,6 +1,5 @@
 #include <cstddef>
 #include <algorithm>
-#include <iostream>
 #include <numbers>
 #include <string>
 
