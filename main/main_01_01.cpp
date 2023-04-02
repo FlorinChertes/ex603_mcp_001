@@ -2,6 +2,7 @@
 #include "test_ext_polymorph.h"
 #include "test_person.h"
 
+#include "test_book_camp.h"
 #include "test_strong_type.h"
 
 #include "test_utils.h"
@@ -100,6 +101,9 @@ int main (int argc, char *argv[])
 	test_strong_type_030();
 	test_strong_type_031();
 
+	test_032();
+	test_033();
+	test_034();
 
 	return 0;
 }

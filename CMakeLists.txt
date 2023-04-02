@@ -108,6 +108,9 @@ set(SRC_001
 
 	test/inc/test_strong_type.h
 	test/src/test_strong_type.cpp
+
+	test/inc/test_book_camp.h
+	test/src/test_book_camp.cpp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
