@@ -1,6 +1,10 @@
 
 #include <numeric>
-#include <format>
+
+#if _MSC_VER
+    #include <format>
+#endif
+
 #include <functional>
 #include <algorithm>
 #include <string>
@@ -112,7 +116,13 @@ void show_vectors(std::ostream& s,
 
         for (const auto& data : row)
         {
+
+#if _MSC_VER
             s << std::format("{: ^{}}", data, 6);
+#else
+            s << data << ' '
+#endif
+
         }
         s << '\n';
     }
@@ -160,11 +170,14 @@ void test_035()
 {
     std::cout << "*** test 035 ***" << std::endl;
 
+#if _MSC_VER
     std::cout << std::format("{: ^{}}", 213, 24);
     std::cout << '\n';
-
+#endif
     const auto rows_count{ 6 };
     const auto pascal_triangle{ generate_triangle(rows_count) };
     check_properties(pascal_triangle);
+
     show_vectors(std::cout, pascal_triangle);
+
 }
