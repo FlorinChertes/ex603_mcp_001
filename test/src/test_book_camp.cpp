@@ -157,22 +157,32 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
 
     for (const auto& row : triangle)
     {
-        assert(std::all_of( row.begin(),
-                            row.end(),
-                            [](int x) { return x >= 0; }));
+        assert(std::ranges::all_of( row,
+            [](int x) { return x >= 0; }) == true);
     }
+
+    std::ranges::for_each(triangle,
+        [](const auto row) {
+            assert(std::ranges::all_of(row,
+                [](int x) { return x >= 0; }) == true);
+        }
+    );
 
     for (const auto& row : triangle)
     {
-        assert(std::ranges::all_of(row, [](auto x) { return x >= 0; }) == true);
-    }
-
-    auto negative = [](int x) { return x < 0; };
-    for (const auto& row : triangle)
-    {
-        auto negatives = row | std::views::filter(negative);
+        auto&& negatives = row | std::views::filter(
+            [](int x) { return x < 0; });
         assert(negatives.empty());
     }
+
+    std::ranges::for_each(triangle,
+        [](const auto& row) {
+
+        auto&& negatives = row | std::views::filter(
+            [](int x) { return x < 0; });
+        assert(negatives.empty());
+        }
+    );
 
     auto is_palindrome = [](const std::vector<int>& v) {
         const auto forward = v | std::views::take(v.size() / 2);
