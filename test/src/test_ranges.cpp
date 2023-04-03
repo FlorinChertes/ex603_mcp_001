@@ -93,5 +93,15 @@ void test_ranges_028_1()
    std::ranges::copy(new_end,           		        //source
        std::ostream_iterator<int>(std::cout, ", "));	//destination
    std::cout << std::endl;
+}
 
+void test_ranges_028_2()
+{
+    std::cout << "*** test ranges 028.2 ***" << std::endl;
+
+    const auto v = std::views::iota(0, 6) | std::vector<int>{};
+    std::ranges::copy(v
+        | std::views::drop_while([](int i) { return i < 3; }),  //source
+        std::ostream_iterator<int>(std::cout, ", "));           //destination
+    std::cout << std::endl;
 }
