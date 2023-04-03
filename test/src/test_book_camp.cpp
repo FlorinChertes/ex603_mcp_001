@@ -251,7 +251,7 @@ void test_036()
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-unsigned some_const_number()
+int some_const_number()
 {
     return 42;
 }
@@ -336,7 +336,7 @@ void test_038()
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void guess_number_with_clues(unsigned number,
+void guess_number_with_clues(int number,
     std::function<std::string(int, int)> message)
 {
     std::istringstream s("51 76 3 The-End");
@@ -344,7 +344,7 @@ void guess_number_with_clues(unsigned number,
     std::cout << "Guess the number.\n>";
     std::optional<int> guess;
 
-    while (guess = read_number(s))
+    while ((guess = read_number(s)))
     {
         if (guess.value() == number)
         {
@@ -357,7 +357,7 @@ void guess_number_with_clues(unsigned number,
 #if _MSC_VER
     std::cout << std::format("The number was {}\n", number);
 #else
-    std::cout << std::format("The number was {}\n", number);
+    std::cout << "The number was " << number << '\n';
 #endif
 }
 //-----------------------------------------------------------------------------
@@ -370,7 +370,8 @@ void test_039()
 #if _MSC_VER
         return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
 #else
-        return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
+        return std::string("Your guess was too")
+            + std::string(guess < number ? "small\n" : "big\n");
 #endif
     };
     guess_number_with_clues(some_const_number(), make_message);
