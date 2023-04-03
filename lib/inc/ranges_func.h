@@ -14,7 +14,7 @@ constexpr auto to_vector(R&& r)
 template <typename Container, std::ranges::range R>
 requires std::convertible_to<std::ranges::range_value_t<R>,
     typename Container::value_type>
-Container operator|(R&& r, Container) {
+Container operator |(R&& r, Container) {
     return Container{ r.begin(), r.end() };
 }
 

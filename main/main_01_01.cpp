@@ -96,6 +96,7 @@ int main (int argc, char *argv[])
 	test_ranges_026();
 	test_ranges_027();
 	test_ranges_028();
+	test_ranges_028_1();
 
 	test_strong_type_029();
 	test_strong_type_030();

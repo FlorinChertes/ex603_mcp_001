@@ -1,6 +1,7 @@
 
 #include <ranges_func.h>
 
+#include <algorithm>
 #include <ranges>
 #include <vector>
 
@@ -72,8 +73,25 @@ void test_ranges_028()
 
     const std::vector<int> ve = vi | std::vector<int>{};
 
-    std::copy(ve.begin(), ve.end(),		                //source
-        std::ostream_iterator<int>(std::cout, ", "));	        //destination
+    std::ranges::copy(ve.begin(), ve.end(),		        //source
+        std::ostream_iterator<int>(std::cout, ", "));	//destination
     std::cout << std::endl;
+
+}
+
+void test_ranges_028_1()
+{
+    std::cout << "*** test ranges 028.1 ***" << std::endl;
+
+    auto v = std::views::iota(0, 6) | std::vector<int>{};
+    const auto new_end = std::ranges::remove_if(v, [](int i) { return i < 3; });
+
+    std::ranges::copy(v,           		                //source
+        std::ostream_iterator<int>(std::cout, ", "));	//destination
+    std::cout << std::endl;
+
+   std::ranges::copy(new_end,           		        //source
+       std::ostream_iterator<int>(std::cout, ", "));	//destination
+   std::cout << std::endl;
 
 }
