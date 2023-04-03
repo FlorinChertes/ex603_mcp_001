@@ -124,7 +124,7 @@ void show_vectors(std::ostream& s,
 #if _MSC_VER
             s << std::format("{: ^{}}", data, 6);
 #else
-            s << data << ' '
+            s << data << ' ';
 #endif
 
         }
