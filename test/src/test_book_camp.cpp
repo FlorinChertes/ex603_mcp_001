@@ -172,7 +172,7 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
     {
         auto&& negatives = row | std::views::filter(
             [](int x) { return x < 0; });
-        assert(negatives.empty());
+        assert(negatives.empty() == true);
     }
 
     std::ranges::for_each(triangle,
@@ -180,7 +180,7 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
 
         auto&& negatives = row | std::views::filter(
             [](int x) { return x < 0; });
-        assert(negatives.empty());
+        assert(negatives.empty() == true);
         }
     );
 
@@ -193,6 +193,28 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
     assert(std::ranges::all_of(triangle, is_palindrome) == true);
 
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void show_view(std::ostream& s,
+    const std::vector<std::vector<int>>& v)
+{
+    std::string spaces(v.back().size(), ' ');
+    for (const auto& row : v)
+    {
+        s << spaces;
+        if (spaces.size())
+            spaces.resize(spaces.size() - 1);
+        auto odds = row | std::views::transform([](int x)
+            { return x % 2 ? '*' : ' '; });
+        for (const auto& data : odds)
+        {
+            s << data << ' ';
+        }
+        s << '\n';
+    }
+}
+
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -209,5 +231,6 @@ void test_035()
     check_properties(pascal_triangle);
 
     show_vectors(std::cout, pascal_triangle);
+    show_view(std::cout, pascal_triangle);
 
 }
