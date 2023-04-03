@@ -316,7 +316,7 @@ void guess_number_or_give_up(int number)
     {
         if (guess.value() == number)
         {
-            std::cout << number << " is the numeber, well done!";
+            std::cout << number << " is the number, well done!";
             return;
         }
         std::cout << guess.value() << " is wrong. Try again\n>";
@@ -331,4 +331,47 @@ void test_038()
     std::cout << "*** test 038 ***" << std::endl;
 
     guess_number_or_give_up(some_const_number());
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void guess_number_with_clues(unsigned number,
+    std::function<std::string(int, int)> message)
+{
+    std::istringstream s("51 76 3 The-End");
+
+    std::cout << "Guess the number.\n>";
+    std::optional<int> guess;
+
+    while (guess = read_number(s))
+    {
+        if (guess.value() == number)
+        {
+            std::cout << number << " is the number, well done!";
+            return;
+        }
+        std::cout << message(number, guess.value());
+            std::cout << '>';
+    }
+#if _MSC_VER
+    std::cout << std::format("The number was {}\n", number);
+#else
+    std::cout << std::format("The number was {}\n", number);
+#endif
+}
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_039()
+{
+    std::cout << "*** test 039 ***" << std::endl;
+
+    auto make_message = [](int number, int guess) {
+#if _MSC_VER
+        return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
+#else
+        return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
+#endif
+    };
+    guess_number_with_clues(some_const_number(), make_message);
 }
