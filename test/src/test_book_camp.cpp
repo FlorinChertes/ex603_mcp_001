@@ -48,9 +48,7 @@ void test_033()
     std::cout << simple_plus<int>(1, 1.23) << '\n';
     std::cout << simple_plus<>(1, 1.23) << '\n';
 
-    //auto x = int{ 1.5 };
-    int x = 1.5;
-    auto data = std::vector{ 1 };
+    [[maybe_unused]] auto data = std::vector{ 1 };
 }
 
 //-----------------------------------------------------------------------------
@@ -314,7 +312,7 @@ void guess_number_or_give_up(int number)
     std::cout << "Guess the number.\n>";
     std::optional<int> guess;
 
-    while (guess = read_number(s))
+    while ((guess = read_number(s)))
     {
         if (guess.value() == number)
         {
