@@ -62,7 +62,6 @@ void test_ranges_027()
     std::copy(ve.begin(), ve.end(),						//source
         std::ostream_iterator<int>(std::cout, ", "));	//destination
     std::cout << std::endl;
-
 }
 
 void test_ranges_028()
@@ -76,7 +75,6 @@ void test_ranges_028()
     std::ranges::copy(ve.begin(), ve.end(),		        //source
         std::ostream_iterator<int>(std::cout, ", "));	//destination
     std::cout << std::endl;
-
 }
 
 void test_ranges_028_1()

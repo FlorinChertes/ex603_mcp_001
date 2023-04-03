@@ -5,8 +5,12 @@
     #include <format>
 #endif
 
+#include <ranges>
+
 #include <functional>
 #include <algorithm>
+
+#include <vector>
 #include <string>
 
 #include <iostream>
@@ -128,9 +132,9 @@ void show_vectors(std::ostream& s,
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void check_properties(const std::vector<std::vector<int>>& triangle)
 {
     size_t row_number = 1;
@@ -160,8 +164,24 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
 
     for (const auto& row : triangle)
     {
-        assert(std::ranges::all_of(row, [](auto x) { return x >= 0; }));
+        assert(std::ranges::all_of(row, [](auto x) { return x >= 0; }) == true);
     }
+
+    auto negative = [](int x) { return x < 0; };
+    for (const auto& row : triangle)
+    {
+        auto negatives = row | std::views::filter(negative);
+        assert(negatives.empty());
+    }
+
+    auto is_palindrome = [](const std::vector<int>& v) {
+        const auto forward = v | std::views::take(v.size() / 2);
+        const auto backward = v | std::views::reverse
+            | std::views::take(v.size() / 2);
+        return std::ranges::equal(forward, backward);
+        };
+    assert(std::ranges::all_of(triangle, is_palindrome) == true);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -171,7 +191,7 @@ void test_035()
     std::cout << "*** test 035 ***" << std::endl;
 
 #if _MSC_VER
-    std::cout << std::format("{: ^{}}", 213, 24);
+    std::cout << std::format("{: ^{}}", 543, 24);
     std::cout << '\n';
 #endif
     const auto rows_count{ 6 };
