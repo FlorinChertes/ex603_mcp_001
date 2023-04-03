@@ -1,4 +1,5 @@
 
+#include <optional>
 #include <numeric>
 
 #if _MSC_VER
@@ -13,7 +14,9 @@
 #include <vector>
 #include <string>
 
+#include <sstream>
 #include <iostream>
+
 #include <cassert>
 
 //-----------------------------------------------------------------------------
@@ -215,7 +218,6 @@ void show_view(std::ostream& s,
     }
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_035()
@@ -232,5 +234,103 @@ void test_035()
 
     show_vectors(std::cout, pascal_triangle);
     show_view(std::cout, pascal_triangle);
+}
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_036()
+{
+    std::cout << "*** test 036 ***" << std::endl;
+
+    std::istringstream s("1 2 3 error");
+    int n;
+
+    std::cout << std::boolalpha << "s is " << static_cast<bool>(s) << '\n';
+    while (s >> n)
+        std::cout << n << '\n';
+    std::cout << "s is " << static_cast<bool>(s) << '\n';
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+unsigned some_const_number()
+{
+    return 42;
+}
+
+unsigned input_number()
+{
+    std::istringstream s("42 2 3 error");
+
+    unsigned number;
+    while (!(s >> number))
+    {
+        std::cout << "Please enter a number.\n>";
+    }
+
+    return number;
+}
+
+void guess_number(unsigned number)
+{
+    std::cout << "Guess the number.\n>";
+    unsigned guess = input_number();
+    if(guess != number)
+    {
+        std::cout << guess << " is wrong. Try again\n>";
+     }
+    else
+        std::cout << guess  << " is right, well done.\n";
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_037()
+{
+    std::cout << "*** test 037 ***" << std::endl;
+
+    guess_number(some_const_number());
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+std::optional<int> read_number(std::istream& in)
+{
+    int result{};
+    if (in >> result)
+    {
+        return result;
+    }
+
+    in.clear();
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return {};
+}
+
+void guess_number_or_give_up(int number)
+{
+    std::istringstream s("51 76 3 The-End");
+
+    std::cout << "Guess the number.\n>";
+    std::optional<int> guess;
+
+    while (guess = read_number(s))
+    {
+        if (guess.value() == number)
+        {
+            std::cout << number << " is the numeber, well done!";
+            return;
+        }
+        std::cout << guess.value() << " is wrong. Try again\n>";
+    }
+    std::cout << "The number was " << number << "\n";
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_038()
+{
+    std::cout << "*** test 038 ***" << std::endl;
+
+    guess_number_or_give_up(some_const_number());
 }
