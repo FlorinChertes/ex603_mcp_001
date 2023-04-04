@@ -371,7 +371,7 @@ void test_039()
 #if _MSC_VER
         return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
 #else
-        return std::string("Your guess was too")
+        return std::string("Your guess was too ")
             + std::string(guess < number ? "small\n" : "big\n");
 #endif
     };
@@ -441,13 +441,11 @@ void test_042()
 {
     std::cout << "*** test 042 ***" << std::endl;
 
-    guess_number_or_give_up(some_const_number());
-
     auto make_message = [](int number, int guess) {
 #if _MSC_VER
         return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
 #else
-        return std::string("Your guess was too")
+        return std::string("Your guess was too ")
             + std::string(guess < number ? "small\n" : "big\n");
 #endif
     };
