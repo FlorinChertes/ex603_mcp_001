@@ -518,9 +518,39 @@ void test_043()
     got = check_which_digits_correct(98041, 41141);
     assert(got == "...**");
     assert(is_prime(17231));
+
     got = check_which_digits_correct(1723, 17231);
     assert(got == "^^^^.");
+
+    got = check_which_digits_correct(17231, 1723);
+    assert(got == ".^^^^");
+
     unsigned number = 78737;
     got = check_which_digits_correct(number, 87739);
     assert(got == "^^**.");
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_044()
+{
+    std::cout << "*** test 04 ***" << std::endl;
+
+    auto message = [](int number, int guess) {
+#if _MSC_VER
+        auto gs = std::format("{:0>5}", (guess));
+        return std::format("{}, {}, {} \n", number, gs, check_which_digits_correct(number, guess));
+#else
+    std::ostringstream n;
+    n << std::setfill('0') << std::setw(5) << number;
+    std::string ns = n.str();
+
+    std::ostringstream g;
+    g << std::setfill('0') << std::setw(5) << guess;
+    const std::string gs = g.str();
+
+    return ns + std::string{ ", " } + gs + std::string{ ", " } + check_which_digits_correct(number, guess) + '\n';
+#endif
+    };
+    guess_number_with_clues(some_prime_number(), message);
 }
