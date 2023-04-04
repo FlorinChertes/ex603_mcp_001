@@ -1,4 +1,5 @@
 
+#include <random>
 #include <optional>
 #include <numeric>
 
@@ -375,4 +376,18 @@ void test_039()
 #endif
     };
     guess_number_with_clues(some_const_number(), make_message);
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+int some_random_number()
+{
+    std::random_device rd;
+    std::mt19937 engine(rd());
+    std::uniform_int_distribution dist(1, 100);
+    return dist(engine);
+}
+void test_040()
+{
+    std::cout << "random number: " << some_random_number() << '\n';
 }

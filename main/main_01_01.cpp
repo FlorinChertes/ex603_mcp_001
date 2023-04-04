@@ -111,6 +111,7 @@ int main (int argc, char *argv[])
 	test_037();
 	test_038();
 	test_039();
+	test_040();
 
 	return 0;
 }
