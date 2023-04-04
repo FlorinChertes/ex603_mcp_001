@@ -389,5 +389,68 @@ int some_random_number()
 }
 void test_040()
 {
+    std::cout << "*** test 040 ***" << std::endl;
     std::cout << "random number: " << some_random_number() << '\n';
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+constexpr bool is_prime(int n)
+{
+    if (n == 2 || n == 3)
+        return true;
+
+    if (n <= 1 || n % 2 == 0 || n % 3 == 0)
+        return false;
+
+    for (int i = 5; i * i <= n; ++i)
+    {
+        if (n % i == 0)
+            return false;
+    }
+    return true;
+}
+constexpr void check_properties()
+{
+    static_assert(is_prime(5) == true);
+    static_assert(is_prime(6) == false);
+    static_assert(is_prime(7) == true);
+    static_assert(is_prime(8) == false);
+}
+
+void test_041()
+{
+    std::cout << "*** test 041 ***" << std::endl;
+    check_properties();
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+int some_prime_number()
+{
+    std::random_device rd;
+    std::mt19937 engine{ rd() };
+    std::uniform_int_distribution<int> dist{ 1, 99999 };
+        int n{};
+        while ((n = dist(engine)) && !is_prime(n))
+            ;
+    return n;
+}
+
+void test_042()
+{
+    std::cout << "*** test 042 ***" << std::endl;
+
+    guess_number_or_give_up(some_const_number());
+
+    auto make_message = [](int number, int guess) {
+#if _MSC_VER
+        return std::format("Your guess was too {}\n", (guess < number ? "small" : "big"));
+#else
+        return std::string("Your guess was too")
+            + std::string(guess < number ? "small\n" : "big\n");
+#endif
+    };
+    guess_number_with_clues(some_prime_number(), make_message);
+
 }

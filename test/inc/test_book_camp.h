@@ -8,3 +8,5 @@ void test_037();
 void test_038();
 void test_039();
 void test_040();
+void test_041();
+void test_042();
