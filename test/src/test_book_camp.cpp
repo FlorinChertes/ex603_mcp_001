@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 
+#include <iomanip>
 #include <sstream>
 #include <iostream>
 
@@ -431,9 +432,11 @@ int some_prime_number()
     std::random_device rd;
     std::mt19937 engine{ rd() };
     std::uniform_int_distribution<int> dist{ 1, 99999 };
-        int n{};
-        while ((n = dist(engine)) && !is_prime(n))
-            ;
+
+    int n{};
+    while ((n = dist(engine)) && !is_prime(n))
+        ;
+
     return n;
 }
 
@@ -451,4 +454,73 @@ void test_042()
     };
     guess_number_with_clues(some_prime_number(), make_message);
 
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+std::string check_which_digits_correct(int number, int guess)
+{
+#if _MSC_VER
+    auto ns = std::format("{:0>5}", (number));
+    auto gs = std::format("{:0>5}", (guess));
+#else
+    std::ostringstream n;
+    n << std::setfill('0') << std::setw(5) << number;
+    std::string ns = n.str();
+
+    std::ostringstream g;
+    g << std::setfill('0') << std::setw(5) << guess;
+    const std::string gs = g.str();
+#endif
+    std::string matches(5, '.');
+
+    for (size_t i = 0, stop = gs.length(); i < stop; ++i)
+    {
+        char guess_char = gs[i];
+        if (i < ns.length() && guess_char == ns[i])
+        {
+            matches[i] = '*';
+            ns[i] = '*'; // don't reuse this digit
+        }
+    }
+
+    for (size_t i = 0, stop = gs.length(); i < stop; ++i)
+    {
+        char guess_char = gs[i];
+        if (i < ns.length() && ns[i] != '*')
+        {
+            if (size_t idx = ns.find(guess_char, 0);
+                idx != std::string::npos)
+            {
+                matches[i] = '^';
+                ns[idx] = '^'; // don't reuse this digit
+            }
+        }
+    }
+
+    return matches;
+}
+
+void test_043()
+{
+    std::cout << "*** test 043 ***" << std::endl;
+
+    assert(check_which_digits_correct(12347, 23471) == "^^^^^");
+
+    auto got = check_which_digits_correct(12347, 11779);
+    assert(got == "*.^..");
+    got = check_which_digits_correct(12345, 23451);
+    assert(got == "^^^^^");
+    got = check_which_digits_correct(12345, 12345);
+    assert(got == "*****");
+    got = check_which_digits_correct(48533, 12345);
+    assert(got == "..^^^");
+    got = check_which_digits_correct(98041, 41141);
+    assert(got == "...**");
+    assert(is_prime(17231));
+    got = check_which_digits_correct(1723, 17231);
+    assert(got == "^^^^.");
+    unsigned number = 78737;
+    got = check_which_digits_correct(number, 87739);
+    assert(got == "^^**.");
 }
