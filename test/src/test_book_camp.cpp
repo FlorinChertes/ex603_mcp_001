@@ -672,8 +672,14 @@ void countdown()
 
     auto event = sys_days(new_years_eve);
     duration dur = event - now;
-    std::cout << duration_cast<days>(dur)
-        << " until event \n";
+
+#if _MSC_VER
+    std::cout << duration_cast<days>(dur) << " until event \n";
+#else
+    std::cout << std::chrono::duration_cast<std::chrono::days>(dur).count()
+        << " days until event \n";
+#endif
+
 }
 
 void test_046()
