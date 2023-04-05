@@ -336,11 +336,10 @@ void test_038()
     guess_number_or_give_up(some_const_number());
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void guess_number_with_clues(int number,
-    std::function<std::string(int, int)> message)
+    std::invocable<int, int> auto message)
 {
     std::istringstream s("12345 51 76 3 The-End");
 
@@ -653,13 +652,14 @@ void duration_to_end_of_year()
     );
     auto event = std::chrono::sys_days(new_years_eve);
     std::chrono::duration dur = event - now;
-
-
 #if _MSC_VER
     std::cout << dur << " until event\n";
 #else
     std::cout << dur.count() << " until event\n";
 #endif
+
+    std::cout << std::ratio<3, 6>::num << '/' << std::ratio<3, 6>::den << '\n';
+
 
 }
 
