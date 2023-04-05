@@ -653,7 +653,14 @@ void duration_to_end_of_year()
     );
     auto event = std::chrono::sys_days(new_years_eve);
     std::chrono::duration dur = event - now;
+
+
+#if _MSC_VER
     std::cout << dur << " until event\n";
+#else
+    std::cout << dur.count() << " until event\n";
+#endif
+
 }
 
 void test_046()
