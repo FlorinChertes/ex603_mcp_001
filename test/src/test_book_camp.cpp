@@ -657,14 +657,28 @@ void duration_to_end_of_year()
 #else
     std::cout << dur.count() << " until event\n";
 #endif
-
     std::cout << std::ratio<3, 6>::num << '/' << std::ratio<3, 6>::den << '\n';
+}
 
+void countdown()
+{
+    using namespace std::chrono;
 
+    time_point now = system_clock::now();
+    const auto ymd = year_month_day{ floor<days>(now) };
+
+    auto this_year = ymd.year();
+    auto new_years_eve = this_year / December / 31;
+
+    auto event = sys_days(new_years_eve);
+    duration dur = event - now;
+    std::cout << duration_cast<days>(dur)
+        << " until event \n";
 }
 
 void test_046()
 {
     std::cout << "*** test 045 ***" << std::endl;
     duration_to_end_of_year();
+    countdown();
 }
