@@ -1,3 +1,4 @@
+#include <chrono>
 
 #include <random>
 #include <optional>
@@ -636,4 +637,27 @@ void test_045()
     };
 
     guess_number_with_more_clues(number, messages);
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//Listing 4.2 Duration between two time points
+void duration_to_end_of_year()
+{
+    std::chrono::time_point now = std::chrono::system_clock::now();
+    constexpr auto year = 2022;
+    auto new_years_eve = std::chrono::year_month_day(
+        std::chrono::year(year),
+        std::chrono::month(12),
+        std::chrono::day(31)
+    );
+    auto event = std::chrono::sys_days(new_years_eve);
+    std::chrono::duration dur = event - now;
+    std::cout << dur << " until event\n";
+}
+
+void test_046()
+{
+    std::cout << "*** test 045 ***" << std::endl;
+    duration_to_end_of_year();
 }
