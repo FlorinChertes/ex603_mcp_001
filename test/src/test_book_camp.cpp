@@ -578,9 +578,14 @@ void guess_number_with_more_clues(int number, auto messages)
             std::cout << number << " is the number, well done!";
             return;
         }
-
-        std::cout << std::format("{:0>5} is wrong. Try again\n",
-            guess.value());
+#if _MSC_VER
+        std::cout << std::format("{:0>5} is wrong. Try again\n", guess.value());
+#else
+        std::ostringstream g;
+        g << std::setfill('0') << std::setw(5) << guess.value();
+        const std::string gs = g.str();
+        std::cout << gs << " is wrong. Try again\n";
+#endif
 
         for (auto message : messages)
         {
