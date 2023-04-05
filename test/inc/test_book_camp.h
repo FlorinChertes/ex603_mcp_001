@@ -12,3 +12,4 @@ void test_041();
 void test_042();
 void test_043();
 void test_044();
+void test_045();

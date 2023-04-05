@@ -341,7 +341,7 @@ void test_038()
 void guess_number_with_clues(int number,
     std::function<std::string(int, int)> message)
 {
-    std::istringstream s("51 76 3 The-End");
+    std::istringstream s("12345 51 76 3 The-End");
 
     std::cout << "Guess the number.\n>";
     std::optional<int> guess;
@@ -353,8 +353,7 @@ void guess_number_with_clues(int number,
             std::cout << number << " is the number, well done!";
             return;
         }
-        std::cout << message(number, guess.value());
-            std::cout << '>';
+        std::cout << message(number, guess.value()) << '>';
     }
 #if _MSC_VER
     std::cout << std::format("The number was {}\n", number);
@@ -505,6 +504,7 @@ void test_043()
 {
     std::cout << "*** test 043 ***" << std::endl;
 
+
     assert(check_which_digits_correct(12347, 23471) == "^^^^^");
 
     auto got = check_which_digits_correct(12347, 11779);
@@ -528,13 +528,19 @@ void test_043()
     unsigned number = 78737;
     got = check_which_digits_correct(number, 87739);
     assert(got == "^^**.");
+
+    got = check_which_digits_correct(5081, 53);
+    assert(got == "*.*^.");
+
+    got = check_which_digits_correct(5081, 79);
+    assert(got == "*.*..");
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_044()
 {
-    std::cout << "*** test 04 ***" << std::endl;
+    std::cout << "*** test 044 ***" << std::endl;
 
     auto message = [](int number, int guess) {
 #if _MSC_VER
@@ -552,5 +558,77 @@ void test_044()
     return ns + std::string{ ", " } + gs + std::string{ ", " } + check_which_digits_correct(number, guess) + '\n';
 #endif
     };
+
     guess_number_with_clues(some_prime_number(), message);
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void guess_number_with_more_clues(int number, auto messages)
+{
+    std::istringstream s("12345 53 79 3 The-End");
+
+    std::cout << "Guess the number.\n>";
+    std::optional<int> guess;
+
+    while ((guess = read_number(s)))
+    {
+        if (guess.value() == number)
+        {
+            std::cout << number << " is the number, well done!";
+            return;
+        }
+
+        std::cout << std::format("{:0>5} is wrong. Try again\n",
+            guess.value());
+
+        for (auto message : messages)
+        {
+            auto clue = message(guess.value());
+            if (clue.length())
+            {
+                std::cout << clue;
+                break;
+            }
+        }
+    }
+#if _MSC_VER
+    std::cout << std::format("The number was {}\n", number);
+#else
+    std::cout << "The number was " << number << '\n';
+#endif
+}
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_045()
+{
+    std::cout << "*** test 045 ***" << std::endl;
+
+    check_properties();
+
+    auto check_prime = [](int guess) {
+        return std::string((is_prime(guess)) ? "" : "Not prime\n");
+    };
+
+    auto check_length = [](int guess) {
+        return std::string((guess < 100000) ? "" : "Too long\n");
+    };
+
+    const int number = some_prime_number();
+    auto check_digits = [number](int guess) {
+#if _MSC_VER
+        return std::format("{}\n", check_which_digits_correct(number, guess));
+#else
+        return std::string{ check_which_digits_correct(number, guess) } + '\n';
+#endif
+    };
+
+    std::vector <std::function<std::string(int)> > messages
+    {
+        check_length,
+        check_prime,
+        check_digits
+    };
+
+    guess_number_with_more_clues(number, messages);
 }
