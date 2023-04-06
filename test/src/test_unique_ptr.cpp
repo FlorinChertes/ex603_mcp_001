@@ -3,11 +3,15 @@
 #include <memory>
 
 struct Widget {
-	Widget(int) {}
+	explicit Widget(int val) : val_{val} {}
+
+	int get() const {return val_;}
+
+	int val_ {};
 };
 
 void sink(std::unique_ptr<Widget> uniqPtr) {
-	uniqPtr;
+	std::cout << uniqPtr->get() << '\n';
 	// do something with uniqPtr
 }
 
