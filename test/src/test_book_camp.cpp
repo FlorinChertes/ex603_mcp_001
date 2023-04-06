@@ -679,7 +679,24 @@ void countdown()
     std::cout << std::chrono::duration_cast<std::chrono::days>(dur).count()
         << " days until event \n";
 #endif
+}
 
+//Listing 4.9 A testable countdown
+constexpr
+std::chrono::system_clock::duration countdown(
+    std::chrono::system_clock::time_point start)
+{
+    using namespace std::chrono;
+
+    auto days_only = floor<days>(start);
+
+    const auto ymd = year_month_day{ days_only };
+
+    auto this_year = ymd.year();
+    auto new_years_eve = this_year / December / last;
+
+    auto event = sys_days(new_years_eve);
+    return event - start;
 }
 
 void test_046()
@@ -687,4 +704,12 @@ void test_046()
     std::cout << "*** test 045 ***" << std::endl;
     duration_to_end_of_year();
     countdown();
+
+    auto result = countdown(std::chrono::system_clock::now());
+
+#if _MSC_VER
+    std::cout << duration_cast<std::chrono::days>(result) << " until event \n";
+#else
+    std::cout << duration_cast<std::chrono::days>(result).count() << " days until event \n";
+#endif
 }
