@@ -1,3 +1,5 @@
+#include <thread>
+
 #include <chrono>
 
 #include <random>
@@ -744,4 +746,21 @@ void test_047()
 
     //Listing 4.10
     static_assert(check_properties_chrono() == true);
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_048()
+{
+    std::cout << "*** test 048 ***" << std::endl;
+
+    using namespace std::chrono;
+
+    for (int i = 0; i < 5; ++i)
+    {
+        std::this_thread::sleep_for(500ms);
+        auto dur = countdown(system_clock::now());
+
+        std::cout << duration_cast<seconds>(dur) << " until event\n";
+    }
 }
