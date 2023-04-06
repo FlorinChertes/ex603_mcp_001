@@ -136,7 +136,6 @@ void show_vectors(std::ostream& s,
     }
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void check_properties(const std::vector<std::vector<int>>& triangle)
@@ -439,6 +438,8 @@ int some_prime_number()
     return n;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void test_042()
 {
     std::cout << "*** test 042 ***" << std::endl;
@@ -500,6 +501,8 @@ std::string check_which_digits_correct(int number, int guess)
     return matches;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void test_043()
 {
     std::cout << "*** test 043 ***" << std::endl;
@@ -699,9 +702,11 @@ std::chrono::system_clock::duration countdown(
     return event - start;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void test_046()
 {
-    std::cout << "*** test 045 ***" << std::endl;
+    std::cout << "*** test 046 ***" << std::endl;
     duration_to_end_of_year();
     countdown();
 
@@ -712,4 +717,31 @@ void test_046()
 #else
     std::cout << duration_cast<std::chrono::days>(result).count() << " days until event \n";
 #endif
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//Listing 4.10 Check the countdown function
+constexpr
+bool check_properties_chrono()
+{
+    using namespace std::chrono;
+
+    constexpr auto new_years_eve = 2022y / December / last;
+    constexpr auto one_day_away = sys_days{ new_years_eve } - 24h;
+
+    constexpr auto duration = countdown(one_day_away);
+    static_assert(duration_cast<days>(duration) == days{ 1 });
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_047()
+{
+    std::cout << "*** test 047 ***" << std::endl;
+
+    //Listing 4.10
+    static_assert(check_properties_chrono() == true);
 }
