@@ -211,7 +211,7 @@ int test_create_big_file()
         const auto loops{ fsize / buffer_size };
         const auto lastChunk{ fsize % buffer_size };
 
-        auto insert_file_block_in_set = [&in_file, buffer_size, &uniques]()
+        auto insert_file_block_in_set = [&in_file, &uniques]()
         {
             std::string file_as_string(buffer_size, 0);
             in_file.read(file_as_string.data(), file_as_string.size());

@@ -33,13 +33,13 @@ void test_type_func_chrono_013()
 {
 	std::cout << "*** test chrono 013 ***" << std::endl;
 
-	std::chrono::hours half_day(12);
-	std::chrono::minutes half_hour(30);
+	[[maybe_unused]] std::chrono::hours half_day(12);
+	[[maybe_unused]] std::chrono::minutes half_hour(30);
 
 	using namespace std::chrono_literals;
 
-	auto half_day_1 = 12h;
-	auto half_hour_1 = 30min;
+	[[maybe_unused]] auto half_day_1 = 12h;
+	[[maybe_unused]] auto half_hour_1 = 30min;
 
 	std::chrono::hours half_day_in_h(12);
 	std::chrono::minutes half_day_in_min(half_day_in_h);

@@ -55,10 +55,10 @@ void test_overloading_ft_001()
     int ret_val = func_a<2>();
     std::cout << "ret val:" << ret_val << std::endl;
 
-    Ret_val<2> ret_val_1 = func_b<2>();
+    [[maybe_unused]] Ret_val<2> ret_val_1 = func_b<2>();
     std::cout << "ret val 1:" << "Ret_val<2>" << std::endl;
 
-    Ret_val<3> ret_val_2 = func_b<3>();
+    [[maybe_unused]] Ret_val<3> ret_val_2 = func_b<3>();
     std::cout << "ret val 2:" << "Ret_val<3>" << std::endl;
 
 }

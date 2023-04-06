@@ -173,6 +173,7 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
         }
     );
 
+#if !defined(__clang__)
     for (const auto& row : triangle)
     {
         auto&& negatives = row | std::views::filter(
@@ -196,11 +197,12 @@ void check_properties(const std::vector<std::vector<int>>& triangle)
         return std::ranges::equal(forward, backward);
         };
     assert(std::ranges::all_of(triangle, is_palindrome) == true);
-
+#endif
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+#if !defined(__clang__)
 void show_view(std::ostream& s,
     const std::vector<std::vector<int>>& v)
 {
@@ -210,8 +212,10 @@ void show_view(std::ostream& s,
         s << spaces;
         if (spaces.size())
             spaces.resize(spaces.size() - 1);
+
         auto odds = row | std::views::transform([](int x)
             { return x % 2 ? '*' : ' '; });
+
         for (const auto& data : odds)
         {
             s << data << ' ';
@@ -219,7 +223,7 @@ void show_view(std::ostream& s,
         s << '\n';
     }
 }
-
+#endif
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_035()
@@ -235,7 +239,9 @@ void test_035()
     check_properties(pascal_triangle);
 
     show_vectors(std::cout, pascal_triangle);
+#if !defined(__clang__)
     show_view(std::cout, pascal_triangle);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -761,11 +767,11 @@ void test_048()
         std::this_thread::sleep_for(500ms);
         auto dur = countdown(system_clock::now());
 
-//#if _MSC_VER
-//        std::cout << duration_cast<seconds>(dur) << " until event\n";
-//#else
+#if _MSC_VER
+        std::cout << duration_cast<seconds>(dur) << " until event\n";
+#else
         std::cout << duration_cast<seconds>(dur).count() << " sec. until event\n";
-//#endif
+#endif
 
 
 
