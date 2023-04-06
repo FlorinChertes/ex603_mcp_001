@@ -761,6 +761,14 @@ void test_048()
         std::this_thread::sleep_for(500ms);
         auto dur = countdown(system_clock::now());
 
-        std::cout << duration_cast<seconds>(dur) << " until event\n";
+//#if _MSC_VER
+//        std::cout << duration_cast<seconds>(dur) << " until event\n";
+//#else
+        std::cout << duration_cast<seconds>(dur).count() << " sec. until event\n";
+//#endif
+
+
+
+
     }
 }
