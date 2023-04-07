@@ -787,6 +787,7 @@ countdown_to(std::chrono::system_clock::time_point now,
     return event - now;
 }
 
+#if _MSC_VER
 std::optional<std::chrono::year_month_day>
 read_date(std::istream& in)
 {
@@ -805,7 +806,7 @@ read_date(std::istream& in)
     format_str << '\n';
     return {};
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -827,8 +828,9 @@ void test_049()
     std::ostringstream o;
     o << this_year << "-12-25"s;
     const auto christmas_day{ o.str() };
-
     std::istringstream in(christmas_day);
+
+#if _MSC_VER
     std::optional<std::chrono::year_month_day> event_date = read_date(in);
     if (event_date)
     {
@@ -842,4 +844,5 @@ void test_049()
         std::cout << duration_cast<days>(dur).count() <<
             " days until " << event_date.value() << "\n";
     }
+#endif
 }
