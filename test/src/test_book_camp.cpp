@@ -1,3 +1,5 @@
+#include "../../lib/inc/playing_cards.h"
+
 #include <thread>
 
 #include <chrono>
@@ -845,4 +847,19 @@ void test_049()
             " days until " << event_date.value() << "\n";
     }
 #endif
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_050()
+{
+    std::cout << "*** test 050 ***" << std::endl;
+    using namespace cards;
+
+    Suit suit{};
+    Card card{2, Suit::Clubs};
+
+    Card card_01;
+    Card card_02{};
+    std::cout << "carr_02: " << static_cast<int>(card_02.suit) << " " << card_02.value << '\n';
 }

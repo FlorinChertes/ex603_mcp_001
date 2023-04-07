@@ -121,6 +121,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_047();
 	test_048();
 	test_049();
+	test_050();
 
 	return 0;
 }
