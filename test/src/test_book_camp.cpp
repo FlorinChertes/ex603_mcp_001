@@ -861,5 +861,5 @@ void test_050()
 
     Card card_01;
     Card card_02{};
-    std::cout << "carr_02: " << static_cast<int>(card_02.suit) << " " << card_02.value << '\n';
+    std::cout << "card_02: " << static_cast<int>(card_02.suit) << " " << card_02.value << '\n';
 }
