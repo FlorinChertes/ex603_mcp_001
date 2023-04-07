@@ -772,9 +772,74 @@ void test_048()
 #else
         std::cout << duration_cast<seconds>(dur).count() << " sec. until event\n";
 #endif
+    }
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+constexpr std::chrono::system_clock::duration
+countdown_to(std::chrono::system_clock::time_point now,
+    std::chrono::year_month_day date)
+{
+    using namespace std::chrono;
+
+    auto event = sys_days(date);
+    return event - now;
+}
+
+std::optional<std::chrono::year_month_day>
+read_date(std::istream& in)
+{
+    using namespace std::string_literals;
+
+    auto format_str = "%Y-%m-%d"s;
+    if (std::chrono::year_month_day date;
+        in >> std::chrono::parse(format_str, date))
+    {
+
+        return date;
+    }
+
+    in.clear();
+    std::cout << "Invalid format. Expected " <<
+    format_str << '\n';
+    return {};
+}
 
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_049()
+{
+    std::cout << "*** test 049 ***" << std::endl;
 
+    using namespace std::string_literals;
+    using namespace std::chrono;
 
+    auto today_now = system_clock::now();
+    const auto days_only = floor<days>(today_now);
+    const auto ymd = year_month_day{ days_only };
+
+    const auto this_year  = static_cast<int>(ymd.year());
+    const auto this_month = static_cast<unsigned int>(ymd.month());
+    const auto this_day   = static_cast<unsigned int>(ymd.day());
+
+    std::ostringstream o;
+    o << this_year << "-12-25"s;
+    const auto christmas_day{ o.str() };
+
+    std::istringstream in(christmas_day);
+    std::optional<std::chrono::year_month_day> event_date = read_date(in);
+    if (event_date)
+    {
+        if (this_month == 12 && this_day > 25)
+        {
+            // 26.12. - 31.12. is Christmas!
+            today_now = sys_days{ year{ this_year } / December / 25 };
+        }
+        const auto& dur = countdown_to(today_now, event_date.value());
+
+        std::cout << duration_cast<days>(dur).count() <<
+            " days until " << event_date.value() << "\n";
     }
 }
