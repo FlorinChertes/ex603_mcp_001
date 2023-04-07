@@ -113,6 +113,7 @@ set(SRC_001
 	test/src/test_book_camp.cpp
 
 	lib/inc/playing_cards.h
+	lib/src/playing_cards.cpp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

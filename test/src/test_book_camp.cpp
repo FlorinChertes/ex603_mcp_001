@@ -857,9 +857,10 @@ void test_050()
     using namespace cards;
 
     Suit suit{};
-    Card card{2, Suit::Clubs};
+    Card card{ FaceValue{2}, Suit::Clubs };
 
     Card card_01;
+    std::cout << "card_01: " << card_01 << '\n';
     Card card_02{};
-    std::cout << "card_02: " << static_cast<int>(card_02.suit) << " " << card_02.value << '\n';
+    std::cout << "card_02: " << card_02 << '\n';
 }
