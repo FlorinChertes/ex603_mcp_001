@@ -1,6 +1,8 @@
 
-//#include <array>
-//#include <compare>
+#include <array>
+#include <ranges>
+#include <algorithm>
+#include <compare>
 //#include <variant>
 
 //#include <iostream>
@@ -12,10 +14,10 @@
 namespace cards
 { 
 	enum class Suit {
-	Hearts, 
-	Diamonds, 
-	Clubs, 
-	Spades 
+		Hearts,
+		Diamonds,
+		Clubs,
+		Spades
 	};
 
 	class FaceValue
@@ -34,6 +36,8 @@ namespace cards
 			return value_;
 		}
 		
+		auto operator<=>(const FaceValue&) const = default;
+
 	private:
 		int value_;
 	};
@@ -50,10 +54,16 @@ namespace cards
 		FaceValue value() const { return value_; }
 		Suit suit() const { return suit_; }
 
+		auto operator<=>(const Card&) const = default;
 	private:
 		FaceValue value_{1};
 		Suit suit_{};
 	};
 
 	std::ostream& operator<<(std::ostream& os, const Card& card);  // Listing 5.10
+
+	Suit& operator++(Suit& suit);
+
+	std::array<Card, 52> create_deck();
+
 } 

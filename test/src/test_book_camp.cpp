@@ -17,6 +17,7 @@
 #include <functional>
 #include <algorithm>
 
+#include <array>
 #include <vector>
 #include <string>
 
@@ -849,18 +850,24 @@ void test_049()
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+void show_deck(const auto& a) {
+    for (const auto& e : a) { std::cout << e << ' '; }
+    std::cout << "\n";
+}
+
 void test_050()
 {
     std::cout << "*** test 050 ***" << std::endl;
     using namespace cards;
 
-    Suit suit{};
-    Card card{ FaceValue{2}, Suit::Clubs };
+    [[maybe_unused]] Suit suit{};
+    [[maybe_unused]] Card card{ FaceValue{2}, Suit::Clubs };
 
     Card card_01;
     std::cout << "card_01: " << card_01 << '\n';
     Card card_02{};
     std::cout << "card_02: " << card_02 << '\n';
+
+    const auto& deck{ create_deck()};
+    show_deck(deck);
 }

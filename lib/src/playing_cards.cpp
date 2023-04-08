@@ -56,5 +56,38 @@ namespace cards
 		return os;
 	}
 
-	
+	// Listing 5.18 increment our enum
+	Suit& operator++(Suit& suit)
+	{
+		// Dangerous! See https://stackoverflow.com/questions/3475152/why-cant-i-increment-a-variable-of-an-enumerated-type
+		using IntType = typename std::underlying_type_t<Suit>;
+
+		if (suit == Suit::Spades)
+			suit = Suit::Hearts;
+		else
+			suit = static_cast<Suit>(static_cast<IntType>(suit) + 1);
+		return suit;
+	}
+
+
+	//Listing 5.19 Generating the deck of cards
+	std::array<Card, 52> create_deck()
+	{
+		std::array<Card, 52> deck;
+
+		int value = 1;
+		Suit suit = Suit::Hearts;
+
+		std::ranges::generate(deck, [&value, &suit]() {
+			if (value > 13)
+			{
+				value = 1;
+				++suit;
+			}
+			return Card{ FaceValue(value++), suit };
+			});
+
+		return deck;
+	}
+
 }
