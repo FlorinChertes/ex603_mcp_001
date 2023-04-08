@@ -1,9 +1,7 @@
 #include "../../lib/inc/playing_cards.h"
 
 #include <thread>
-
 #include <chrono>
-
 #include <random>
 #include <optional>
 #include <numeric>
@@ -825,8 +823,10 @@ void test_049()
     const auto ymd = year_month_day{ days_only };
 
     const auto this_year  = static_cast<int>(ymd.year());
+#if _MSC_VER
     const auto this_month = static_cast<unsigned int>(ymd.month());
     const auto this_day   = static_cast<unsigned int>(ymd.day());
+#endif
 
     std::ostringstream o;
     o << this_year << "-12-25"s;
@@ -868,6 +868,18 @@ void test_050()
     Card card_02{};
     std::cout << "card_02: " << card_02 << '\n';
 
-    const auto& deck{ create_deck()};
+    auto&& deck{ create_deck()};
+    show_deck(deck);
+    shuffle_deck(deck);
+    show_deck(deck);
+}
+
+
+void test_051()
+{
+    std::cout << "*** test 051 ***" << std::endl;
+    using namespace cards;
+
+    auto&& deck{ create_extended_deck() };
     show_deck(deck);
 }

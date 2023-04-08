@@ -3,12 +3,8 @@
 #include <ranges>
 #include <algorithm>
 #include <compare>
-//#include <variant>
-
-//#include <iostream>
+#include <variant>
 #include <stdexcept>
-//s#include <string>
-
 
 #pragma once
 namespace cards
@@ -60,10 +56,19 @@ namespace cards
 		Suit suit_{};
 	};
 
+	//Listing 5.26 A joker
+	struct Joker
+	{
+	};
+
 	std::ostream& operator<<(std::ostream& os, const Card& card);  // Listing 5.10
 
 	Suit& operator++(Suit& suit);
 
 	std::array<Card, 52> create_deck();
+	void shuffle_deck(std::array<Card, 52>& deck);
+
+	std::ostream& operator<<(std::ostream& os, const std::variant<Card, Joker>& card);
+	std::array<std::variant<Card, Joker>, 54> create_extended_deck();
 
 } 

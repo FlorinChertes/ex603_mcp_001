@@ -1,11 +1,8 @@
 #include "playing_cards.h"
 
 #include <iostream>
-#include <stdexcept>
 #include <string>
-
-//#include <algorithm>
-//#include <random>
+#include <random>
 
 namespace cards
 {
@@ -90,4 +87,30 @@ namespace cards
 		return deck;
 	}
 
+	// Listing 5.22 Shuffle the cards
+	void shuffle_deck(std::array<Card, 52>& deck)
+	{
+		std::random_device rd;
+		std::mt19937 gen{ rd() };
+		std::ranges::shuffle(deck, gen);
+	}
+
+	//Listing 5.31 Stream out cards and jokers
+	std::ostream& operator<<(std::ostream& os, const std::variant<Card, Joker>& card)
+	{
+		if (std::holds_alternative<Joker>(card))
+			os << "JOKER";
+		else
+			os << std::get<Card>(card);
+		return os;
+	}
+
+	//Listing 5.28 Create an extended deck
+	std::array<std::variant<Card, Joker>, 54> create_extended_deck()
+	{
+		std::array<std::variant<Card, Joker>, 54> deck{ Joker{} , Joker{} };
+		std::array<Card, 52> cards = create_deck();
+		std::ranges::copy(cards, deck.begin() + 2);
+		return deck;
+	}
 }
