@@ -114,6 +114,10 @@ set(SRC_001
 
 	lib/inc/playing_cards.h
 	lib/src/playing_cards.cpp
+
+	test/inc/test_concurrency.h
+	test/src/test_concurrency.cpp
+
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
