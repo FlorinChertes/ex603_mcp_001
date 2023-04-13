@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <memory>
 
 #include <cassert>
 
@@ -98,7 +99,7 @@ void test_054()
     std::cout << "*** test 054 ***" << std::endl;
 
     std::cout << '\n';
-
+#if _MSC_VER
     std::atomic<std::shared_ptr<std::string>> sharString(
         std::make_shared<std::string>("Zero"));
 
@@ -125,6 +126,7 @@ void test_054()
     t5.join();
 
     std::cout << *sharString.load() << '\n';
+#endif
 }
 
 //-----------------------------------------------------------------------------
