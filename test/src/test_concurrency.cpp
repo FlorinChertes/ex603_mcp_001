@@ -1,7 +1,4 @@
 
-#include <atomic>
-#include <thread>
-
 #include <array>
 #include <vector>
 #include <string>
@@ -9,6 +6,10 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+
+#include <atomic>
+#include <thread>
+#include <chrono>
 #include <memory>
 
 #include <cassert>
@@ -165,4 +166,105 @@ void test_055()
     t4.join();
     t5.join();
 
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+std::string work;
+std::atomic<bool> ready(false);
+
+void consumer() {
+    while (!ready.load()) {}
+    std::cout << work << '\n';
+}
+
+void producer() {
+    work = "done";
+    ready = true;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_056()
+{
+    std::cout << "*** test 056 ***" << std::endl;
+
+    std::thread con(consumer);
+    std::thread prod(producer);
+
+    prod.join();
+    con.join();
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+std::atomic<int> atom{ 0 };
+int somethingShared{ 0 };
+
+void writeShared() {
+    somethingShared = 2011;
+    atom.store(3, std::memory_order_release);
+}
+
+void readShared() {
+    using namespace std::chrono_literals;
+    while (!(atom.fetch_sub(1, std::memory_order_acquire) > 0)) {
+        std::this_thread::sleep_for(100ms);
+    }
+
+    std::cout << "somethingShared: " <<
+        "111111111 " <<
+        "222222222 " <<
+        "333333333 " <<
+        somethingShared << '\n';
+}
+
+void test_057()
+{
+    std::cout << "*** test 057 ***" << std::endl;
+
+        std::thread t2(readShared);
+    std::thread t3(readShared);
+    std::thread t4(readShared);
+
+    std::thread t1(writeShared);
+
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+
+    std::cout << "atom: " << atom << '\n';
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+std::atomic<int> count = { 0 };
+
+void add()
+{
+    for (int n = 0; n < 100000; ++n) {
+        count.fetch_add(1/*, std::memory_order_relaxed*/);
+     }
+}
+
+void test_058()
+{
+    const auto start = std::chrono::steady_clock::now();
+
+    std::vector<std::jthread> v;
+    for (int n = 0; n < 100; ++n) {
+        v.emplace_back(add);
+    }
+    for (auto& t : v) {
+        t.join();
+    }
+
+    const auto end = std::chrono::steady_clock::now();
+    const auto res = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    std::cout << "Final counter value is " << count << '\n';
+    std::cout << "time: " << res << " ms\n";
 }
