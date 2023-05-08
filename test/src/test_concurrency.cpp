@@ -8,7 +8,10 @@
 #include <iostream>
 
 #include <atomic>
+
+#include <syncstream>
 #include <thread>
+
 #include <chrono>
 #include <memory>
 
@@ -213,7 +216,7 @@ void readShared() {
         std::this_thread::sleep_for(100ms);
     }
 
-    std::cout << "somethingShared: " <<
+    std::osyncstream(std::cout) << "somethingShared: " <<
         "111111111 " <<
         "222222222 " <<
         "333333333 " <<
@@ -224,7 +227,7 @@ void test_057()
 {
     std::cout << "*** test 057 ***" << std::endl;
 
-        std::thread t2(readShared);
+    std::thread t2(readShared);
     std::thread t3(readShared);
     std::thread t4(readShared);
 
