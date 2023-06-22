@@ -9,6 +9,8 @@
 
 #include <atomic>
 
+#include<shared_mutex>
+
 #include <syncstream>
 #include <thread>
 
@@ -452,15 +454,15 @@ void test_061()
 
     std::cout << "val_32 & 0x000000FF: " << (val_32 & 0x000000FF) << '\n';
     val_8 = val_32 & 0x000000FF;
-    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
 
     std::cout << "(val_32 & 0x0000FF00) >> 8: " << ((val_32 & 0x0000FF00) >>  8) << '\n';
     val_8 = (val_32 & 0x0000FF00) >> 8;
-    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
 
 
     val_8 = static_cast<uint8_t>(val_32);
-    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
 
 
     std::cout << '\n';
