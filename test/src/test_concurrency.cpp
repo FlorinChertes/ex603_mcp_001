@@ -255,6 +255,7 @@ void add()
 
 void test_058()
 {
+    std::cout << "*** test 058 ***" << std::endl;
     const auto start = std::chrono::steady_clock::now();
 
     std::vector<std::jthread> v;
@@ -270,4 +271,197 @@ void test_058()
 
     std::cout << "Final counter value is " << count << '\n';
     std::cout << "time: " << res << " ms\n";
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+class Lock {                                     // (4)
+public:
+    virtual void lock() const = 0;
+    virtual void unlock() const = 0;
+};
+
+class StrategizedLocking {
+    Lock& lock;                                 // (1)
+public:
+    explicit StrategizedLocking(Lock& l) : lock(l) {       // (2)
+        lock.lock();
+    }
+    ~StrategizedLocking() {                      // (3)
+        lock.unlock();
+    }
+};
+
+struct NullObjectMutex {
+    void lock() {}
+    void unlock() {}
+};
+
+class NoLock : public Lock {                    // (5)
+    void lock() const override {
+        std::cout << "NoLock::lock: " << '\n';
+        nullObjectMutex.lock();
+    }
+    void unlock() const override {
+        std::cout << "NoLock::unlock: " << '\n';
+        nullObjectMutex.unlock();
+    }
+    mutable NullObjectMutex nullObjectMutex;    // (10)
+};
+
+class ExclusiveLock : public Lock {             // (6)
+    void lock() const override {
+        std::cout << "    ExclusiveLock::lock: " << '\n';
+        mutex.lock();
+    }
+    void unlock() const override {
+        std::cout << "    ExclusiveLock::unlock: " << '\n';
+        mutex.unlock();
+    }
+    mutable std::mutex mutex;                   // (11)
+};
+
+class SharedLock : public Lock {                // (7)
+    void lock() const override {
+        std::cout << "        SharedLock::lock_shared: " << '\n';
+        sharedMutex.lock_shared();             // (8)
+    }
+    void unlock() const override {
+        std::cout << "        SharedLock::unlock_shared: " << '\n';
+        sharedMutex.unlock_shared();           // (9)
+    }
+    mutable std::shared_mutex sharedMutex;     // (12)
+};
+
+
+void test_059()
+{
+    std::cout << "*** test 059 ***" << std::endl;
+    std::cout << '\n';
+
+    NoLock noLock;
+    StrategizedLocking stratLock1{ noLock };
+
+    {
+        ExclusiveLock exLock;
+        StrategizedLocking stratLock2{ exLock };
+        {
+            SharedLock sharLock;
+            StrategizedLocking startLock3{ sharLock };
+        }
+    }
+
+    std::cout << '\n';
+
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+template <typename T>
+concept BasicLockable = requires(T lo) {
+    lo.lock();
+    lo.unlock();
+};
+
+template <BasicLockable Lock>
+class Strategized_Locking {
+    Lock& lock;
+public:
+    explicit Strategized_Locking(Lock& l) : lock(l) {
+        lock.lock();
+    }
+    ~Strategized_Locking() {
+        lock.unlock();
+    }
+};
+
+
+class No_Lock {
+public:
+    void lock() const {
+        std::cout << "NoLock::lock: " << '\n';
+        nullObjectMutex.lock();
+    }
+    void unlock() const {
+        std::cout << "NoLock::unlock: " << '\n';
+        nullObjectMutex.lock();
+    }
+    mutable NullObjectMutex nullObjectMutex;
+};
+
+class Exclusive_Lock {
+public:
+    void lock() const {
+        std::cout << "    ExclusiveLock::lock: " << '\n';
+        mutex_.lock();
+    }
+    void unlock() const {
+        std::cout << "    ExclusiveLock::unlock: " << '\n';
+        mutex_.unlock();
+    }
+    mutable std::mutex mutex_;
+};
+
+class Shared_Lock {
+public:
+    void lock() const {
+        std::cout << "        SharedLock::lock_shared: " << '\n';
+        sharedMutex.lock_shared();
+    }
+    void unlock() const {
+        std::cout << "        SharedLock::unlock_shared: " << '\n';
+        sharedMutex.unlock_shared();
+    }
+    mutable std::shared_mutex sharedMutex;
+};
+
+
+void test_060()
+{
+    std::cout << "*** test 060 ***" << std::endl;
+    std::cout << '\n';
+
+    No_Lock noLock;
+    Strategized_Locking<No_Lock> stratLock1{ noLock };
+
+    {
+        Exclusive_Lock exLock;
+        Strategized_Locking<Exclusive_Lock> stratLock2{ exLock };
+        {
+            Shared_Lock sharLock;
+            Strategized_Locking<Shared_Lock> startLock3{ sharLock };
+        }
+    }
+
+    std::cout << '\n';
+}
+
+void test_061()
+{
+    std::cout << "*** test 061 ***" << std::endl;
+    std::cout << '\n';
+    uint32_t val_32{ 0x12345678 };
+    std::cout << "val_32: " << std::hex << val_32 << '\n';
+
+    uint16_t val_16 = static_cast<uint16_t>(val_32);
+    std::cout << "val_16: " << std::hex << val_16 << '\n';
+
+    uint8_t val_8;
+
+    std::cout << "val_32 & 0x000000FF: " << (val_32 & 0x000000FF) << '\n';
+    val_8 = val_32 & 0x000000FF;
+    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+
+    std::cout << "(val_32 & 0x0000FF00) >> 8: " << ((val_32 & 0x0000FF00) >>  8) << '\n';
+    val_8 = (val_32 & 0x0000FF00) >> 8;
+    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+
+
+    val_8 = static_cast<uint8_t>(val_32);
+    std::cout << "val_8: " << std::hex << static_cast<int>(val_8) << '\n';
+
+
+    std::cout << '\n';
 }

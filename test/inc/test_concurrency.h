@@ -5,3 +5,6 @@ void test_055();
 void test_056();
 void test_057();
 void test_058();
+void test_059();
+void test_060();
+void test_061();
