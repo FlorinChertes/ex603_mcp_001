@@ -86,6 +86,7 @@ public:
     TMP& operator= ([[maybe_unused]] TMP&& tmp) noexcept
     {
         std::cout << "move assignment" << '\n';
+        return *this;
     }
 
     std::string get_name() const
