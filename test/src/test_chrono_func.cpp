@@ -128,6 +128,6 @@ void test_type_func_chrono_017()
 
 	std::cout.imbue(std::locale("de_AT.utf8"));
 	std::cout << "de_AT: " << std::put_time(ltime, "%c %Z") << '\n';
-
 	std::cout << "de_AT: " << std::put_time(ltime, "%c") << '\n';
+	std::cout.imbue(std::locale());
 }

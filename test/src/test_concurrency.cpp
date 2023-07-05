@@ -1,4 +1,3 @@
-
 #include <array>
 #include <vector>
 #include <string>
@@ -38,7 +37,6 @@ public:
 int idx{};
 Spinlock spin{};
 
-
 void workOnResource() {
 
     spin.lock();
@@ -49,7 +47,6 @@ void workOnResource() {
 
     spin.unlock();
 }
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -91,8 +88,9 @@ void completeWork() {
 void test_053()
 {
     std::cout << "*** test 053 ***" << std::endl;
-    std::thread t1(prepareWork);
+
     std::thread t2(completeWork);
+    std::thread t1(prepareWork);
 
     t1.join();
     t2.join();
@@ -147,16 +145,15 @@ T fetch_mult(std::atomic<T>& shared, T mult) {
 //-----------------------------------------------------------------------------
 void test_055()
 {
-
     std::cout << "*** test 055 ***" << std::endl;
 
     std::atomic<int> value_{ 5 };
 
     auto func = [&value_] (){
 
-        std::cout << value_ << '\n';
+        std::cout << "before: " << value_ << '\n';
         fetch_mult(value_, 5);
-        std::cout << value_ << '\n';
+        std::cout << "after: " << value_ << '\n';
     };
 
     std::thread t1(func);
@@ -170,7 +167,6 @@ void test_055()
     t3.join();
     t4.join();
     t5.join();
-
 }
 
 //-----------------------------------------------------------------------------
