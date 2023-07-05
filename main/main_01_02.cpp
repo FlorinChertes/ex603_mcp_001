@@ -2,6 +2,7 @@
 #include "test_ext_polymorph.h"
 #include "test_person.h"
 
+#include "test_refref_01.h"
 #include "test_concurrency.h"
 #include "test_book_camp.h"
 #include "test_strong_type.h"
@@ -127,7 +128,11 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_057();
 	test_058();
 
+	test_059();
+	test_060();
+
 	test_061();
+	test_062();
 
 	return 0;
 }

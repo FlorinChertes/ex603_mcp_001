@@ -118,6 +118,9 @@ set(SRC_001
 	test/inc/test_concurrency.h
 	test/src/test_concurrency.cpp
 
+	test/inc/test_refref_01.h
+	test/src/test_refref_01.cpp
+
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

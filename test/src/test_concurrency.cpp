@@ -440,30 +440,3 @@ void test_060()
     std::cout << '\n';
 }
 
-void test_061()
-{
-    std::cout << "*** test 061 ***" << std::endl;
-    std::cout << '\n';
-    uint32_t val_32{ 0x12345678 };
-    std::cout << "val_32: " << std::hex << val_32 << '\n';
-
-    uint16_t val_16 = static_cast<uint16_t>(val_32);
-    std::cout << "val_16: " << std::hex << val_16 << '\n';
-
-    uint8_t val_8;
-
-    std::cout << "val_32 & 0x000000FF: " << (val_32 & 0x000000FF) << '\n';
-    val_8 = val_32 & 0x000000FF;
-    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
-
-    std::cout << "(val_32 & 0x0000FF00) >> 8: " << ((val_32 & 0x0000FF00) >>  8) << '\n';
-    val_8 = (val_32 & 0x0000FF00) >> 8;
-    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
-
-
-    val_8 = static_cast<uint8_t>(val_32);
-    std::cout << "val_8: " << std::hex << static_cast<uint16_t>(val_8) << '\n';
-
-
-    std::cout << '\n';
-}
