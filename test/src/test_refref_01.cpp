@@ -137,3 +137,34 @@ void test_062()
 
     //consume_string(create_string());
 }
+
+class A
+{
+public:
+    A() { construct(); };
+    virtual ~A() { destroy(); }
+private:
+    virtual void destroy() noexcept { std::cout << "dtor A" << '\n'; }
+    virtual void construct() const { std::cout << "ctor A" << '\n'; }
+};
+
+class B : public A
+{
+public:
+    B() { construct(); }
+    ~B() override { destroy(); }
+private:
+    void destroy() noexcept override { std::cout << "dtor B" << '\n'; }
+    void construct() const override { std::cout << "ctor B" << '\n'; }
+};
+
+void test_063()
+{
+    // https://godbolt.org/
+    // -std=c++20 -Wall -Wextra
+
+    std::cout << "*** test 063 ***" << std::endl;
+
+    A* ptr{ new B()};
+    delete ptr;
+}
