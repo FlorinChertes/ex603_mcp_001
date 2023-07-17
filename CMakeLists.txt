@@ -127,7 +127,20 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	add_executable(ex603_mcp_001_ex
 		main/main_01_02.cpp	${SRC_001}
 	)
-else()
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	# using GCC
+	add_executable(ex603_mcp_001_ex
+		main/main_01_gcc.cpp	${SRC_001}
+
+		lib/inc/ranges_func.h
+		test/inc/test_ranges.h
+		test/src/test_ranges.cpp
+
+		test/src/test_polymorphism_variant.cpp
+		test/inc/test_polymorphism_variant.h
+	)
+  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	# using Visual Studio C++
 	add_executable(ex603_mcp_001_ex
 		main/main_01_01.cpp	${SRC_001}
 
