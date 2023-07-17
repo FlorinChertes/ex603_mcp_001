@@ -137,6 +137,9 @@ else()
 
 		test/src/test_polymorphism_variant.cpp
 		test/inc/test_polymorphism_variant.h
+
+		test/src/test_visitor.cpp
+		test/inc/test_visitor.h
 	)
 endif()
 

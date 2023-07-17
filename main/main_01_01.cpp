@@ -1,3 +1,4 @@
+#include "test_visitor.h"
 #include "test_type_erasure.h"
 #include "test_ext_polymorph.h"
 #include "test_person.h"
