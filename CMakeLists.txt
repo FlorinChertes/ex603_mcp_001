@@ -139,7 +139,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		test/src/test_polymorphism_variant.cpp
 		test/inc/test_polymorphism_variant.h
 	)
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# using Visual Studio C++
 	add_executable(ex603_mcp_001_ex
 		main/main_01_01.cpp	${SRC_001}
@@ -153,6 +153,13 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 		test/src/test_visitor.cpp
 		test/inc/test_visitor.h
+
+		test/inc/coro/tracingawaiter.hpp
+		test/inc/coro/tracingcoro.hpp
+
+		test/src/test_coro.cpp
+		test/inc/test_coro.h
+
 	)
 endif()
 

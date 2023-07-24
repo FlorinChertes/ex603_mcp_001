@@ -8,7 +8,7 @@
 
 #include <atomic>
 
-#include<shared_mutex>
+#include <shared_mutex>
 
 #include <syncstream>
 #include <thread>
