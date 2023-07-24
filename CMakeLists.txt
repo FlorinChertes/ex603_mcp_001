@@ -125,7 +125,14 @@ set(SRC_001
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	add_executable(ex603_mcp_001_ex
-		main/main_01_02.cpp	${SRC_001}
+		main/main_01_clang.cpp	${SRC_001}
+
+		#est/inc/coro/tracingawaiter.hpp
+		#test/inc/coro/tracingcoro.hpp
+
+		#test/src/test_coro.cpp
+		#test/inc/test_coro.h
+
 	)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	# using GCC
@@ -138,11 +145,21 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 		test/src/test_polymorphism_variant.cpp
 		test/inc/test_polymorphism_variant.h
+
+		#test/src/test_visitor.cpp
+		#test/inc/test_visitor.h
+
+		test/inc/coro/tracingawaiter.hpp
+		test/inc/coro/tracingcoro.hpp
+
+		test/src/test_coro.cpp
+		test/inc/test_coro.h
+
 	)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# using Visual Studio C++
 	add_executable(ex603_mcp_001_ex
-		main/main_01_01.cpp	${SRC_001}
+		main/main_01_msvc.cpp	${SRC_001}
 
 		lib/inc/ranges_func.h
 		test/inc/test_ranges.h
@@ -184,13 +201,13 @@ set(TEST_NAME ex603_mcp_003_gtest
 
 IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	set(TEST_SOURCES
-		main/test_main.cpp
+		main/main_03_gtest.cpp
 		test/src/gtest_ranges_01.cpp
 		test/src/gtest_ranges_02.cpp
 	)
 ELSE()
 	set(TEST_SOURCES
-		main/test_main.cpp
+		main/main_03_gtest.cpp
 		test/src/gtest_ranges_01.cpp
 	)
 ENDIF()

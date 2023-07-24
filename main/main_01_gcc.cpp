@@ -1,4 +1,5 @@
-#include "test_visitor.h"
+#include "test_coro.h"
+//#include "test_visitor.h"
 #include "test_type_erasure.h"
 #include "test_ext_polymorph.h"
 #include "test_person.h"
@@ -142,6 +143,10 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_061();
 	test_062();
 	test_063();
+
+	//test_064();
+
+	test_065();
 
 	return 0;
 }
