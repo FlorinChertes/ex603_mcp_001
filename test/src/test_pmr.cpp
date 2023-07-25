@@ -78,8 +78,7 @@ void test_pmr_066_01()
 
 void test_pmr_066()
 {
-    std::cout << "\n*** test 067 ***" << std::endl;
-    std::cout << '\n';
+    std::cout << "\n*** test 066 ***" << std::endl;
 
     char buffer[64] = {}; // a small buffer on the stack
     std::fill_n(std::begin(buffer), std::size(buffer) - 1, '_');
@@ -107,21 +106,18 @@ void test_pmr_066()
     std::cout << buffer << '\n';
 
     std::cout << "\n*** test 066 end ***" << std::endl;
-    std::cout << '\n';
-
 }
 
 void test_pmr_067()
 {
     std::cout << "\n*** test 067 ***" << std::endl;
-    std::cout << '\n';
 
     constexpr std::size_t buf_len{64};
 
     std::array<char, buf_len> buffer;
     std::fill_n(std::begin(buffer), std::size(buffer), '_');
     std::pmr::monotonic_buffer_resource pool{buffer.data(), buffer.size()};
-    for (int i{}; i < buf_len; ++i)
+    for (std::size_t i{}; i < buf_len; ++i)
     {
         std::cout << buffer[i];
     }
@@ -132,12 +128,11 @@ void test_pmr_067()
     {
         vec.push_back(ch);
     }
-    for (int i{}; i < buf_len; ++i)
+    for (std::size_t i{}; i < buf_len; ++i)
     {
         std::cout << buffer[i];
     }
     std::cout << '\n';
 
     std::cout << "\n*** test 067 end ***" << std::endl;
-    std::cout << '\n';
 }
