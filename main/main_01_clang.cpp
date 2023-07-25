@@ -1,3 +1,4 @@
+#include "test_pmr.h"
 //#include "test_coro.h"
 #include "test_type_erasure.h"
 #include "test_ext_polymorph.h"
@@ -137,6 +138,9 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_063();
 
 	//test_065();
+
+	test_pmr_066_01();
+	test_pmr_066();
 
 	return 0;
 }

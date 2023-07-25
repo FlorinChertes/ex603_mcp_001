@@ -121,6 +121,9 @@ set(SRC_001
 	test/inc/test_refref_01.h
 	test/src/test_refref_01.cpp
 
+	test/src/test_pmr.cpp
+	test/inc/test_pmr.h
+
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -132,7 +135,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 		#test/src/test_coro.cpp
 		#test/inc/test_coro.h
-
 	)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	# using GCC
@@ -154,10 +156,6 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
-
-		test/src/test_pmr.cpp
-		test/inc/test_pmr.h
-
 	)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# using Visual Studio C++
@@ -179,10 +177,6 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
-
-		test/src/test_pmr.cpp
-		test/inc/test_pmr.h
-
 	)
 endif()
 

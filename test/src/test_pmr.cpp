@@ -30,21 +30,21 @@ void test_pmr_066_01()
     constexpr int iterations{ 100 };
     constexpr int total_nodes{ 20'000 };
 
-    auto default_std_alloc = [total_nodes]
+    auto default_std_alloc = []
     {
         std::list<int> list;
         for (int i{}; i != total_nodes; ++i)
             list.push_back(i);
     };
 
-    auto default_pmr_alloc = [total_nodes]
+    auto default_pmr_alloc = []
     {
         std::pmr::list<int> list;
         for (int i{}; i != total_nodes; ++i)
             list.push_back(i);
     };
 
-    auto pmr_alloc_no_buf = [total_nodes]
+    auto pmr_alloc_no_buf = []
     {
         std::pmr::monotonic_buffer_resource mbr;
         std::pmr::polymorphic_allocator<int> pa{&mbr};
@@ -53,7 +53,7 @@ void test_pmr_066_01()
             list.push_back(i);
     };
 
-    auto pmr_alloc_and_buf = [total_nodes]
+    auto pmr_alloc_and_buf = []
     {
         std::array<std::byte, total_nodes * 32> buffer; // enough to fit in all nodes
         std::pmr::monotonic_buffer_resource mbr{buffer.data(), buffer.size()};
