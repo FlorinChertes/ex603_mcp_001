@@ -5,12 +5,14 @@
 // coroutine interface to deal with a simple task
 // - providing resume() to resume it
 class [[nodiscard]] TracingCoro {
-public:
+
   // native coroutine handle and its promise type:
   struct promise_type;
   using CoroHdl = std::coroutine_handle<promise_type>;
+
   CoroHdl hdl;          // coroutine handle
 
+public:
   // helper type for state and customization:
   struct promise_type {
     promise_type() {
@@ -25,8 +27,8 @@ public:
     }
     auto initial_suspend() {         // initial suspend point
       std::cout << "      PROMISE: initial_suspend()\n";
+      // use return std::suspend_never{};  to start eagerly
       return std::suspend_always{};  // - start lazily
-      //return std::suspend_never{};  // - start eagerly
     }
     void unhandled_exception() {     // deal with exceptions
       std::cout << "      PROMISE: unhandled_exception()\n";

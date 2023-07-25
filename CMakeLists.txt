@@ -177,6 +177,9 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 
+		test/src/test_pmr.cpp
+		test/inc/test_pmr.h
+
 	)
 endif()
 
