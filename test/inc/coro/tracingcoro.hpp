@@ -6,8 +6,11 @@
 // - providing resume() to resume it
 class [[nodiscard]] TracingCoro {
 
+public:
   // native coroutine handle and its promise type:
   struct promise_type;
+
+private:
   using CoroHdl = std::coroutine_handle<promise_type>;
 
   CoroHdl hdl;          // coroutine handle

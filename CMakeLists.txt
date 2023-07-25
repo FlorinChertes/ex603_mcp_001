@@ -155,6 +155,9 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 
+		test/src/test_pmr.cpp
+		test/inc/test_pmr.h
+
 	)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# using Visual Studio C++
