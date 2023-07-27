@@ -1,8 +1,12 @@
+#include "../inc/coro/corogenback.hpp"   // for CoroGenBack
+
 #include "../inc/coro/tracingcoro.hpp"
 #include "../inc/coro/tracingawaiter.hpp"
 
 #include <iostream>
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 TracingCoro coro(int max)
 {
   std::cout << "  START coro(" << max << ")\n";
@@ -37,4 +41,48 @@ void test_065()
     }
 
     std::cout << "\n**** coro() loop done\n";
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+CoroGenBack coro_gen(int max)
+{
+    std::cout << "         CORO " << max << " start\n";
+
+    for (int val = 1; val <= max; ++val) {
+        // print next value:
+        std::cout << "         CORO suspend and send val: " << val << '/' << max << '\n';
+
+        // yield next value:
+        auto back = co_yield val;           // SUSPEND with value and response
+        std::cout << "         CORO resume and receive val: " << back << "\n";
+    }
+
+    std::cout << "         CORO " << max << " end\n";
+}
+
+
+void test_065_01()
+{
+    std::cout << "\n*** test 065_01 ***" << std::endl;
+    std::cout << '\n';
+
+    // start coroutine:
+    auto coroGen = coro_gen(3);              // initialize coroutine
+    std::cout << "**** coro() started\n";
+
+    // loop to resume the coroutine until it is done:
+    std::cout << "\n**** coro() first resume\n";
+    while (coroGen.resume()) {           // RESUME
+        // process value from co_yield:
+        auto val = coroGen.getValue();
+        std::cout << "**** coro caller, coro() is suspended, get value from coro: " << val << '\n';
+
+        // set response (the value co_yield yields):
+        std::string back = (val % 2 != 0 ? "OK" : "ERR");
+        std::cout << "\n**** coro caller, coro() before resumes, set back value to coro: " << back << '\n';
+        coroGen.setBackValue(back);        // set value back to the coroutine
+    }
+
+    std::cout << "**** coro() ended\n";
 }
