@@ -154,6 +154,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		test/inc/coro/tracingawaiter.hpp
 		test/inc/coro/tracingcoro.hpp
 
+		test/inc/coro/coro_iter.hpp
+
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 	)
