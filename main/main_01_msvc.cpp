@@ -149,6 +149,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
 	test_065();
 	test_065_01();
+	test_UseCounter_065_02();
 
 	test_pmr_066_01();
 	test_pmr_066();

@@ -1,3 +1,5 @@
+#include "../inc/coro/coro_iter.hpp"
+
 #include "../inc/coro/corogenback.hpp"   // for CoroGenBack
 
 #include "../inc/coro/tracingcoro.hpp"
@@ -85,4 +87,26 @@ void test_065_01()
     }
 
     std::cout << "**** coro() ended\n";
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+generator<int> counter(int start, int end)
+{
+    while (start < end) {
+        co_yield start; // Yielding a value and giving control back to the caller
+        ++start;
+    }
+}
+
+void test_UseCounter_065_02()
+{
+    std::cout << "\n*** test UseCounter 065_02 ***" << std::endl;
+    std::cout << '\n';
+
+    auto g = counter(1, 5);
+    //This sequence runs from 1 to 5
+    for (auto i : g) {
+        std::cout << "Use Counter Value (" << i << ")\n";
+    }
 }

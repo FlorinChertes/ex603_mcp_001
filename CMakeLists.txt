@@ -178,6 +178,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		test/inc/coro/corogenback.hpp
 		test/inc/coro/backawaiter.hpp
 
+		test/inc/coro/coro_iter.hpp
+
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 	)
