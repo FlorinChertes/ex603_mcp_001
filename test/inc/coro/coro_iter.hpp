@@ -4,23 +4,25 @@
 
 template<typename T, typename G>
 struct promise_type_base {
+
 	T mValue; // The value yielded or returned from a coroutine
 
-	auto yield_value(T value) // Invoked by co_yield or co_return
-	{ // Store the yielded value for access outside the coroutine
+	auto yield_value(T value)
+	{	// Invoked by co_yield or co_return
+		// Store the yielded value for access outside the coroutine
 		mValue = std::move(value);
 
 		return std::suspend_always{}; // Suspend the coroutine here
 	}
 
-	G get_return_object() {
-		return G{this};
+	auto get_return_object() {
+		return G{ this };
 	}; // Return generator
 
-	std::suspend_always initial_suspend() { return {}; }
-	std::suspend_always final_suspend() noexcept { return {}; }
-	void return_void() {}
-	void unhandled_exception() {
+	std::suspend_always initial_suspend() const { return {}; }
+	std::suspend_always final_suspend() const  noexcept { return {}; }
+	void return_void() const  {}
+	void unhandled_exception() const {
 		std::terminate();
 	}
 
@@ -37,7 +39,7 @@ struct iterator {
 
 	void resume()
 	{
-		if (not mCoroHdl.done()) {
+		if (mCoroHdl.done() == false) {
 			mCoroHdl.resume();
 		}
 	}
@@ -56,7 +58,7 @@ struct iterator {
 		return mCoroHdl.done();
 	}
 
-	const auto & operator*() const
+	const auto& operator* () const
 	{
 		return mCoroHdl.promise().mValue;
 	}
@@ -79,21 +81,20 @@ struct generator {
 
 	generator(generator const&) = delete;
 
-	generator(generator && rhs)
+	generator(generator&& rhs) noexcept
 		:mCoroHdl(std::exchange(rhs.mCoroHdl, nullptr)) {}
 
 	~generator() {
 		// We have to maintain the life - time of the coroutine
-		if (mCoroHdl) {
+		if (mCoroHdl)
 			mCoroHdl.destroy();
-		}
 	}
 
 private:
 	friend promise_type; // As the default ctor is private
 						 // promise_type needs to be a friend
 
-	explicit generator(promise_type * p)
+	explicit generator(promise_type* p)
 		: mCoroHdl{ PromiseTypeHandle::from_promise(*p) }
 	{}
 

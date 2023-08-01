@@ -94,7 +94,8 @@ void test_065_01()
 generator<int> counter(int start, int end)
 {
     while (start < end) {
-        co_yield start; // Yielding a value and giving control back to the caller
+        // Yielding a value and giving control back to the caller
+        co_yield start;
         ++start;
     }
 }
@@ -105,6 +106,7 @@ void test_UseCounter_065_02()
     std::cout << '\n';
 
     auto g = counter(1, 5);
+
     //This sequence runs from 1 to 5
     for (auto i : g) {
         std::cout << "Use Counter Value (" << i << ")\n";
