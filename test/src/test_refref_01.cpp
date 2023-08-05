@@ -52,7 +52,7 @@ void test_061()
     std::cout << "val_8: " <<  static_cast<uint16_t>(val_8) << '\n';
 
 
-    std::cout << '\n';
+    std::cout << std::dec << '\n';
 }
 
 class TMP

@@ -87,3 +87,35 @@ void test_064()
     std::cout << '\n';
 
 }
+
+
+template <typename actual_type>
+class CRTPExample {
+public:
+    void placeOrder() {
+        static_cast<actual_type*>(this)->actualPlaceOrder();
+    }
+    void actualPlaceOrder() {
+        std::cout << "CRTPExample::actualPlaceOrder()\n";
+    }
+};
+
+class SpecificCRTPExample : public CRTPExample<SpecificCRTPExample> {
+public:
+    void actualPlaceOrder() {
+        std::cout << "SpecificCRTPExample::actualPlaceOrder()\n";
+    }
+};
+
+void test_CRTP_064_01()
+{
+    std::cout << "*** test CRTP 064 01 ***" << std::endl;
+    std::cout << '\n';
+
+    CRTPExample<SpecificCRTPExample>* crtp_example = new SpecificCRTPExample;
+    crtp_example->placeOrder();
+
+    delete crtp_example;
+    crtp_example = nullptr;
+
+}

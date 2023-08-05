@@ -146,10 +146,12 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_063();
 
 	test_064();
+	test_CRTP_064_01();
 
 	test_065();
 	test_065_01();
 	test_UseCounter_065_02();
+	test_UpdateCoro_065_03();
 
 	test_pmr_066_01();
 	test_pmr_066();

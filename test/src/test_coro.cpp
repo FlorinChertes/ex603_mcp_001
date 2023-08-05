@@ -1,3 +1,5 @@
+#include "../inc/coro/coroprio.hpp"
+
 #include "../inc/coro/coro_iter.hpp"
 
 #include "../inc/coro/corogenback.hpp"   // for CoroGenBack
@@ -111,4 +113,28 @@ void test_UseCounter_065_02()
     for (auto i : g) {
         std::cout << "Use Counter Value (" << i << ")\n";
     }
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_UpdateCoro_065_03()
+{
+    std::cout << "\n*** test Update coro 065_03 ***" << std::endl;
+    std::cout << '\n';
+
+    CoroPrioScheduler sched;
+
+    std::cout << "schedule coroutines\n";
+    sched.start(coro_prio(5));
+    sched.start(coro_prio(1));
+    sched.start(coro_prio(4));
+
+    std::cout << "loop until all are processed\n";
+    while (sched.resumeNext()) {
+        std::cout << "resume next" << '\n';
+    }
+
+    std::cout << '\n';
+
 }
