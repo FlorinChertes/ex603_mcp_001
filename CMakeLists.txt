@@ -156,6 +156,12 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 		test/inc/coro/coro_iter.hpp
 
+		test/inc/coro/coropriosched.hpp
+		test/inc/coro/coroprio.hpp
+
+		test/inc/coro/coropool.hpp
+		test/inc/coro/coroasync.hpp
+
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 	)
