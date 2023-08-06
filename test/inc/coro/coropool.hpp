@@ -1,4 +1,6 @@
+#include <syncstream>
 #include <iostream>
+
 #include <list>
 #include <utility>     // for std::exchange()
 #include <functional>  // for std::function
@@ -8,16 +10,21 @@
 #include <condition_variable>
 #include <functional>
 
+#include <cassert>
+
 class CoroPool;
 
 class [[nodiscard]] CoroPoolTask
 {
   friend class CoroPool;
+
 public:
   struct promise_type;
   using CoroHdl = std::coroutine_handle<promise_type>;
+
 private:
   CoroHdl hdl;
+
 public:
   struct promise_type {
     CoroPool* poolPtr = nullptr;   // if not null, lifetime is controlled by pool
@@ -33,6 +40,7 @@ public:
     auto final_suspend() const noexcept {
       struct FinalAwaiter {
         bool await_ready() const noexcept { return false; }
+
         std::coroutine_handle<> await_suspend(CoroHdl h) noexcept {
           if (h.promise().contHdl) {
             return h.promise().contHdl;    // resume continuation
@@ -41,8 +49,10 @@ public:
             return std::noop_coroutine();  // no continuation
           }  
         }
+
         void await_resume() noexcept { }
       };
+
       return FinalAwaiter{};  // AFTER suspended, resume continuation if there is one
     }
   };
@@ -56,12 +66,15 @@ public:
       hdl.destroy();
     }
   }
+
   CoroPoolTask(const CoroPoolTask&) = delete;
   CoroPoolTask& operator= (const CoroPoolTask&) = delete;
+
   CoroPoolTask(CoroPoolTask&& t)
    : hdl{t.hdl} {
       t.hdl = nullptr;
   }
+
   CoroPoolTask& operator= (CoroPoolTask&&) = delete;
 
   // Awaiter for: co_await task()
@@ -73,13 +86,17 @@ public:
     void await_suspend(CoroHdl awaitingHdl) noexcept;  // see below
     void await_resume() noexcept {}
   };
+
   auto operator co_await() noexcept {
+      std::osyncstream(std::cout) << " CoroPoolTask " << std::endl;
+
     return CoAwaitAwaiter{std::exchange(hdl, nullptr)}; // pool takes ownership of hdl
   }
 };
 
 class CoroPool
 {
+
 private:
   std::list<std::jthread> threads;         // list of threads
   std::list<CoroPoolTask::CoroHdl> coros;  // queue of scheduled coros
@@ -88,6 +105,7 @@ private:
   std::atomic<int> numCoros = 0;           // counter for all coros owned by the pool
 
 public:
+
   explicit CoroPool(int num) {
     // start pool with num threads:
     for (int i = 0; i < num; ++i) {
@@ -115,11 +133,14 @@ public:
 
   void runTask(CoroPoolTask&& coroTask) noexcept {
     auto hdl = std::exchange(coroTask.hdl, nullptr); // pool takes ownership of hdl
-    if (coroTask.hdl.done()) {
-      coroTask.hdl.destroy();  // OOPS, a done() coroutine was passed
+
+    assert(hdl != nullptr);
+    if (hdl.done()) {
+        hdl.destroy();  // OOPS, a done() coroutine was passed
     }
     else {
       // schedule coroutine in the pool
+        runCoro(hdl);
     }
   }
 
@@ -190,6 +211,8 @@ public:
 // - sets the calling coro as continuation
 void CoroPoolTask::CoAwaitAwaiter::await_suspend(CoroHdl awaitingHdl) noexcept
 {
+  std::osyncstream(std::cout) << " await_suspend " << std::endl;
+
   newHdl.promise().contHdl = awaitingHdl;
   awaitingHdl.promise().poolPtr->runCoro(newHdl);
 }
