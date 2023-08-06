@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-int CoroPrioDefVal = 10;
+constexpr int CoroPrioDefVal = 10;
 enum class CoroPrioRequest {same, less, more, def};
 
 class CoroPrioScheduler;

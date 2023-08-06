@@ -1,3 +1,4 @@
+#include "../inc/coro/coroasync.hpp"
 #include "../inc/coro/coroprio.hpp"
 
 #include "../inc/coro/coro_iter.hpp"
@@ -136,5 +137,32 @@ void test_UpdateCoro_065_03()
     }
 
     std::cout << '\n';
+}
 
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_CoroPool_065_04()
+{
+    std::cout << "\n*** test Coro Pool 065_04 ***" << std::endl;
+    std::cout << '\n';
+
+    // init pool of coroutine threads:
+    syncOut() << "**** main() on thread " << std::this_thread::get_id() << std::endl;
+    CoroPool pool{ 4 };
+
+
+    // start main coroutine and run it in coroutine pool:
+    syncOut() << "runTask(runAsync(1))" << std::endl;
+
+
+    CoroPoolTask t1 = runAsync("1");
+    pool.runTask(std::move(t1));
+
+
+    // wait until all coroutines are done:
+    syncOut() << "\n**** waitUntilNoCoros()" << std::endl;
+    pool.waitUntilNoCoros();
+
+    std::cout << '\n';
 }
