@@ -144,31 +144,28 @@ void test_UpdateCoro_065_03()
 //-----------------------------------------------------------------------------
 void test_CoroPool_065_04()
 {
-    std::cout << "\n*** test Coro Pool 065_04 ***" << std::endl;
+    std::cout << "\n*** test start Coro Pool 065_04 ***" << std::endl;
     std::cout << '\n';
 
     // init pool of coroutine threads:
     syncOut() << "**** main() on thread " << std::this_thread::get_id() << std::endl;
     CoroPool pool{ 4 };
 
-
     // start main coroutine and run it in coroutine pool:
-    //syncOut() << "runTask(runAsync(1))" << std::endl;
-
-
-    //CoroPoolTask t1 = runAsync("1");
-    //pool.runTask(std::move(t1));
-
+    syncOut() << "runTask(runAsync(1))" << std::endl;
+    CoroPoolTask t1 = runAsync("1");
+    pool.runTask(std::move(t1));
 
     // start multiple coroutines and run them in coroutine pool:
-    for (int i = 1; i <= 4; ++i) {
-        syncOut() << "runTask(runAsync(" << i << "))" << std::endl;
-        pool.runTask(runAsync(std::to_string(i)));
-    }
+    //for (int i = 1; i <= 4; ++i) {
+    //    syncOut() << "runTask(runAsync(" << i << "))" << std::endl;
+    //    pool.runTask(runAsync(std::to_string(i)));
+    //}
 
     // wait until all coroutines are done:
     syncOut() << "\n**** waitUntilNoCoros()" << std::endl;
     pool.waitUntilNoCoros();
 
+    std::cout << "\n*** test end Coro Pool 065_04 ***" << std::endl;
     std::cout << '\n';
 }

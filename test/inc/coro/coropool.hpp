@@ -199,9 +199,11 @@ public:
 
   void waitUntilNoCoros() {
     int num = numCoros.load();
+    std::osyncstream(std::cout) << " numCoros = " << num << std::endl;
     while (num > 0) {
       numCoros.wait(num);  // wait for notification that numCoros changed the value
       num = numCoros.load();
+      std::osyncstream(std::cout) << " numCoros = " << num << std::endl;
     }
   }
 };
