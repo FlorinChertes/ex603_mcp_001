@@ -148,11 +148,11 @@ void test_CoroPool_065_04()
     std::cout << '\n';
 
     // init pool of coroutine threads:
-    syncOut() << "**** main() on thread " << std::this_thread::get_id() << std::endl;
-    CoroPool pool{ 4 };
+    syncOut() << "main() start on thread " << std::this_thread::get_id() << std::endl;
+    CoroPool pool{ 1 };
 
     // start main coroutine and run it in coroutine pool:
-    syncOut() << "runTask(runAsync(1))" << std::endl;
+    syncOut() << "main() runTask(runAsync(1)) " << std::this_thread::get_id() << std::endl;
     CoroPoolTask t1 = runAsync("1");
     pool.runTask(std::move(t1));
 
@@ -163,8 +163,10 @@ void test_CoroPool_065_04()
     //}
 
     // wait until all coroutines are done:
-    syncOut() << "\n**** waitUntilNoCoros()" << std::endl;
+    syncOut() << "\nmain() waitUntilNoCoros() thread: " << std::this_thread::get_id() << std::endl;
     pool.waitUntilNoCoros();
+
+    syncOut() << "main() end on thread " << std::this_thread::get_id() << std::endl;
 
     std::cout << "\n*** test end Coro Pool 065_04 ***" << std::endl;
     std::cout << '\n';

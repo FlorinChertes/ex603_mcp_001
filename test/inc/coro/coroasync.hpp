@@ -8,23 +8,23 @@ inline auto syncOut(std::ostream& strm = std::cout) {
 
 CoroPoolTask print(std::string id, std::string msg)
 {
-  syncOut() << "    > " << id <<  " print: " << msg
+  syncOut() << "\nRUN    > " << id <<  " print: " << msg
             << "   on thread: " << std::this_thread::get_id() << std::endl;
   co_return;  // make it a coroutine
 }
 
 CoroPoolTask runAsync(std::string id)
 {
-  syncOut() << "===== " << id << " start     "
+  syncOut() << "\nRUN runAsync " << id << " start     "
             << "   on thread: " << std::this_thread::get_id() << std::endl;
 
   co_await print(id + "a", "start");
-  syncOut() << "===== " << id << " resume    "
+  syncOut() << "\nRUN runAsync " << id << " resume    "
             << "   on thread " << std::this_thread::get_id() << std::endl;
 
-  co_await print(id + "b", "end  ");
-  syncOut() << "===== " << id << " resume    "
-            << "   on thread " << std::this_thread::get_id() << std::endl;
+  //co_await print(id + "b", "end  ");
+  //syncOut() << "\nRUN runAsync " << id << " resume    "
+  //          << "   on thread " << std::this_thread::get_id() << std::endl;
 
-  syncOut() << "===== " << id << " done" << std::endl;
+  syncOut() << "\nRUN runAsync " << id << " done" << std::endl;
 }
