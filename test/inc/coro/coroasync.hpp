@@ -22,9 +22,9 @@ CoroPoolTask runAsync(std::string id)
   syncOut() << "\nRUN runAsync " << id << " resume    "
             << "   on thread " << std::this_thread::get_id() << std::endl;
 
-  //co_await print(id + "b", "end  ");
-  //syncOut() << "\nRUN runAsync " << id << " resume    "
-  //          << "   on thread " << std::this_thread::get_id() << std::endl;
+  co_await print(id + "b", "end  ");
+  syncOut() << "\nRUN runAsync " << id << " resume    "
+            << "   on thread " << std::this_thread::get_id() << std::endl;
 
   syncOut() << "\nRUN runAsync " << id << " done" << std::endl;
 }

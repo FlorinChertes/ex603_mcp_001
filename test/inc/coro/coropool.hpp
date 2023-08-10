@@ -35,11 +35,17 @@ public:
     CoroHdl contHdl = nullptr;     // coro that awaits this coro
   
     CoroPoolTask get_return_object() noexcept {
+        std::osyncstream(std::cout) << "        INTERFACE: get_return_object this: " << this << std::endl;
       return CoroPoolTask{CoroHdl::from_promise(*this)};
     }
-    auto initial_suspend() const noexcept { return std::suspend_always{}; }
+    auto initial_suspend() const noexcept {
+        std::osyncstream(std::cout) << "        INTERFACE: initial_suspend this: " << this << std::endl;
+        return std::suspend_always{}; }
+
     void unhandled_exception() noexcept { std::exit(1); }
-    void return_void() noexcept { }
+    void return_void() noexcept {
+        std::osyncstream(std::cout) << "        INTERFACE: return_void this: " << this << std::endl;
+    }
 
     auto final_suspend() const noexcept {
 
@@ -52,35 +58,35 @@ public:
                   << " id: " << id << ": ==> constructor" << std::endl;
           }
           ~FinalAwaiter() {
-              finalAwaiterMaxId--;
               std::osyncstream(std::cout) << "          FinalAwaiter"
                   << " id: " << id << ": <== destructor" << std::endl;
           }
 
         bool await_ready() const noexcept { return false; }
 
+        // Return type/value means:
+        // - void: do suspend
+        // - bool: true: do suspend
+        // - handle: resume coro of the handle
         std::coroutine_handle<> await_suspend(CoroHdl h) noexcept {
-          std::osyncstream(std::cout)
-          << "hdl: " << h.address()
-          << " id: " << id
-          << " FinalAwaiter::await_suspend on thread: " << std::this_thread::get_id()
-          << std::endl;
-
+            std::osyncstream(std::cout) << "hdl: " << h.address()
+            << " id: " << id << " FinalAwaiter::await_suspend on thread: "
+            << std::this_thread::get_id() << std::endl;
           if (h.promise().contHdl) {
                 std::osyncstream(std::cout)
                 << "from promise cont hdl: " << h.promise().contHdl.address()
                 << std::endl;
-            return h.promise().contHdl;    // resume continuation
+            return h.promise().contHdl;    // resume on cont Hdl, the returned handle
           }
           else {
             return std::noop_coroutine();  // no continuation
           }
-
         }
 
         void await_resume() noexcept { }
       };
 
+      std::osyncstream(std::cout) << "        INTERFACE: final_suspend / return FinalAwaiter: " << this << std::endl;
       return FinalAwaiter{};  // AFTER suspended, resume continuation if there is one
     }
   };
@@ -91,7 +97,6 @@ public:
           << hdl.address() << " id: " << id << std::endl;
   }
   ~CoroPoolTask() {
-      maxId--;
     if (hdl && !hdl.promise().poolPtr) {
       // task was not passed to pool:
       hdl.destroy();
@@ -127,7 +132,6 @@ public:
             << newHdl.address() << " id: " << id << ": ==> constructor\n";
     }
     ~CoAwaitAwaiter() {
-        maxId--;
         std::osyncstream(std::cout) << "          CoAwaitAwaiter, new hdl:"
             << newHdl.address() << " id: " << id << ": <== destructor\n";
     }
@@ -238,6 +242,7 @@ public:
         coros.pop_back();
       }
 
+
       // resume it:
       std::osyncstream(std::cout) << "\nbefore resume threadLoop: " << i << " on thread: " << std::this_thread::get_id() << std::endl;
       coro.resume();  // RESUME
@@ -249,20 +254,19 @@ public:
       // => After this resumption, this coro and SOME continuations MIGHT be done
       std::function<void(CoroPoolTask::CoroHdl)> destroyDone;
       destroyDone = [&destroyDone, this, i](auto hdl) {
-                      if (hdl && hdl.done()) {
-                        auto nextHdl = hdl.promise().contHdl;
+                        if (hdl && hdl.done()) {
+                            auto nextHdl = hdl.promise().contHdl;
+                            std::osyncstream(std::cout) << "destroy hdl: " << hdl.address()
+                                << " cont hdl: " << nextHdl.address() << std::endl;
 
-                        std::osyncstream(std::cout) << "destroy hdl: " << hdl.address()
-                            << " cont hdl: " << nextHdl.address() << std::endl;
-                        hdl.destroy();         // destroy handle done
-                        --numCoros;            // adjust total number of coros
+                            hdl.destroy();         // destroy handle done
+                            --numCoros;            // adjust total number of coros
 
-                        std::osyncstream(std::cout) << "destroy recursive threadLoop: "  << i << " / " << numCoros
-                            << " on thread: " << std::this_thread::get_id()
-                            << std::endl;
-
-                        destroyDone(nextHdl);  // do it for all continuations done
-                      }
+                            std::osyncstream(std::cout) << "destroy recursive threadLoop: "  << i << " / " << numCoros
+                                << " on thread: " << std::this_thread::get_id()
+                                << std::endl;
+                            destroyDone(nextHdl);  // do it for all continuations done
+                        }
                     };
 
       std::osyncstream(std::cout) << "\nbefore destroy threadLoop: " << i << " / " << numCoros
@@ -271,7 +275,7 @@ public:
       destroyDone(coro);      // recursively destroy coroutines done
 
       std::osyncstream(std::cout) << "after destroy threadLoop: " << i << " / " << numCoros
-          << " on thread: " << std::this_thread::get_id() << std::endl;
+          << " on thread: " << std::this_thread::get_id() << '\n' << std::endl;
 
 
       numCoros.notify_all();  // wake up any waiting waitUntilNoCoros()
