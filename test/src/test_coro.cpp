@@ -1,3 +1,7 @@
+#include "../inc/coro/coro_return_type.hpp"
+
+#include "../inc/coro/corochat.hpp"
+
 #include "../inc/coro/coroasync.hpp"
 #include "../inc/coro/coroprio.hpp"
 
@@ -139,7 +143,6 @@ void test_UpdateCoro_065_03()
     std::cout << '\n';
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void test_CoroPool_065_04()
@@ -169,5 +172,78 @@ void test_CoroPool_065_04()
     syncOut() << "main() end on thread " << std::this_thread::get_id() << std::endl;
 
     std::cout << "\n*** test end Coro Pool 065_04 ***" << std::endl;
+    std::cout << '\n';
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+Chat Fun()
+{
+    using namespace std::literals;
+
+    co_yield "Hello!\n"s;                   // call promise_type.yield_value
+
+    std::cout << co_await std::string{};    // call promise_type.await_transform
+
+    co_return "Here!\n"s;                   // call promise_type.return_value
+}
+
+void test_CoroChat_065_05()
+{
+    using namespace std::literals;
+
+    std::cout << "\n*** test start Coro Chat 065_05 ***" << std::endl;
+    std::cout << '\n';
+
+
+    Chat chat = Fun();
+
+    std::cout << chat.listen();             // Trigger FSM
+
+    chat.answer("Where are you?\n"s);       // Sent data into the coroutine
+
+    std::cout << chat.listen();             // Wait for more data from the coroutine
+
+
+    std::cout << "\n*** test end Coro Chat 065_05 ***" << std::endl;
+    std::cout << '\n';
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+ReturnType hello_coroutine()
+{
+    std::cout << "Hello from coroutine" << std::endl;
+
+    const int send_value{42};
+    std::cout << "Hello from coroutine, before send value: " << send_value << std::endl;
+
+    const int get_value = co_await ReturnType::TheAwaiter{ send_value };
+
+    std::cout << "Hello from coroutine, after get value: " << get_value << std::endl;
+}
+
+void test_CoroReturnType_065_06()
+{
+    using namespace std::literals;
+
+    std::cout << "\n*** test start Coro Return Type 065_06 ***" << std::endl;
+    std::cout << '\n';
+
+    ReturnType returnType = hello_coroutine();
+
+    returnType.resume();
+    const int value_from_coroutine{ returnType.get_value() };
+    std::cout << "get value from coroutine: " << value_from_coroutine << std::endl;
+
+    const int value_to_coroutine{ 13 };
+    std::cout << "set value to  coroutine: " << value_to_coroutine << std::endl;
+    returnType.set_value(value_to_coroutine);
+    returnType.resume();
+
+    std::cout << "\n*** test end Coro Return Type 065_06 ***" << std::endl;
     std::cout << '\n';
 }

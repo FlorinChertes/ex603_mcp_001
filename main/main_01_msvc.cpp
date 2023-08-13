@@ -153,6 +153,8 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_UseCounter_065_02();
 	test_UpdateCoro_065_03();
 	test_CoroPool_065_04();
+	test_CoroChat_065_05();
+	test_CoroReturnType_065_06();
 
 	test_pmr_066_01();
 	test_pmr_066();
