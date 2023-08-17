@@ -28,8 +28,9 @@ struct Chat {
 				promise_type& pt;
 
 				constexpr bool	await_ready() const noexcept { return true; }
-				std::string		await_resume() const noexcept {return pt._msgIn;}
 				void			await_suspend(std::coroutine_handle<>) const noexcept {}
+
+				std::string		await_resume() const noexcept { return pt._msgIn; }
 			};
 
 			return awaiter(*this);

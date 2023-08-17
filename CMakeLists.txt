@@ -192,6 +192,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
 		test/inc/coro/coro_return_type.hpp
 
+		test/inc/coro/coro_parser.hpp
+
 		test/inc/coro/coropriosched.hpp
 		test/inc/coro/coroprio.hpp
 

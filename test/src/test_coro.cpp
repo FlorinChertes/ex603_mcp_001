@@ -1,3 +1,5 @@
+#include "../inc/coro/coro_parser.hpp"
+
 #include "../inc/coro/coro_return_type.hpp"
 
 #include "../inc/coro/corochat.hpp"
@@ -5,7 +7,7 @@
 #include "../inc/coro/coroasync.hpp"
 #include "../inc/coro/coroprio.hpp"
 
-#include "../inc/coro/coro_iter.hpp"
+//#include "../inc/coro/coro_iter.hpp"
 
 #include "../inc/coro/corogenback.hpp"   // for CoroGenBack
 
@@ -245,5 +247,36 @@ void test_CoroReturnType_065_06()
     returnType.resume();
 
     std::cout << "\n*** test end Coro Return Type 065_06 ***" << std::endl;
+    std::cout << '\n';
+}
+
+void test_CoroReturnType_065_07()
+{
+    using namespace std::literals;
+
+    std::cout << "\n*** test start Coro Parser 065_07 ***" << std::endl;
+    std::cout << '\n';
+
+    // #A Create the Parse coroutine and store the handle in p
+    auto fsm = Parse();
+
+    std::vector<byte> fakeBytes1{
+      0x70_B, 0x08_B, 0x09_B, ESC, SOF, ESC,
+      'H'_B, 'e'_B, 'l'_B, 'l'_B, 'o'_B, ESC, SOF,
+      0x7_B, 0x08_B, 0x09_B, ESC, SOF, 'n'_B, 'i'_B, 'c'_B, 'e'_B, ESC, SOF,
+      0x08_B, 0x09_B, ESC, SOF, 'W'_B, 'o'_B, 'r'_B };
+    // #B Simulate the first network stream
+    auto stream_1 = sender(std::move(fakeBytes1));
+    ProcessStream(stream_1, fsm);  // #C Process the bytes
+
+    // #D Simulate the reopening of the network stream
+    std::vector<byte> fakeBytes2{
+         'l'_B, 'd'_B, ESC, SOF, 0x99_B };
+    // #E Simulate a second network stream
+    auto stream_2 = sender(std::move(fakeBytes2));
+    // #F We still use the former p and feed it with new bytes
+    ProcessStream(stream_2, fsm);
+
+    std::cout << "\n*** test end Coro Parser 065_07 ***" << std::endl;
     std::cout << '\n';
 }
