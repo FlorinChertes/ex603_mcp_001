@@ -5,4 +5,4 @@ void test_UpdateCoro_065_03();
 void test_CoroPool_065_04();
 void test_CoroChat_065_05();
 void test_CoroReturnType_065_06();
-void test_CoroReturnType_065_07();
+void test_CoroParse_065_07();
