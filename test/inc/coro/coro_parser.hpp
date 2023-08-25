@@ -24,10 +24,10 @@ std::byte operator""_B(unsigned long long c)
   return static_cast<byte>(c);
 }
 
-
 template<typename T, typename G,
          typename... Bases>  // #A Allow multiple bases for awaiter
 struct promise_type_base : public Bases... {
+
   T mValue;
 
   auto yield_value(T value)
@@ -41,8 +41,7 @@ struct promise_type_base : public Bases... {
   std::suspend_always initial_suspend() { return {}; }
   std::suspend_always final_suspend() noexcept { return {}; }
   void                return_void() {}
-  void                unhandled_exception()
-                      { std::terminate(); }
+  void                unhandled_exception() { std::terminate(); }
 };
 
 
@@ -117,9 +116,11 @@ private:
 
 template<typename T>
 struct awaitable_promise_type_base {
+
   std::optional<T> mRecentSignal;
 
   struct awaiter {
+
     std::optional<T>& mRecentSignal;
 
     bool await_ready() const { return mRecentSignal.has_value(); }
@@ -135,10 +136,12 @@ struct awaitable_promise_type_base {
   };
 
   // A promise_type must provide a method await_transform
-  // to be an Awaitbale type.This method takes a type as a single argument and
+  // to be an Awaitbale type.
+  // This method takes a type as a single argument and
   // returns an Awaiter.
-  [[nodiscard]] awaiter await_transform(T)
-  { return awaiter{mRecentSignal}; }
+  [[nodiscard]] awaiter await_transform(T) {
+      return awaiter{mRecentSignal};
+  }
 };
 
 
@@ -165,7 +168,10 @@ struct [[nodiscard]] async_generator
   void SendSignal(U signal)
   {
     mCoroHdl.promise().mRecentSignal = signal;
-    if(not mCoroHdl.done()) { mCoroHdl.resume(); }
+
+    if(not mCoroHdl.done()) {
+        mCoroHdl.resume();
+    }
   }
 
   async_generator(const async_generator&) = delete;
@@ -194,37 +200,51 @@ static const byte SOF{0x10};
 using FSM = async_generator<std::string, byte>;
 FSM Parse()
 {
-  while(true) {
+    while(true) {
 
-      //look for either an operator co_await(byte) or
-      // for await_transform(byte)
-      byte b = co_await byte{};
+        // look for either an operator co_await(byte) or
+        // for await_transform(byte) and call it
+        //
+        // calls await_transform
+        // creates the awaiter with the existing async_generator.mRecentSignal
+        // Before this call async_generator.SendSignal,
+        // that puts the byte in async_generator.mRecentSignal
+        // and awaiter.await_resume returnds the byte value
+        // becase awaiter.await_ready returns true (mRecentSignal not empty) do not wait,
+        byte b = co_await byte{};
 
-      if(ESC != b) { continue; }
+        if(ESC != b) {
+            continue;
+        }
 
-    b = co_await byte{};
-    if(SOF != b) { continue; }  // #A  not looking at a start sequence
-
-    std::string frame{};
-    while(true) {  // #B capture the full frame
-      b = co_await byte{};
-
-      if(ESC == b) {
-        // #C skip this byte and look at the next one
         b = co_await byte{};
-
-        if(SOF == b) {
-          co_yield frame;
-          break;
+        if(SOF != b) {
+            continue;   // #A  not looking at a start sequence
         }
-        else if(ESC != b) {  // #D out of sync
-          break;
-        }
-      }
 
-      frame += static_cast<char>(b);
+        std::string frame{};
+        while(true) {  // #B capture the full frame
+
+            b = co_await byte{};
+
+            if(ESC == b) {
+                // #C skip this byte and look at the next one
+                b = co_await byte{};
+
+                if(SOF == b) {
+                    // call yield_value and put the frame : std::string
+                    // in async_generator...mValue
+                    co_yield frame;
+                    break;
+                }
+                else if(ESC != b) {  // #D out of sync
+                    break;
+                }
+            }
+
+            frame += static_cast<char>(b);
+        }
     }
-  }
 }
 
 using Byte_generator = generator<std::byte>;
@@ -232,6 +252,8 @@ Byte_generator sender(std::vector<byte> fakeBytes)
 {
   for(const auto& b : fakeBytes)
   {
+      // call yield_value and put the b : std::byte
+      // in generator...mValue
       co_yield b;
   }
 }
@@ -243,16 +265,21 @@ void HandleFrame(const std::string& frame)
 
 void ProcessStream(Byte_generator& stream, FSM& parse)
 {
-  for(const auto& b : stream) {
 
-    // #A Send the new byte to the waiting Parse coroutine
-    parse.SendSignal(b);
+    for(const auto& b : stream) {
+        // get the byte value from the generator.mValue
 
-    // #B Check whether we have a complete frame
-    if(const auto& res = parse(); res.length()) {
-        HandleFrame(res);
+        // #A Send the new byte to the waiting Parse coroutine
+        // put it in the async_generator.mRecentSignal
+        parse.SendSignal(b);
+
+        // #B Check whether we have a complete frame
+        if(const auto& res = parse(); res.length()) {
+            // get the frame from the async_generator.mValue
+            HandleFrame(res);
+        }
     }
-  }
+
 }
 
 

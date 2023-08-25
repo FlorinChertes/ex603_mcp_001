@@ -185,10 +185,16 @@ Chat Fun()
     using namespace std::literals;
 
     co_yield "Hello!\n"s;                   // call promise_type.yield_value
+                                            // and send to the caller the yielded value
 
-    std::cout << co_await std::string{};    // call promise_type.await_transform
+    std::cout << co_await std::string{};    // call promise_type.await_transform,
+                                            // get the value send by the caller,
+                                            // and use it in the coroutine,
+                                            // print it in this case
 
     co_return "Here!\n"s;                   // call promise_type.return_value
+                                            // works like a co_yield
+                                            // and terminates the coroutine
 }
 
 void test_CoroChat_065_05()
@@ -249,6 +255,9 @@ void test_CoroReturnType_065_06()
     std::cout << "\n*** test end Coro Return Type 065_06 ***" << std::endl;
     std::cout << '\n';
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 void test_CoroReturnType_065_07()
 {
