@@ -107,7 +107,7 @@ struct generator {
 private:
     friend promise_type;  // #A As the default ctor is private G needs to be a friend
     explicit generator(promise_type* p)
-        : mCoroHdl(PromiseTypeHandle::from_promise(*p))
+        : mCoroHdl{ PromiseTypeHandle::from_promise(*p) }
     {}
 
     PromiseTypeHandle mCoroHdl;
@@ -187,7 +187,7 @@ struct [[nodiscard]] async_generator
 private:
   friend promise_type;  // #C As the default ctor is private G needs to be a friend
   explicit async_generator(promise_type* p)
-    : mCoroHdl(PromiseTypeHandle::from_promise(*p))
+      : mCoroHdl{ PromiseTypeHandle::from_promise(*p) }
   {}
 
   PromiseTypeHandle mCoroHdl;
