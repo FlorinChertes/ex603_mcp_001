@@ -112,6 +112,9 @@ set(SRC_001
 	test/inc/test_book_camp.h
 	test/src/test_book_camp.cpp
 
+	test/inc/test_book_camp_06.h
+	test/src/test_book_camp_06.cpp
+
 	lib/inc/playing_cards.h
 	lib/src/playing_cards.cpp
 
