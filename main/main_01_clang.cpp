@@ -1,3 +1,6 @@
+#include "test_book_camp_06.h"
+#include "test_book_camp.h"
+
 #include "test_pmr.h"
 //#include "test_coro.h"
 #include "test_type_erasure.h"
@@ -6,7 +9,7 @@
 
 #include "test_refref_01.h"
 #include "test_concurrency.h"
-#include "test_book_camp.h"
+
 #include "test_strong_type.h"
 
 #include "test_utils.h"
@@ -142,6 +145,9 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_pmr_066_01();
 	test_pmr_066();
 	test_pmr_067();
+
+	test_boot_camp_polymorphism_069();
+	test_boot_camp_polymorphism_069_01();
 
 	return 0;
 }
