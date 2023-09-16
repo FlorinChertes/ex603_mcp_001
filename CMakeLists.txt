@@ -209,6 +209,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		test/inc/coro/coropool.hpp
 		test/inc/coro/coroasync.hpp
 
+		test/inc/coro/coro_sync.hpp
+
 		test/src/test_coro.cpp
 		test/inc/test_coro.h
 	)

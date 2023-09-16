@@ -1,3 +1,5 @@
+#include "../inc/coro/coro_sync.hpp"
+
 #include "../inc/coro/coro_parser.hpp"
 
 #include "../inc/coro/coro_return_type.hpp"
@@ -287,5 +289,78 @@ void test_CoroParse_065_07()
     ProcessStream(stream_2, fsm);
 
     std::cout << "\n*** test end Coro Parser 065_07 ***" << std::endl;
+    std::cout << '\n';
+}
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+Task receiver(Event& event) {                                        // (3)
+    auto start = std::chrono::high_resolution_clock::now();
+
+    co_await event;
+
+    std::cout << "Got the notification! " << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Waited " << elapsed.count() << " seconds." << std::endl;
+}
+
+void test_CoroParse_065_08()
+{
+    using namespace std::literals;
+
+    std::cout << "\n*** test start Coro Parser 065_08 ***" << std::endl;
+    std::cout << '\n';
+
+    std::cout << std::endl;
+    std::cout << "Notification before waiting" << std::endl;
+
+    Event event1{};
+    {
+
+        std::cout << "\nvalue before = " << event1.get_value() << std::endl;
+
+        auto senderThread1 = std::thread([&event1] { event1.notify(); });
+        auto receiverThread1 = std::thread(receiver, std::ref(event1));
+
+        receiverThread1.join();
+        senderThread1.join();
+        std::cout << "\nvalue after = " << event1.get_value() << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "\n*** test end Coro Parser 065_08 ***" << std::endl;
+    std::cout << '\n';
+}
+
+
+
+void test_CoroParse_065_09()
+{
+    using namespace std::literals;
+
+    std::cout << "\n*** test start Coro Parser 065_09 ***" << std::endl;
+    std::cout << '\n';
+
+    std::cout << std::endl;
+    std::cout << "Notification after waiting" << std::endl;
+
+    Event event1{};
+    {
+        std::cout << "\nvalue before = " << event1.get_value() << std::endl;
+
+
+        auto receiverThread1 = std::thread(receiver, std::ref(event1));
+        auto senderThread1 = std::thread([&event1] { event1.notify(); });
+
+        receiverThread1.join();
+        senderThread1.join();
+        std::cout << "\nvalue after = " << event1.get_value() << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "\n*** test end Coro Parser 065_09 ***" << std::endl;
     std::cout << '\n';
 }
