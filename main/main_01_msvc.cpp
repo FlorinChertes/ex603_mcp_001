@@ -162,6 +162,9 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_CoroReturnType_065_06();
 	test_CoroParse_065_07();
 
+	test_CoroParse_065_08();
+	test_CoroParse_065_09();
+
 	test_pmr_066_01();
 	test_pmr_066();
 	test_pmr_067();
