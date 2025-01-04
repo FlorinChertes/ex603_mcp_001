@@ -1,5 +1,5 @@
 # set minimum cmake version
-cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 # project name and language
 project (ex603_mcp_001_prj  LANGUAGES CXX)
@@ -17,15 +17,22 @@ ENDIF()
 
 include(FetchContent)
 
+# Fetch GoogleTest with better control over versioning and options
 FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        release-1.11.0
-        GIT_SHALLOW    1
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.14.0  # Update to a newer, stable release
+    GIT_SHALLOW    ON
 )
-FetchContent_MakeAvailable(googletest)
-include(GoogleTest)
 
+# Ensure proper build options for GoogleTest
+set(gtest_force_shared_crt ON CACHE BOOL "Use shared runtime" FORCE)
+set(BUILD_GMOCK OFF CACHE BOOL "Do not build GoogleMock" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "Do not install GoogleTest" FORCE)
+
+FetchContent_MakeAvailable(googletest)
+# Include the GoogleTest module
+include(GoogleTest)
 
 IF (MSVC)
 	# Avoid error LNK2038
@@ -127,6 +134,9 @@ set(SRC_001
 	test/src/test_pmr.cpp
 	test/inc/test_pmr.h
 
+	lib/inc/bartek.h
+	test/inc/test_bartek.h
+	test/src/test_bartek.cpp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -258,7 +268,7 @@ enable_testing()
 add_executable(	${TEST_NAME})
 target_sources(${TEST_NAME} PRIVATE ${TEST_SOURCES} ${SOURCES})
 
-target_link_libraries(${TEST_NAME} gtest gmock)
+target_link_libraries(${TEST_NAME} gtest gtest_main)
 gtest_discover_tests(${TEST_NAME})
 
 #------------------------------------------------------------------------------

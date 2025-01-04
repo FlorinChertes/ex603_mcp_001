@@ -2,9 +2,10 @@
 
 #include "../../lib/inc/ranges_func.h"
 
-#include <array>
 
-#include <gmock/gmock.h>
+#include <array>
+#include <algorithm>
+
 #include <gtest/gtest.h>
 
 //-----------------------------------------------------------------------------
