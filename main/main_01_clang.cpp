@@ -1,3 +1,4 @@
+#include "test_bartek.h"
 #include "test_book_camp_06.h"
 #include "test_book_camp.h"
 
@@ -148,6 +149,14 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
 	test_boot_camp_polymorphism_069();
 	test_boot_camp_polymorphism_069_01();
+
+	test_bartek_001();
+	test_bartek_002();
+	test_bartek_003();
+	test_bartek_004();
+	test_bartek_005();
+	test_bartek_006();
+	test_bartek_007();
 
 	return 0;
 }
