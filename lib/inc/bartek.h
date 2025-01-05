@@ -66,7 +66,7 @@
 	  std::string name_ {"none"};
  };
 
- void foo(Product p)
+ void foo(Product )
  {
 	 std::cout << "inside foo()\n";
  }
@@ -78,7 +78,7 @@
  };
  struct MyType1 {
 	 MyType1() {}
-	 int x;
+	 int x {};
  };
  struct MyType2 {
 	 MyType2() = default;
@@ -86,7 +86,7 @@
  };
  struct MyType3 {
 	 MyType3();
-	 int x;
+	 int x {};
  };
  MyType3::MyType3() = default;
 
