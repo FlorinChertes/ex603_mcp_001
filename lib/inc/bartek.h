@@ -22,6 +22,11 @@
 		std::cout << "Product(): " << id_ << ", " << name_ << '\n';
 	 }
 
+	 explicit Product(const std::string& name)
+		 : Product{ 0, name }
+	 {
+	 }
+
 	 // copy constructor
 	 Product(const Product& other)
 	 : id_{other.id_}
