@@ -137,6 +137,9 @@ set(SRC_001
 	lib/inc/bartek.h
 	test/inc/test_bartek.h
 	test/src/test_bartek.cpp
+
+	test/inc/test_regex.h
+	test/src/test_regex.cpp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
