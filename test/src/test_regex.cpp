@@ -248,38 +248,28 @@ R"(
         std::cout << line << std::endl;
 }
 
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
 namespace {
+
     constexpr const char TOKEN_EQUALS[]{".equals"};
     constexpr const char TOKEN_EQUALS_REPLACE[]{ " === " };
 
     const std::string token_equals{ TOKEN_EQUALS };
     const std::string token_equals_replace{ TOKEN_EQUALS_REPLACE };
 
-    const std::vector<std::pair<std::string, std::string>> replacements{ {{TOKEN_EQUALS},{TOKEN_EQUALS_REPLACE}} };
-
     std::string replate_text_portions(const std::string& original_text)
     {
         std::string result{ original_text };
 
-        for (const auto& [orig, repl] : replacements)
-        {
-            if (orig.empty())
-                continue;
+        assert(token_equals.empty() == false);
+        std::string::size_type pos{ result.find(token_equals) };
+        assert(pos != std::string::npos);
+        result.replace(pos, token_equals.length(), token_equals_replace);
 
-            for (std::string::size_type pos{ result.find(orig) }
-                ; pos != std::string::npos
-                ; pos += repl.length(), pos = result.find(orig, pos)
-                )
-            {
-                result.replace(pos, orig.length(), repl);
-            }
-        }
         return result;
     }
+
 }
 
 std::string change_line_using_pattren(const std::string& script)
@@ -371,6 +361,8 @@ void test_regex_008()
     std::cout << line_from_lines << "\n";
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void test_regex_009()
 {
     std::cout << "\n*** test regex 009 ***" << std::endl;
