@@ -6,3 +6,5 @@ void test_bartek_004();
 void test_bartek_005();
 void test_bartek_006();
 void test_bartek_007();
+void test_bartek_008();
+void test_bartek_009();

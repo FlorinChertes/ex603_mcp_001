@@ -76,7 +76,7 @@
 	 std::cout << "inside foo()\n";
  }
 
- //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
  struct MyType0 {
 	 int x;
@@ -95,6 +95,29 @@
  };
  MyType3::MyType3() = default;
 
- //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+ constexpr double ToWattsRatio{ 745.699872 };
+ class HorsePower;
+ class WattPower {
+ public:
+	 WattPower() = default;
+	 explicit WattPower(double p) : power_{ p } {}
+	 explicit WattPower(const HorsePower& h);
+	 double getValue() const { return power_; }
+ private:
+	 double power_{ 0. };
+ };
+ class HorsePower {
+ public:
+	 HorsePower() = default;
+	 explicit HorsePower(double p) : power_{ p } {}
+	 explicit HorsePower(const WattPower& w);
+	 double getValue() const { return power_; }
+ private:
+	 double power_{ 0. };
+ };
+
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 

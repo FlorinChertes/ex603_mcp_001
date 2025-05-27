@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 
+#include <functional>
 #include <memory>
 #include <cassert>
 

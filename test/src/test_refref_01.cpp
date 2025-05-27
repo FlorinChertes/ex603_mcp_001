@@ -124,14 +124,14 @@ void test_062()
 {
     std::cout << "*** test 062 ***" << std::endl;
 
-    //TMP t1{};
-    //TMP t2 = t1;
+    TMP t1{};
+    TMP t2 = t1;
     
-    //TMP t3{};
-    //t3 = t1;
+    TMP t3{};
+    t3 = t1;
 
     /*const*/ auto&& t_ref = func_returnTMP();
-    TMP t3{ std::move(t_ref) };
+    //TMP t3{ std::move(t_ref) };
 
     //consume_TMP(func_returnTMP());
 

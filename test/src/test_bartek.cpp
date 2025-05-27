@@ -161,3 +161,46 @@ void test_bartek_007()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+WattPower::WattPower(const HorsePower& h)
+    : power_{ h.getValue() * ToWattsRatio } {
+}
+HorsePower::HorsePower(const WattPower& w)
+    : power_{ w.getValue() / ToWattsRatio } {
+}
+std::ostream& operator<<(std::ostream& os, const WattPower& w) {
+    os << w.getValue() << "W";
+    return os;
+}
+std::ostream& operator<<(std::ostream& os, const HorsePower& h) {
+    os << h.getValue() << "hp";
+    return os;
+}
+
+void test_bartek_008()
+{
+    std::cout << "\n*** test bartek 008 ***" << std::endl;
+
+    //HorsePower hp_ = 10.; // not possible, copy initialization
+    HorsePower hp{ 10. }; // fine
+    WattPower w{ 1. }; // fine
+    WattPower watts{ hp }; // fine, performs the proper conversion for us!
+
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void test_bartek_009()
+{
+    std::cout << "\n*** test bartek 009 ***" << std::endl;
+
+    std::vector<std::string> string_v {"one", "two", "three"};
+    auto i = string_v.begin();
+    auto e = string_v.end();
+    for (; i != e; ++i)
+    {
+       std::cout << "elem: " << *i << '\n';
+    }
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
