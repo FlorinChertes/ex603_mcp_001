@@ -21,7 +21,7 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        v1.14.0  # Update to a newer, stable release
+    GIT_TAG        v1.17.0  # Update to a newer, stable release
     GIT_SHALLOW    ON
 )
 
