@@ -1,9 +1,13 @@
+#include "test_regex.h"
 #include "test_bartek.h"
+
 #include "test_book_camp_06.h"
 #include "test_book_camp.h"
 
-#include "test_pmr.h"
 #include "test_coro.h"
+
+#include "test_pmr.h"
+
 //#include "test_visitor.h"
 #include "test_type_erasure.h"
 #include "test_ext_polymorph.h"
@@ -150,6 +154,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_063();
 
 	//test_064();
+	//test_CRTP_064_01();
 
 	test_065();
 	test_065_01();
@@ -178,6 +183,19 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	test_bartek_005();
 	test_bartek_006();
 	test_bartek_007();
+	test_bartek_008();
+	test_bartek_009();
+
+	test_regex_001();
+	test_regex_002();
+	test_regex_002_1();
+	test_regex_003();
+	test_regex_004();
+	test_regex_005();
+	test_regex_006();
+	test_regex_007();
+	test_regex_008();
+	test_regex_009();
 
 	return 0;
 }
