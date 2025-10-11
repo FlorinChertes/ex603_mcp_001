@@ -300,3 +300,14 @@ add_executable(ex603_mcp_004_ex
 
 	main/main_04.cpp
 )
+
+#------------------------------------------------------------------------------
+# add the executable 005
+#------------------------------------------------------------------------------
+add_executable(ex603_mcp_005_ex
+
+	test/inc/open_edg/test_array.h
+	test/src//open_edg/test_array.cpp
+
+	main/main_05.cpp
+)
