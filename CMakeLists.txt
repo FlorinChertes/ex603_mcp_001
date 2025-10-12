@@ -306,6 +306,9 @@ add_executable(ex603_mcp_004_ex
 #------------------------------------------------------------------------------
 add_executable(ex603_mcp_005_ex
 
+	lib/inc/open_edg/oedg_array.h
+	lib/src/open_edg/oedg_array.cpp
+
 	test/inc/open_edg/test_array.h
 	test/src//open_edg/test_array.cpp
 
