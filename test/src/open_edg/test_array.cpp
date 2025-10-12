@@ -101,5 +101,5 @@ void test_openEDG_012()
     {
         std::cout << v1[i] << " ";
 	}
-
+    std::cout << "\n";
 }
