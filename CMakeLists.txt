@@ -310,7 +310,18 @@ add_executable(ex603_mcp_005_ex
 	lib/src/open_edg/oedg_array.cpp
 
 	test/inc/open_edg/test_array.h
-	test/src//open_edg/test_array.cpp
+	test/src/open_edg/test_array.cpp
 
 	main/main_05.cpp
+)
+
+#------------------------------------------------------------------------------
+# add the executable 006
+#------------------------------------------------------------------------------
+add_executable(ex603_mcp_006_ex
+
+	test/inc/hp_tsdb/test_hp_tsdb.h
+	test/src/hp_tsdb/test_hp_tsdb.cpp
+
+	main/main_06.cpp
 )
